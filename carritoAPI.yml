@@ -1,0 +1,66 @@
+openapi: '3.0.2'
+info:
+  title: Carrito
+  version: '1.0'
+paths:
+  /carts:
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        provisional:
+          type: string
+          example: "borrame por dios"
+    ProductPair:
+      type: object
+      properties:
+        product:
+          $ref: "#/components/schemas/Product"
+        quantity:
+          type: integer
+          format: int32
+          description: "Quantity of paired item."
+    CountryTax:
+      type: object
+      properties:
+        name: 
+          type: string
+        taxRate: 
+          type: number
+    Carrito:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "UUID string"
+          example: "123e4567-e89b-12d3-a456-426655440000"
+        userId:
+          type: integer
+          format: int
+          description: "id of the User, from /users endpoint"
+          example: 
+        createdAt:
+          type: string
+          description: "Date of creation"
+          example: "yyyy-MM-dd HH:mm:s"
+        updateAt:
+          type: string
+          description: "Date of creation"
+          example: "yyyy-MM-dd HH:mm:s"
+        status:
+          type: string
+          enum:
+            - DRAFT
+            - SUBMITTED
+          example: "DRAFT"
+        taxCountry:
+          $ref: '#/components/schemas/CountryTax'
+        totalPrice:
+          type: number
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductPair'
+          ### product pair
