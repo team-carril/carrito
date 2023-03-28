@@ -13,7 +13,7 @@ CREATE TABLE PRODUCT (
 	category VARCHAR(100),
 	description TEXT,
 	price FLOAT,
-	stock INT,
+	quantity INT,
 );
 
 CREATE TABLE TAXCOUNTRY (

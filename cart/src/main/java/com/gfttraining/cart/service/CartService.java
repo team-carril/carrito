@@ -1,6 +1,7 @@
 package com.gfttraining.cart.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.gfttraining.cart.api.controller.dto.Cart;
 import com.gfttraining.cart.jpa.CartRepository;
@@ -15,12 +16,9 @@ public class CartService {
 	{
 		List<CartEntity> cartEntityList = cartRepository.findAll();
 
-		// TODO Cart Entity -> cart
-
-
-	
-		List<Cart> cartList;
-		
+		return cartEntityList.stream()
+		.map(CartEntity::toDTO)
+		.collect(Collectors.toList());
 		
 	}
 }
