@@ -16,6 +16,4 @@ public class Cart {
 	private TaxCountry taxCounty;
 	private Float totalPrice;
 	private List<ProductPair> productPair;
-	
-	
 }

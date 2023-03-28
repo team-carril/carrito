@@ -14,6 +14,11 @@ public class CartService {
 	public List<Cart> findAll()
 	{
 		List<CartEntity> cartEntityList = cartRepository.findAll();
+
+		// TODO Cart Entity -> cart
+
+
+	
 		List<Cart> cartList;
 		
 		

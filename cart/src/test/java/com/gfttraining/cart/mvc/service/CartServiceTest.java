@@ -31,7 +31,4 @@ public class CartServiceTest {
 		cartService.findAll();
 		verify(cartRepository).findAll();
 	}
-
-
-	
 }
