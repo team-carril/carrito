@@ -1,6 +1,7 @@
 package com.gfttraining.cart.api.controller.dto;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 import lombok.Builder;
 import lombok.Data;
@@ -15,4 +16,6 @@ public class Product {
 	private String description;
 	private BigDecimal price;
 	private Integer quantity;
+
+	private UUID cartId;
 }

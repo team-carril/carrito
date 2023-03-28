@@ -3,6 +3,7 @@ package com.gfttraining.cart.api.controller.dto;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +12,7 @@ import lombok.Data;
 @Builder
 public class Cart {
 	
-	private String id;
+	private UUID id;
 	private Integer userId;
 	private Date createdAt;
 	private Date updateAt;
