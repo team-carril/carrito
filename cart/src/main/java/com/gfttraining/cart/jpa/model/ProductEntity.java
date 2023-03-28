@@ -1,5 +1,7 @@
 package com.gfttraining.cart.jpa.model;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -22,12 +24,13 @@ public class ProductEntity {
 	private String cartId;
 	private Integer category;
 	private String description;
-	private Float price;
+	@Column(precision = 10, scale = 4)
+	private BigDecimal price;
 	private int quantity;
 
-	public Float getTotalPrize()
+	public BigDecimal getTotalPrize()
 	{
-		return this.getPrice() * this.getQuantity();
+		return this.getPrice().multiply(BigDecimal.valueOf(this.getQuantity()));
 	}
 
 	static public Product toDTO(ProductEntity entity)

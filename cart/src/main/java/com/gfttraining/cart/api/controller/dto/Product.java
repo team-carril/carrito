@@ -1,5 +1,7 @@
 package com.gfttraining.cart.api.controller.dto;
 
+import java.math.BigDecimal;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,6 +13,6 @@ public class Product {
 	private String name;
 	private Integer category;
 	private String description;
-	private Float price;
+	private BigDecimal price;
 	private Integer quantity;
 }

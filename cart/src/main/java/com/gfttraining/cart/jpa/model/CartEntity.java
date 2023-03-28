@@ -1,5 +1,6 @@
 package com.gfttraining.cart.jpa.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,9 +40,10 @@ public class CartEntity {
 
 	static public Cart toDTO(CartEntity entity)
 	{
-		Float totalPrice = entity.getProducts().stream()
-		.reduce((float)0, (x, p) -> x + p.getTotalPrize(), Float::sum);
-		totalPrice = totalPrice * (entity.getTaxCountry().getTaxRate() / 100);
+		BigDecimal totalPrice = entity.getProducts().stream()
+		.reduce(BigDecimal.valueOf(0), 
+		(x, p) -> x.add(p.getTotalPrize()), BigDecimal::add);
+		totalPrice = totalPrice.multiply(BigDecimal.valueOf(entity.getTaxCountry().getTaxRate() / 100));
 
 		return Cart.builder()
 		.id(entity.getId())
@@ -53,6 +55,5 @@ public class CartEntity {
 		.totalPrice(totalPrice) 
 		.taxCountry(TaxCountryEntity.toDTO(entity.getTaxCountry())) 
 		.build();
-
 	}
 }

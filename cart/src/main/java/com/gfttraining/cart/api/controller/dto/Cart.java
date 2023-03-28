@@ -1,5 +1,6 @@
 package com.gfttraining.cart.api.controller.dto;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +17,6 @@ public class Cart {
 	private Date updateAt;
 	private String status;
 	private TaxCountry taxCountry;
-	private Float totalPrice;
+	private BigDecimal totalPrice;
 	private List<Product> products;
 }

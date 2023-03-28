@@ -12,14 +12,14 @@ CREATE TABLE PRODUCT (
 	to_cart VARCHAR(20),
 	category VARCHAR(100),
 	description TEXT,
-	price FLOAT,
-	quantity INT,
+	price DECIMAL(10,4),
+	quantity INT
 );
 
 CREATE TABLE TAXCOUNTRY (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	country VARCHAR(50),
-	tax_rate INT,
+	tax_rate INT
 );
 
 ALTER TABLE CART ADD FOREIGN KEY (to_tax_country) REFERENCES TAXCOUNTRY(id);
