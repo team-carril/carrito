@@ -1,0 +1,230 @@
+openapi: '3.0.2'
+info:
+  title: Cart
+  version: '1.0'
+paths:
+  /carts:
+    get:
+      responses:
+        '200':
+          description: Returns list of Carts sorted by status
+          content:
+            application/json:
+              schema:
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Cart'
+    post:
+      requestBody:
+        description: User JSON
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: New Cart created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '422':
+          description: Wrong request body, must be User 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Cart already exists.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /carts/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    patch:
+      requestBody:
+        description: ProductPair JSON
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductPair'
+      responses:
+        '200':
+          description: Cart updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+
+        '400':
+          description: Cart status invalid, wrong Product JSON (?)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Cart not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      responses:
+        '200':
+          description: Cart deleted.
+        '400':
+          description: Cart status invalid (?)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Cart not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /carts/submit/{id}:
+    patch:
+      responses:
+       '200':
+         description: Cart submitted.
+       '400':
+          description: Out of stock or invalid User data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+       '404':
+          description: Cart not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        paymentMethod:
+          type: string
+          enum:
+            - VISA
+            - PAYPAL
+            - TRANSFER
+    Product:
+      type: object
+      required:
+        - id
+        - name
+        - category
+        - description
+        - price
+        - stock
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Pelota Adidas
+        category:
+          type: integer
+          format: int64
+          description: id category product 
+          example: 2
+        description:
+          type: string
+          example: Pelota Adidas Futbol Profesional.
+        price:
+          type: number
+          format: double
+          example: 19.99
+        stock:
+          type: integer
+          format: int64
+          example: 48
+    ProductPair:
+      type: object
+      properties:
+        product:
+          $ref: "#/components/schemas/Product"
+        quantity:
+          type: integer
+          format: int32
+          description: "Quantity of paired item."
+    CountryTax:
+      type: object
+      properties:
+        name: 
+          type: string
+          enum:
+            - Spain
+            - Estonia
+            - Finland
+            - France
+            - Italy
+            - Portugal
+        taxRate: 
+          type: number
+          format: int32
+    Cart:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "UUID string"
+          example: "123e4567-e89b-12d3-a456-426655440000"
+        userId:
+          type: integer
+          format: int
+          description: "id of the User, from /users endpoint"
+          example: 
+        createdAt:
+          type: string
+          description: "Date of creation"
+          example: "yyyy-MM-dd HH:mm:s"
+        updateAt:
+          type: string
+          description: "Date of creation"
+          example: "yyyy-MM-dd HH:mm:s"
+        status:
+          type: string
+          enum:
+            - DRAFT
+            - SUBMITTED
+          example: "DRAFT"
+        taxCountry:
+          $ref: '#/components/schemas/CountryTax'
+        totalPrice:
+          type: number
+          format: double
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductPair'
+    ErrorResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          example: "yyyy-MM-dd HH:mm:s"
+        msg:
+          type: string
+          example: "Missing User id"
+        
+        
