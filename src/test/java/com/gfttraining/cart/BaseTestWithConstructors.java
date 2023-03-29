@@ -1,8 +1,8 @@
 package com.gfttraining.cart;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,14 +23,16 @@ public class BaseTestWithConstructors {
 		return TaxCountry.create(name, taxRate);
 	}
 
-	protected CartEntity cartEntity(UUID id, int userId, Date createdAt, Date updatedAt, String status,
+	protected CartEntity cartEntity(UUID id, int userId, LocalDateTime createdAt, LocalDateTime updatedAt,
+			String status,
 			List<ProductEntity> products, TaxCountryEntity taxCountry) {
 		return CartEntity.builder().id(id).userId(userId).createdAt(createdAt).updatedAt(updatedAt).status(status)
 				.products(products).taxCountry(taxCountry).build();
 
 	}
 
-	protected Cart cartDto(UUID id, int userId, Date createdAt, Date updatedAt, String status, List<Product> products,
+	protected Cart cartDto(UUID id, int userId, LocalDateTime createdAt, LocalDateTime updatedAt, String status,
+			List<Product> products,
 			TaxCountry taxCountry, double totalPrice) {
 
 		return Cart.builder().id(id).userId(userId).createdAt(createdAt).updatedAt(updatedAt).status(status)

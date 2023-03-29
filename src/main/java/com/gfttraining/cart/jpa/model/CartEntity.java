@@ -1,7 +1,7 @@
 package com.gfttraining.cart.jpa.model;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -32,9 +32,9 @@ public class CartEntity {
 	@Column(name = "to_user")
 	private int userId;
 	@Column(name = "created_at")
-	private Date createdAt;
+	private LocalDateTime createdAt;
 	@Column(name = "updated_at")
-	private Date updatedAt;
+	private LocalDateTime updatedAt;
 
 	private String status;
 
@@ -47,7 +47,8 @@ public class CartEntity {
 	private TaxCountryEntity taxCountry;
 
 	@Builder
-	static public CartEntity create(UUID id, int userId, Date createdAt, Date updatedAt, String status,
+	static public CartEntity create(UUID id, int userId, LocalDateTime createdAt, LocalDateTime updatedAt,
+			String status,
 			List<ProductEntity> products, TaxCountryEntity taxCountry) {
 		CartEntity entity = new CartEntity();
 		entity.setId(id);
@@ -63,7 +64,8 @@ public class CartEntity {
 	static public Cart toDTO(CartEntity entity) {
 		BigDecimal totalPrice = entity.getProducts().stream().reduce(BigDecimal.valueOf(0.0),
 				(x, p) -> x.add(p.getTotalPrize()), BigDecimal::add);
-		BigDecimal taxRate = BigDecimal.valueOf(entity.getTaxCountry().getTaxRate() / 100); // TODO division de enteros siempre es 0
+		BigDecimal taxRate = BigDecimal.valueOf(entity.getTaxCountry().getTaxRate() / 100); // TODO division de enteros
+																							// siempre es 0
 		totalPrice = totalPrice.add(totalPrice.multiply(taxRate));
 
 		return Cart.builder().id(entity.getId()).userId(entity.getUserId()).createdAt(entity.getCreatedAt())

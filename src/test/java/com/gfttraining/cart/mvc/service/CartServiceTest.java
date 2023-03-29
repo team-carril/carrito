@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,7 +44,7 @@ public class CartServiceTest extends BaseTestWithConstructors {
 
 	@Test
 	public void returns_valid_dto() {
-		Date testDate = new Date(777);
+		LocalDateTime testDate = LocalDateTime.of(1990, 03, 03, 12, 15, 15);
 		UUID uuidA = UUID.randomUUID();
 		UUID uuidB = UUID.randomUUID();
 		UUID uuidC = UUID.randomUUID();
@@ -72,7 +72,7 @@ public class CartServiceTest extends BaseTestWithConstructors {
 
 	@Test
 	public void handles_empty_product_list() {
-		Date testDate = new Date(777);
+		LocalDateTime testDate = LocalDateTime.of(1990, 03, 03, 12, 15, 15);
 		UUID uuidA = UUID.randomUUID();
 
 		List<CartEntity> listInput = toList(cartEntity(uuidA, 1, testDate, testDate, "DRAFT", Collections.emptyList(),
