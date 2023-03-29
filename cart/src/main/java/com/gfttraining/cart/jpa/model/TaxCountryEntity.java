@@ -8,6 +8,7 @@ import javax.persistence.Table;
 
 import com.gfttraining.cart.api.controller.dto.TaxCountry;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Entity
@@ -28,5 +29,13 @@ public class TaxCountryEntity {
 		.country(entity.getCountry())
 		.taxRate(entity.getTaxRate())
 		.build();
+	}
+
+	@Builder
+	static public TaxCountryEntity create(String name, int taxRate) {
+		TaxCountryEntity entity = new TaxCountryEntity();
+		entity.setCountry(name);
+		entity.setTaxRate(taxRate);
+		return entity;
 	}
 }

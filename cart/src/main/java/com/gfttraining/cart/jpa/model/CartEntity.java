@@ -45,7 +45,7 @@ public class CartEntity {
 	private TaxCountryEntity taxCountry;
 
 	@Builder
-	static public CartEntity factory(UUID id, int userId, Date createdAt, Date updatedAt, String status,
+	static public CartEntity create(UUID id, int userId, Date createdAt, Date updatedAt, String status,
 			List<ProductEntity> products, TaxCountryEntity taxCountry) {
 		CartEntity entity = new CartEntity();
 		entity.setId(id);
@@ -60,16 +60,16 @@ public class CartEntity {
 
 	static public Cart toDTO(CartEntity entity) {
 		BigDecimal totalPrice = entity.getProducts().stream()
-				.reduce(BigDecimal.valueOf(0),
+				.reduce(BigDecimal.valueOf(0.0),
 						(x, p) -> x.add(p.getTotalPrize()), BigDecimal::add);
-		BigDecimal rate = BigDecimal.valueOf(entity.getTaxCountry().getTaxRate()).divide(BigDecimal.valueOf(100));
-		totalPrice = totalPrice.add(totalPrice.multiply(rate));
+		BigDecimal taxRate = BigDecimal.valueOf(entity.getTaxCountry().getTaxRate() / 100);
+		totalPrice = totalPrice.add(totalPrice.multiply(taxRate));
 
 		return Cart.builder()
 				.id(entity.getId())
 				.userId(entity.getUserId())
 				.createdAt(entity.getCreatedAt())
-				.updateAt(entity.getUpdatedAt())
+				.updatedAt(entity.getUpdatedAt())
 				.status(entity.getStatus())
 				.products(entity.getProducts().stream().map(ProductEntity::toDTO).collect(Collectors.toList()))
 				.totalPrice(totalPrice)

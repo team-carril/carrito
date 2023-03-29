@@ -9,15 +9,30 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
 public class Cart {
 	
 	private UUID id;
 	private Integer userId;
 	private Date createdAt;
-	private Date updateAt;
+	private Date updatedAt;
 	private String status;
 	private TaxCountry taxCountry;
 	private BigDecimal totalPrice;
 	private List<Product> products;
+
+	@Builder
+	public static Cart create(UUID id, int userId, Date createdAt,
+			Date updatedAt, String status, List<Product> products, TaxCountry taxCountry, BigDecimal totalPrice) 
+	{
+		Cart cart = new Cart();
+		cart.setId(id);
+		cart.setUserId(userId);
+		cart.setCreatedAt(createdAt);
+		cart.setUpdatedAt(updatedAt);
+		cart.setStatus(status);
+		cart.setProducts(products);
+		cart.setTaxCountry(taxCountry);
+		cart.setTotalPrice(totalPrice);
+		return cart;
+	}
 }

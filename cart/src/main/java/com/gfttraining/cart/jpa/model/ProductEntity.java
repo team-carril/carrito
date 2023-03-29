@@ -35,7 +35,7 @@ public class ProductEntity {
 	}
 
 	@Builder
-	static public ProductEntity factory(int id, String name, String description, UUID cartId, int category, BigDecimal price,
+	static public ProductEntity create(int id, String name, String description, UUID cartId, int category, BigDecimal price,
 			int quantity) {
 		ProductEntity entity = new ProductEntity();
 		entity.setId(id);
