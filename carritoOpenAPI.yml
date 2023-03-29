@@ -52,6 +52,13 @@ paths:
         schema:
           type: string
     patch:
+      requestBody:
+        description: Product JSON
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
       responses:
         '200':
           description: Cart updated
@@ -124,12 +131,11 @@ components:
             - VISA
             - PAYPAL
             - TRANSFER
-    Product:
+    ProductfromCatalog:
       type: object
       required:
         - id
         - name
-        - category
         - description
         - price
         - quantity
@@ -141,11 +147,6 @@ components:
         name:
           type: string
           example: Pelota Adidas
-        category:
-          type: integer
-          format: int64
-          description: id category product 
-          example: 2
         description:
           type: string
           example: Pelota Adidas Futbol Profesional.
@@ -157,6 +158,37 @@ components:
           type: integer
           format: int64
           example: 48
+    Product:
+      type: object
+      required:
+        - id
+        - name
+        - description
+        - price
+        - quantity
+        - cartId
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Pelota Adidas
+        description:
+          type: string
+          example: Pelota Adidas Futbol Profesional.
+        price:
+          type: number
+          format: double
+          example: 19.99
+        quantity:
+          type: integer
+          format: int64
+          example: 48
+        cartId:
+          type: string
+          example: '73fbba50-6a2d-4218-a6a8-6fbd1d7b98c5'
     TaxCountry:
       type: object
       properties:
@@ -204,7 +236,10 @@ components:
           type: number
           format: double
         products:
-          type: string
+          items:
+            type: array
+            items:
+              $ref: '#/components/schemas/Product'
     ErrorResponse:
       type: object
       properties:
@@ -214,5 +249,3 @@ components:
         msg:
           type: string
           example: "Missing User id"
-        
-        
