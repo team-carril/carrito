@@ -1,0 +1,1 @@
+insert into PRODUCT (id, to_cart, category, description, price, quantity) values (1, '17d95cad-c198-4c06-812d-2cd2f345685f', 1, 'Pikachu', 20.00, 15); 

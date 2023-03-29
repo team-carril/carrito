@@ -3,10 +3,13 @@ package com.gfttraining.cart.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
 import com.gfttraining.cart.api.controller.dto.Cart;
 import com.gfttraining.cart.jpa.CartRepository;
 import com.gfttraining.cart.jpa.model.CartEntity;
 
+@Service
 public class CartService {
 
 	private CartRepository cartRepository;
