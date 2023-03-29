@@ -1,7 +1,7 @@
 package com.gfttraining.cart.api.controller.dto;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,15 +13,15 @@ public class Cart {
 
 	private UUID id;
 	private Integer userId;
-	private Date createdAt;
-	private Date updatedAt;
+	private LocalDateTime createdAt;
+	private LocalDateTime updatedAt;
 	private String status;
 	private TaxCountry taxCountry;
 	private BigDecimal totalPrice;
 	private List<Product> products;
 
 	@Builder
-	public static Cart create(UUID id, int userId, Date createdAt, Date updatedAt, String status,
+	public static Cart create(UUID id, int userId, LocalDateTime createdAt, LocalDateTime updatedAt, String status,
 			List<Product> products, TaxCountry taxCountry, BigDecimal totalPrice) {
 		Cart cart = new Cart();
 		cart.setId(id);

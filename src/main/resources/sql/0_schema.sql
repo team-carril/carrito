@@ -1,18 +1,18 @@
 CREATE TABLE CART (
-	id VARCHAR(20) PRIMARY KEY,
+	id UUID PRIMARY KEY UNIQUE, 
 	to_user INT, 
 	to_tax_country INT,
-	created_at DATE,
-	updated_at DATE,
+	created_at DATETIME,
+	updated_at DATETIME,
 	status VARCHAR(20)
 );
 
 CREATE TABLE PRODUCT (
 	id INT PRIMARY KEY,
-	to_cart VARCHAR(20),
-	category VARCHAR(100),
+	to_cart UUID,
+	name TEXT,
 	description TEXT,
-	price DECIMAL(10,4),
+	price DECIMAL(10,2),
 	quantity INT
 );
 

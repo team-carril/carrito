@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,17 +44,17 @@ public class CartServiceTest extends BaseTestWithConstructors {
 
 	@Test
 	public void returns_valid_dto() {
-		Date testDate = new Date(777);
+		LocalDateTime testDate = LocalDateTime.of(1990, 03, 03, 12, 15, 15);
 		UUID uuidA = UUID.randomUUID();
 		UUID uuidB = UUID.randomUUID();
 		UUID uuidC = UUID.randomUUID();
 
-		List<ProductEntity> p1 = toList(productEntity(1, "test_item", "asdf", uuidA, 1, 5.0, 1),
-				productEntity(2, "test_item", "asdf", uuidA, 1, 5.0, 1),
-				productEntity(3, "test_item", "asdf", uuidA, 1, 5.0, 1));
-		List<Product> p2 = toList(productDto(1, "test_item", "asdf", uuidA, 1, 5.0, 1),
-				productDto(2, "test_item", "asdf", uuidA, 1, 5.0, 1),
-				productDto(3, "test_item", "asdf", uuidA, 1, 5.0, 1));
+		List<ProductEntity> p1 = toList(productEntity(1, "test_item", "asdf", uuidA, 5.0, 1),
+				productEntity(2, "test_item", "asdf", uuidA, 5.0, 1),
+				productEntity(3, "test_item", "asdf", uuidA, 5.0, 1));
+		List<Product> p2 = toList(productDto(1, "test_item", "asdf", uuidA, 5.0, 1),
+				productDto(2, "test_item", "asdf", uuidA, 5.0, 1),
+				productDto(3, "test_item", "asdf", uuidA, 5.0, 1));
 
 		List<CartEntity> listInput = toList(
 				cartEntity(uuidA, 1, testDate, testDate, "DRAFT", p1, taxCountryEntity("SPAIN", 0)),
@@ -72,7 +72,7 @@ public class CartServiceTest extends BaseTestWithConstructors {
 
 	@Test
 	public void handles_empty_product_list() {
-		Date testDate = new Date(777);
+		LocalDateTime testDate = LocalDateTime.of(1990, 03, 03, 12, 15, 15);
 		UUID uuidA = UUID.randomUUID();
 
 		List<CartEntity> listInput = toList(cartEntity(uuidA, 1, testDate, testDate, "DRAFT", Collections.emptyList(),
