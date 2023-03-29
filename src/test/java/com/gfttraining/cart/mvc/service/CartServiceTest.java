@@ -43,7 +43,14 @@ public class CartServiceTest extends BaseTestWithConstructors {
 	}
 
 	@Test
-	public void returns_valid_dto() {
+	public void handles_empty() {
+		when(cartRepository.findAll()).thenReturn(Collections.emptyList());
+		cartService.findAll();
+		verify(cartRepository).findAll();
+	}
+
+	@Test
+	public void returns_sorted_dtos() {
 		LocalDateTime testDate = LocalDateTime.of(1990, 03, 03, 12, 15, 15);
 		UUID uuidA = UUID.randomUUID();
 		UUID uuidB = UUID.randomUUID();
@@ -58,15 +65,14 @@ public class CartServiceTest extends BaseTestWithConstructors {
 
 		List<CartEntity> listInput = toList(
 				cartEntity(uuidA, 1, testDate, testDate, "DRAFT", p1, taxCountryEntity("SPAIN", 10)),
-				cartEntity(uuidB, 1, testDate, testDate, "DRAFT", p1, taxCountryEntity("SPAIN", 10)),
+				cartEntity(uuidB, 1, testDate, testDate, "SUBMITTED", p1, taxCountryEntity("SPAIN", 10)),
 				cartEntity(uuidC, 1, testDate, testDate, "DRAFT", p1, taxCountryEntity("SPAIN", 10)));
 		List<Cart> listExpected = toList(
 				cartDto(uuidA, 1, testDate, testDate, "DRAFT", p2, taxCountry("SPAIN", 10), 16.5),
-				cartDto(uuidB, 1, testDate, testDate, "DRAFT", p2, taxCountry("SPAIN", 10), 16.5),
-				cartDto(uuidC, 1, testDate, testDate, "DRAFT", p2, taxCountry("SPAIN", 10), 16.5));
+				cartDto(uuidC, 1, testDate, testDate, "DRAFT", p2, taxCountry("SPAIN", 10), 16.5),
+				cartDto(uuidB, 1, testDate, testDate, "SUBMITTED", p2, taxCountry("SPAIN", 10), 16.5));
 		when(cartRepository.findAll()).thenReturn(listInput);
 		List<Cart> listActual = cartService.findAll();
-
 		assertEquals(listExpected, listActual);
 	}
 

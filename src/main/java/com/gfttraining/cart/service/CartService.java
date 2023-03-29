@@ -14,10 +14,13 @@ public class CartService {
 
 	private CartRepository cartRepository;
 
-	public CartService(CartRepository cartRepository) {this.cartRepository = cartRepository;}
+	public CartService(CartRepository cartRepository) {
+		this.cartRepository = cartRepository;
+	}
 
 	public List<Cart> findAll() {
 		List<CartEntity> cartEntityList = cartRepository.findAll();
-		return cartEntityList.stream().map(CartEntity::toDTO).collect(Collectors.toList());
+		return cartEntityList.stream().map(CartEntity::toDTO)
+				.sorted((l1, l2) -> l1.getStatus().compareTo(l2.getStatus())).collect(Collectors.toList());
 	}
 }
