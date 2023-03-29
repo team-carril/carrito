@@ -28,12 +28,14 @@ public class CartEntity {
 	@Id
 	@GeneratedValue
 	private UUID id;
-	private int userId;
 
+	@Column(name = "to_user")
+	private int userId;
 	@Column(name = "created_at")
 	private Date createdAt;
 	@Column(name = "updated_at")
 	private Date updatedAt;
+
 	private String status;
 
 	@OneToMany
@@ -61,7 +63,7 @@ public class CartEntity {
 	static public Cart toDTO(CartEntity entity) {
 		BigDecimal totalPrice = entity.getProducts().stream().reduce(BigDecimal.valueOf(0.0),
 				(x, p) -> x.add(p.getTotalPrize()), BigDecimal::add);
-		BigDecimal taxRate = BigDecimal.valueOf(entity.getTaxCountry().getTaxRate() / 100);
+		BigDecimal taxRate = BigDecimal.valueOf(entity.getTaxCountry().getTaxRate() / 100); // TODO division de enteros siempre es 0
 		totalPrice = totalPrice.add(totalPrice.multiply(taxRate));
 
 		return Cart.builder().id(entity.getId()).userId(entity.getUserId()).createdAt(entity.getCreatedAt())

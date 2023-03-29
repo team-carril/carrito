@@ -21,10 +21,8 @@ public class ProductEntity {
 	private int id;
 
 	private String name;
-
 	@Column(name = "to_cart")
 	private UUID cartId;
-	private Integer category;
 	private String description;
 	@Column(precision = 10, scale = 4)
 	private BigDecimal price;
@@ -35,14 +33,13 @@ public class ProductEntity {
 	}
 
 	@Builder
-	static public ProductEntity create(int id, String name, String description, UUID cartId, int category,
+	static public ProductEntity create(int id, String name, String description, UUID cartId,
 			BigDecimal price, int quantity) {
 		ProductEntity entity = new ProductEntity();
 		entity.setId(id);
 		entity.setName(name);
 		entity.setCartId(cartId);
 		entity.setDescription(description);
-		entity.setCategory(category);
 		entity.setPrice(price);
 		entity.setQuantity(quantity);
 		entity.setCartId(cartId);
@@ -50,7 +47,7 @@ public class ProductEntity {
 	}
 
 	static public Product toDTO(ProductEntity entity) {
-		return Product.builder().id(entity.getId()).name(entity.getName()).category(entity.getCategory())
+		return Product.builder().id(entity.getId()).name(entity.getName())
 				.description(entity.getDescription()).price(entity.getPrice()).cartId(entity.getCartId())
 				.quantity(entity.getQuantity()).build();
 	}

@@ -10,9 +10,9 @@ CREATE TABLE CART (
 CREATE TABLE PRODUCT (
 	id INT PRIMARY KEY,
 	to_cart UUID,
-	category INT,
+	name TEXT,
 	description TEXT,
-	price DECIMAL(10,4),
+	price DECIMAL(10,2),
 	quantity INT
 );
 
