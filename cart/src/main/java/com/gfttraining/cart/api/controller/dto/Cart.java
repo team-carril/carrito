@@ -10,7 +10,7 @@ import lombok.Data;
 
 @Data
 public class Cart {
-	
+
 	private UUID id;
 	private Integer userId;
 	private Date createdAt;
@@ -21,9 +21,8 @@ public class Cart {
 	private List<Product> products;
 
 	@Builder
-	public static Cart create(UUID id, int userId, Date createdAt,
-			Date updatedAt, String status, List<Product> products, TaxCountry taxCountry, BigDecimal totalPrice) 
-	{
+	public static Cart create(UUID id, int userId, Date createdAt, Date updatedAt, String status,
+			List<Product> products, TaxCountry taxCountry, BigDecimal totalPrice) {
 		Cart cart = new Cart();
 		cart.setId(id);
 		cart.setUserId(userId);

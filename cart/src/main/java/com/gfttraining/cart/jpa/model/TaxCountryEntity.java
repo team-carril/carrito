@@ -17,18 +17,14 @@ import lombok.Data;
 public class TaxCountryEntity {
 	@Id
 	@GeneratedValue
-	private	int	id;
+	private int id;
 
 	private String country;
 	@Column(name = "tax_rate")
 	private int taxRate;
 
-	static public TaxCountry toDTO (TaxCountryEntity entity)
-	{
-		return TaxCountry.builder()
-		.country(entity.getCountry())
-		.taxRate(entity.getTaxRate())
-		.build();
+	static public TaxCountry toDTO(TaxCountryEntity entity) {
+		return TaxCountry.builder().country(entity.getCountry()).taxRate(entity.getTaxRate()).build();
 	}
 
 	@Builder

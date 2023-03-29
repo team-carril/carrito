@@ -13,12 +13,13 @@ public class CartController {
 
 	private CartService cartService;
 
-	public CartController(CartService cartService) {this.cartService = cartService;}
+	public CartController(CartService cartService) {
+		this.cartService = cartService;
+	}
 
 	@GetMapping("/carts")
-	public List<Cart> findAllCarts()
-	{
+	public List<Cart> findAllCarts() {
 		return cartService.findAll();
 	}
-	
+
 }

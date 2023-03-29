@@ -8,17 +8,13 @@ import com.gfttraining.cart.jpa.CartRepository;
 import com.gfttraining.cart.jpa.model.CartEntity;
 
 public class CartService {
-	
-	private CartRepository cartRepository;
-	
 
-	public List<Cart> findAll()
-	{
+	private CartRepository cartRepository;
+
+	public List<Cart> findAll() {
 		List<CartEntity> cartEntityList = cartRepository.findAll();
 
-		return cartEntityList.stream()
-		.map(CartEntity::toDTO)
-		.collect(Collectors.toList());
-		
+		return cartEntityList.stream().map(CartEntity::toDTO).collect(Collectors.toList());
+
 	}
 }

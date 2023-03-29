@@ -10,12 +10,11 @@ public class TaxCountry {
 	private Integer taxRate;
 
 	@Builder
-	static public TaxCountry create(String country, int taxRate)
-	{
+	static public TaxCountry create(String country, int taxRate) {
 		TaxCountry taxCountry = new TaxCountry();
 		taxCountry.setCountry(country);
 		taxCountry.setTaxRate(taxRate);
 		return taxCountry;
 	}
-	
+
 }
