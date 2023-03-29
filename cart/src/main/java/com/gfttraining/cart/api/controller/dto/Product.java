@@ -19,8 +19,8 @@ public class Product {
 	private UUID cartId;
 
 	@Builder
-	static public Product create(int id, String name, String description, UUID cartId, int category,
-			BigDecimal price, int quantity) {
+	static public Product create(int id, String name, String description, UUID cartId, int category, BigDecimal price,
+			int quantity) {
 		Product product = new Product();
 		product.setId(id);
 		product.setName(name);

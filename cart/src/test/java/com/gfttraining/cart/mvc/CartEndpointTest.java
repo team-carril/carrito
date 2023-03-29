@@ -20,11 +20,9 @@ public class CartEndpointTest {
 	@MockBean
 	private CartService cartService;
 
-	@Test public void
-	returns_200_OK() throws Exception
-	{
-		mockMvc.perform(MockMvcRequestBuilders.get("/carts"))
-		.andExpect(MockMvcResultMatchers.status().isOk());
+	@Test
+	public void returns_200_OK() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/carts")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
-	
+
 }

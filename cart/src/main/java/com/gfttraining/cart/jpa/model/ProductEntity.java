@@ -35,8 +35,8 @@ public class ProductEntity {
 	}
 
 	@Builder
-	static public ProductEntity create(int id, String name, String description, UUID cartId, int category, BigDecimal price,
-			int quantity) {
+	static public ProductEntity create(int id, String name, String description, UUID cartId, int category,
+			BigDecimal price, int quantity) {
 		ProductEntity entity = new ProductEntity();
 		entity.setId(id);
 		entity.setName(name);
@@ -50,14 +50,8 @@ public class ProductEntity {
 	}
 
 	static public Product toDTO(ProductEntity entity) {
-		return Product.builder()
-				.id(entity.getId())
-				.name(entity.getName())
-				.category(entity.getCategory())
-				.description(entity.getDescription())
-				.price(entity.getPrice())
-				.cartId(entity.getCartId())
-				.quantity(entity.getQuantity())
-				.build();
+		return Product.builder().id(entity.getId()).name(entity.getName()).category(entity.getCategory())
+				.description(entity.getDescription()).price(entity.getPrice()).cartId(entity.getCartId())
+				.quantity(entity.getQuantity()).build();
 	}
 }
