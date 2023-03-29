@@ -52,13 +52,6 @@ paths:
         schema:
           type: string
     patch:
-      requestBody:
-        description: ProductPair JSON
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ProductPair'
       responses:
         '200':
           description: Cart updated
@@ -96,6 +89,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
   /carts/submit/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
     patch:
       responses:
        '200':
@@ -133,7 +132,7 @@ components:
         - category
         - description
         - price
-        - stock
+        - quantity
       properties:
         id:
           type: integer
@@ -158,19 +157,10 @@ components:
           type: integer
           format: int64
           example: 48
-    ProductPair:
+    TaxCountry:
       type: object
       properties:
-        product:
-          $ref: "#/components/schemas/Product"
-        quantity:
-          type: integer
-          format: int32
-          description: "Quantity of paired item."
-    CountryTax:
-      type: object
-      properties:
-        name: 
+        country: 
           type: string
           enum:
             - Spain
@@ -198,7 +188,7 @@ components:
           type: string
           description: "Date of creation"
           example: "yyyy-MM-dd HH:mm:s"
-        updateAt:
+        updatedAt:
           type: string
           description: "Date of creation"
           example: "yyyy-MM-dd HH:mm:s"
@@ -209,14 +199,12 @@ components:
             - SUBMITTED
           example: "DRAFT"
         taxCountry:
-          $ref: '#/components/schemas/CountryTax'
+          $ref: '#/components/schemas/TaxCountry'
         totalPrice:
           type: number
           format: double
         products:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductPair'
+          type: string
     ErrorResponse:
       type: object
       properties:
