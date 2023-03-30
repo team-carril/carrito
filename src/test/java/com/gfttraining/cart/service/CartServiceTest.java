@@ -1,4 +1,4 @@
-package com.gfttraining.cart.mvc.service;
+package com.gfttraining.cart.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -8,9 +8,13 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -21,7 +25,6 @@ import com.gfttraining.cart.api.controller.dto.Product;
 import com.gfttraining.cart.jpa.CartRepository;
 import com.gfttraining.cart.jpa.model.CartEntity;
 import com.gfttraining.cart.jpa.model.ProductEntity;
-import com.gfttraining.cart.service.CartService;
 
 public class CartServiceTest extends BaseTestWithConstructors {
 
@@ -76,6 +79,13 @@ public class CartServiceTest extends BaseTestWithConstructors {
 		assertEquals(listExpected, listActual);
 	}
 
+	@ParameterizedTest
+	@MethodSource("statusArguments")
+	public void returns_filtered_by_status(String status) {
+		cartService.findByStatus(status);
+		verify(cartRepository).findByStatus(status);
+	}
+
 	@Test
 	public void handles_empty_product_list() {
 		LocalDateTime testDate = LocalDateTime.of(1990, 03, 03, 12, 15, 15);
@@ -88,5 +98,11 @@ public class CartServiceTest extends BaseTestWithConstructors {
 		when(cartRepository.findAll()).thenReturn(listInput);
 		List<Cart> listActual = cartService.findAll();
 		assertEquals(listExpected, listActual);
+	}
+
+	static Stream<Arguments> statusArguments() {
+		return Stream.of(
+				Arguments.of("DRAFT"),
+				Arguments.of("SUBMITTED"));
 	}
 }

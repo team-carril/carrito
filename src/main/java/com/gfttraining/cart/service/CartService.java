@@ -1,5 +1,6 @@
 package com.gfttraining.cart.service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +22,11 @@ public class CartService {
 	public List<Cart> findAll() {
 		List<CartEntity> cartEntityList = cartRepository.findAll();
 		return cartEntityList.stream().map(CartEntity::toDTO)
-				.sorted((l1, l2) -> l1.getStatus().compareTo(l2.getStatus())).collect(Collectors.toList());
+				.sorted(Comparator.comparing(Cart::getStatus)).collect(Collectors.toList());
+	}
+
+	public List<Cart> findByStatus(String status) {
+		List<CartEntity> entities = cartRepository.findByStatus(status);
+		return entities.stream().map(CartEntity::toDTO).collect(Collectors.toList());
 	}
 }
