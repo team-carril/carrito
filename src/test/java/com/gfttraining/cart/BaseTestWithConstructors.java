@@ -36,7 +36,7 @@ public class BaseTestWithConstructors {
 			TaxCountry taxCountry, double totalPrice) {
 
 		return Cart.builder().id(id).userId(userId).createdAt(createdAt).updatedAt(updatedAt).status(status)
-				.products(products).taxCountry(taxCountry).totalPrice(BigDecimal.valueOf(totalPrice)).build();
+				.products(products).taxCountry(taxCountry).totalPrice(BigDecimal.valueOf(totalPrice).stripTrailingZeros()).build();
 	}
 
 	protected List<CartEntity> toList(CartEntity... entities) {
