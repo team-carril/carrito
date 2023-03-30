@@ -71,9 +71,9 @@ public class CartServiceTest extends BaseTestWithConstructors {
 				cartEntity(uuidB, 1, testDate, testDate, "SUBMITTED", p1, taxCountryEntity("SPAIN", 10)),
 				cartEntity(uuidC, 1, testDate, testDate, "DRAFT", p1, taxCountryEntity("SPAIN", 10)));
 		List<Cart> listExpected = toList(
-				cartDto(uuidA, 1, testDate, testDate, "DRAFT", p2, taxCountry("SPAIN", 10), 16.5),
-				cartDto(uuidC, 1, testDate, testDate, "DRAFT", p2, taxCountry("SPAIN", 10), 16.5),
-				cartDto(uuidB, 1, testDate, testDate, "SUBMITTED", p2, taxCountry("SPAIN", 10), 16.5));
+				cartDto(uuidA, 1, testDate, testDate, "DRAFT", p2, taxCountry("SPAIN", 10), 15),
+				cartDto(uuidC, 1, testDate, testDate, "DRAFT", p2, taxCountry("SPAIN", 10), 15),
+				cartDto(uuidB, 1, testDate, testDate, "SUBMITTED", p2, taxCountry("SPAIN", 10), 15));
 		when(cartRepository.findAll()).thenReturn(listInput);
 		List<Cart> listActual = cartService.findAll();
 		assertEquals(listExpected, listActual);

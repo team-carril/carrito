@@ -64,8 +64,7 @@ public class CartEntity {
 	static public Cart toDTO(CartEntity entity) {
 		BigDecimal totalPrice = entity.getProducts().stream().reduce(BigDecimal.valueOf(0.0),
 				(x, p) -> x.add(p.getTotalPrize()), BigDecimal::add);
-		BigDecimal taxRate = BigDecimal.valueOf(entity.getTaxCountry().getTaxRate() / 100.0);
-		totalPrice = totalPrice.add(totalPrice.multiply(taxRate)).stripTrailingZeros();
+		totalPrice = totalPrice.stripTrailingZeros();
 
 		return Cart.builder().id(entity.getId()).userId(entity.getUserId()).createdAt(entity.getCreatedAt())
 				.updatedAt(entity.getUpdatedAt()).status(entity.getStatus())
