@@ -1,5 +1,12 @@
 insert into
-	PRODUCT (id, to_cart, name, description, price, quantity)
+	PRODUCT (
+		catalog_id,
+		to_cart,
+		name,
+		description,
+		price,
+		quantity
+	)
 values
 	(
 		1,
@@ -11,7 +18,14 @@ values
 	);
 
 insert into
-	PRODUCT (id, to_cart, name, description, price, quantity)
+	PRODUCT (
+		catalog_id,
+		to_cart,
+		name,
+		description,
+		price,
+		quantity
+	)
 values
 	(
 		2,
@@ -23,7 +37,14 @@ values
 	);
 
 insert into
-	PRODUCT (id, to_cart, name, description, price, quantity)
+	PRODUCT (
+		catalog_id,
+		to_cart,
+		name,
+		description,
+		price,
+		quantity
+	)
 values
 	(
 		3,
@@ -35,7 +56,14 @@ values
 	);
 
 insert into
-	PRODUCT (id, to_cart, name, description, price, quantity)
+	PRODUCT (
+		catalog_id,
+		to_cart,
+		name,
+		description,
+		price,
+		quantity
+	)
 values
 	(
 		4,
@@ -47,7 +75,14 @@ values
 	);
 
 insert into
-	PRODUCT (id, to_cart, name, description, price, quantity)
+	PRODUCT (
+		catalog_id,
+		to_cart,
+		name,
+		description,
+		price,
+		quantity
+	)
 values
 	(
 		5,
@@ -59,19 +94,33 @@ values
 	);
 
 insert into
-	PRODUCT (id, to_cart, name, description, price, quantity)
+	PRODUCT (
+		catalog_id,
+		to_cart,
+		name,
+		description,
+		price,
+		quantity
+	)
 values
 	(
 		6,
 		'17d95cad-c198-4c06-812d-2cd2f345685f',
-		'Rapidash',
+		'Rapcatalog_idash',
 		1,
 		20.00,
 		5
 	);
 
 insert into
-	PRODUCT (id, to_cart, name, description, price, quantity)
+	PRODUCT (
+		catalog_id,
+		to_cart,
+		name,
+		description,
+		price,
+		quantity
+	)
 values
 	(
 		7,
@@ -83,7 +132,14 @@ values
 	);
 
 insert into
-	PRODUCT (id, to_cart, name, description, price, quantity)
+	PRODUCT (
+		catalog_id,
+		to_cart,
+		name,
+		description,
+		price,
+		quantity
+	)
 values
 	(
 		8,
@@ -95,7 +151,14 @@ values
 	);
 
 insert into
-	PRODUCT (id, to_cart, name, description, price, quantity)
+	PRODUCT (
+		catalog_id,
+		to_cart,
+		name,
+		description,
+		price,
+		quantity
+	)
 values
 	(
 		9,

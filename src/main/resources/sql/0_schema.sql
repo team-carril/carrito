@@ -7,7 +7,8 @@ CREATE TABLE CART (
 );
 
 CREATE TABLE PRODUCT (
-	id INT PRIMARY KEY,
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	catalog_id INT,
 	to_cart UUID,
 	name TEXT,
 	description TEXT,
