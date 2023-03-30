@@ -27,14 +27,14 @@ public class CartRepositoryTest extends BaseTestWithConstructors {
 	public void find_by_status_filters(String status) {
 		LocalDateTime testDate = LocalDateTime.of(1990, 03, 03, 12, 15, 15);
 		cartRepository
-				.saveAndFlush(cartEntity(null, 1, testDate, testDate, "DRAFT", null, null));
+				.saveAndFlush(cartEntity(null, 1, testDate, testDate, "DRAFT", null));
 		cartRepository
-				.saveAndFlush(cartEntity(null, 1, testDate, testDate, "DRAFT", null, null));
+				.saveAndFlush(cartEntity(null, 1, testDate, testDate, "DRAFT", null));
 		cartRepository
-				.saveAndFlush(cartEntity(null, 1, testDate, testDate, "SUBMITTED", null, null));
+				.saveAndFlush(cartEntity(null, 1, testDate, testDate, "SUBMITTED", null));
 		cartRepository
 				.saveAndFlush(
-						cartEntity(null, 1, testDate, testDate, "SUBMITTED", null, null));
+						cartEntity(null, 1, testDate, testDate, "SUBMITTED", null));
 		List<CartEntity> actualList = cartRepository.findByStatus(status);
 
 		for (CartEntity e : actualList)

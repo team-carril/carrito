@@ -1,7 +1,6 @@
 CREATE TABLE CART (
-	id UUID PRIMARY KEY UNIQUE, 
-	to_user INT, 
-	to_tax_country INT,
+	id UUID PRIMARY KEY UNIQUE,
+	to_user INT,
 	created_at DATETIME,
 	updated_at DATETIME,
 	status VARCHAR(20)
@@ -12,15 +11,11 @@ CREATE TABLE PRODUCT (
 	to_cart UUID,
 	name TEXT,
 	description TEXT,
-	price DECIMAL(10,2),
+	price DECIMAL(10, 2),
 	quantity INT
 );
 
-CREATE TABLE TAXCOUNTRY (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	country VARCHAR(50),
-	tax_rate INT
-);
-
-ALTER TABLE CART ADD FOREIGN KEY (to_tax_country) REFERENCES TAXCOUNTRY(id);
-ALTER TABLE PRODUCT ADD FOREIGN KEY (to_cart) REFERENCES CART(id);
+ALTER TABLE
+	PRODUCT
+ADD
+	FOREIGN KEY (to_cart) REFERENCES CART(id);

@@ -16,13 +16,12 @@ public class Cart {
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 	private String status;
-	private TaxCountry taxCountry;
 	private BigDecimal totalPrice;
 	private List<Product> products;
 
 	@Builder
 	public static Cart create(UUID id, int userId, LocalDateTime createdAt, LocalDateTime updatedAt, String status,
-			List<Product> products, TaxCountry taxCountry, BigDecimal totalPrice) {
+			List<Product> products, BigDecimal totalPrice) {
 		Cart cart = new Cart();
 		cart.setId(id);
 		cart.setUserId(userId);
@@ -30,7 +29,6 @@ public class Cart {
 		cart.setUpdatedAt(updatedAt);
 		cart.setStatus(status);
 		cart.setProducts(products);
-		cart.setTaxCountry(taxCountry);
 		cart.setTotalPrice(totalPrice);
 		return cart;
 	}

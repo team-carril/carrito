@@ -16,3 +16,16 @@ spring:
   h2:
     console:
       enabled: true
+rates:
+  paymentMethod:
+    VISA: 0
+    TRANSFER: 2
+    PAYPAL: 0
+  country:
+    SPAIN: 21
+    ESTONIA: 20
+    FINLAND: 24
+    FRANCE: 20
+    ITALY: 22
+    PORTUGAL: 20
+    GREECE: 23
