@@ -11,7 +11,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -42,14 +41,10 @@ public class CartEntity {
 	@JoinColumn(name = "to_cart", referencedColumnName = "id")
 	private List<ProductEntity> products;
 
-	@ManyToOne
-	@JoinColumn(name = "to_tax_country", referencedColumnName = "id")
-	private TaxCountryEntity taxCountry;
-
 	@Builder
 	static public CartEntity create(UUID id, int userId, LocalDateTime createdAt, LocalDateTime updatedAt,
 			String status,
-			List<ProductEntity> products, TaxCountryEntity taxCountry) {
+			List<ProductEntity> products) {
 		CartEntity entity = new CartEntity();
 		entity.setId(id);
 		entity.setUserId(userId);
@@ -57,7 +52,6 @@ public class CartEntity {
 		entity.setUpdatedAt(updatedAt);
 		entity.setStatus(status);
 		entity.setProducts(products);
-		entity.setTaxCountry(taxCountry);
 		return entity;
 	}
 
@@ -69,6 +63,6 @@ public class CartEntity {
 		return Cart.builder().id(entity.getId()).userId(entity.getUserId()).createdAt(entity.getCreatedAt())
 				.updatedAt(entity.getUpdatedAt()).status(entity.getStatus())
 				.products(entity.getProducts().stream().map(ProductEntity::toDTO).collect(Collectors.toList()))
-				.totalPrice(totalPrice).taxCountry(TaxCountryEntity.toDTO(entity.getTaxCountry())).build();
+				.totalPrice(totalPrice).build();
 	}
 }

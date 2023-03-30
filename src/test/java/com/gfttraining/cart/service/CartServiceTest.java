@@ -67,13 +67,13 @@ public class CartServiceTest extends BaseTestWithConstructors {
 				productDto(3, "test_item", "asdf", uuidA, 5.0, 1));
 
 		List<CartEntity> listInput = toList(
-				cartEntity(uuidA, 1, testDate, testDate, "DRAFT", p1, taxCountryEntity("SPAIN", 10)),
-				cartEntity(uuidB, 1, testDate, testDate, "SUBMITTED", p1, taxCountryEntity("SPAIN", 10)),
-				cartEntity(uuidC, 1, testDate, testDate, "DRAFT", p1, taxCountryEntity("SPAIN", 10)));
+				cartEntity(uuidA, 1, testDate, testDate, "DRAFT", p1),
+				cartEntity(uuidB, 1, testDate, testDate, "SUBMITTED", p1),
+				cartEntity(uuidC, 1, testDate, testDate, "DRAFT", p1));
 		List<Cart> listExpected = toList(
-				cartDto(uuidA, 1, testDate, testDate, "DRAFT", p2, taxCountry("SPAIN", 10), 15),
-				cartDto(uuidC, 1, testDate, testDate, "DRAFT", p2, taxCountry("SPAIN", 10), 15),
-				cartDto(uuidB, 1, testDate, testDate, "SUBMITTED", p2, taxCountry("SPAIN", 10), 15));
+				cartDto(uuidA, 1, testDate, testDate, "DRAFT", p2, 15),
+				cartDto(uuidC, 1, testDate, testDate, "DRAFT", p2, 15),
+				cartDto(uuidB, 1, testDate, testDate, "SUBMITTED", p2, 15));
 		when(cartRepository.findAll()).thenReturn(listInput);
 		List<Cart> listActual = cartService.findAll();
 		assertEquals(listExpected, listActual);
@@ -91,10 +91,9 @@ public class CartServiceTest extends BaseTestWithConstructors {
 		LocalDateTime testDate = LocalDateTime.of(1990, 03, 03, 12, 15, 15);
 		UUID uuidA = UUID.randomUUID();
 
-		List<CartEntity> listInput = toList(cartEntity(uuidA, 1, testDate, testDate, "DRAFT", Collections.emptyList(),
-				taxCountryEntity("SPAIN", 21)));
+		List<CartEntity> listInput = toList(cartEntity(uuidA, 1, testDate, testDate, "DRAFT", Collections.emptyList()));
 		List<Cart> listExpected = toList(
-				cartDto(uuidA, 1, testDate, testDate, "DRAFT", Collections.emptyList(), taxCountry("SPAIN", 21), 0));
+				cartDto(uuidA, 1, testDate, testDate, "DRAFT", Collections.emptyList(), 0));
 		when(cartRepository.findAll()).thenReturn(listInput);
 		List<Cart> listActual = cartService.findAll();
 		assertEquals(listExpected, listActual);
