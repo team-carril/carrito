@@ -3,6 +3,7 @@ package com.gfttraining.cart;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,6 +25,14 @@ public class BaseTestWithConstructors {
 	protected Cart cartDto(UUID id, int userId, LocalDateTime createdAt, LocalDateTime updatedAt, String status,
 			List<Product> products,
 			double totalPrice) {
+		if (id == null)
+			id = UUID.randomUUID();
+		if (createdAt == null)
+			createdAt = LocalDateTime.now();
+		if (updatedAt == null)
+			updatedAt = LocalDateTime.now();
+		if (products == null)
+			products = Collections.emptyList();
 
 		return Cart.builder().id(id).userId(userId).createdAt(createdAt).updatedAt(updatedAt).status(status)
 				.products(products).totalPrice(BigDecimal.valueOf(totalPrice).stripTrailingZeros()).build();
