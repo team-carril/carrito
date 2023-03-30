@@ -1,6 +1,7 @@
 package com.gfttraining.cart.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -22,6 +23,7 @@ import org.mockito.MockitoAnnotations;
 import com.gfttraining.cart.BaseTestWithConstructors;
 import com.gfttraining.cart.api.controller.dto.Cart;
 import com.gfttraining.cart.api.controller.dto.Product;
+import com.gfttraining.cart.api.controller.dto.User;
 import com.gfttraining.cart.jpa.CartRepository;
 import com.gfttraining.cart.jpa.model.CartEntity;
 import com.gfttraining.cart.jpa.model.ProductEntity;
@@ -97,6 +99,16 @@ public class CartServiceTest extends BaseTestWithConstructors {
 		when(cartRepository.findAll()).thenReturn(listInput);
 		List<Cart> listActual = cartService.findAll();
 		assertEquals(listExpected, listActual);
+	}
+
+	@Test
+	public void create_calls_repository() {
+		User user = new User();
+		user.setId(0);
+		when(cartRepository.save(any(CartEntity.class)))
+				.thenReturn(cartEntity(null, 0, null, null, null, Collections.emptyList()));
+		cartService.postNewCart(user);
+		verify(cartRepository).save(any(CartEntity.class));
 	}
 
 	static Stream<Arguments> statusArguments() {

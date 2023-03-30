@@ -13,8 +13,15 @@ import com.gfttraining.cart.api.controller.dto.ErrorResponse;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-	@ExceptionHandler
+	@ExceptionHandler(BadRequestParamException.class)
 	public ResponseEntity<ErrorResponse> handlesBadRequestParamException(BadRequestParamException ex, WebRequest req) {
+		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
+
+		return new ResponseEntity<ErrorResponse>(res, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(BadRequestBodyException.class)
+	public ResponseEntity<ErrorResponse> handlesBadRequestBodyException(BadRequestBodyException ex, WebRequest req) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
 
 		return new ResponseEntity<ErrorResponse>(res, HttpStatus.BAD_REQUEST);
