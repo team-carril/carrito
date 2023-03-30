@@ -1,12 +1,12 @@
-openapi: '3.0.2'
+openapi: "3.0.2"
 info:
   title: Cart
-  version: '1.0'
+  version: "1.0"
 paths:
   /carts:
     get:
       responses:
-        '200':
+        "200":
           description: Returns list of Carts sorted by status
           content:
             application/json:
@@ -15,7 +15,7 @@ paths:
                   items:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Cart'
+                      $ref: "#/components/schemas/Cart"
     post:
       requestBody:
         description: User JSON
@@ -23,26 +23,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: "#/components/schemas/User"
       responses:
-        '200':
+        "200":
           description: New Cart created.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Cart'
-        '422':
-          description: Wrong request body, must be User 
+                $ref: "#/components/schemas/Cart"
+        "422":
+          description: Wrong request body, must be User
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '400':
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
           description: Cart already exists.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /carts/{id}:
     parameters:
@@ -58,43 +58,43 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProductfromCatalog'
+              $ref: "#/components/schemas/ProductfromCatalog"
       responses:
-        '200':
+        "200":
           description: Cart updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Cart'
+                $ref: "#/components/schemas/Cart"
 
-        '400':
+        "400":
           description: Cart status invalid, wrong Product JSON (?)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Cart not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
     delete:
       responses:
-        '200':
+        "200":
           description: Cart deleted.
-        '400':
+        "400":
           description: Cart status invalid (?)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Cart not found.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
   /carts/submit/{id}:
     parameters:
       - name: id
@@ -104,20 +104,20 @@ paths:
           type: string
     patch:
       responses:
-       '200':
-         description: Cart submitted.
-       '400':
+        "200":
+          description: Cart submitted.
+        "400":
           description: Out of stock or invalid User data.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-       '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Cart not found.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
     User:
@@ -188,22 +188,7 @@ components:
           example: 48
         cartId:
           type: string
-          example: '73fbba50-6a2d-4218-a6a8-6fbd1d7b98c5'
-    TaxCountry:
-      type: object
-      properties:
-        country: 
-          type: string
-          enum:
-            - Spain
-            - Estonia
-            - Finland
-            - France
-            - Italy
-            - Portugal
-        taxRate: 
-          type: number
-          format: int32
+          example: "73fbba50-6a2d-4218-a6a8-6fbd1d7b98c5"
     Cart:
       type: object
       properties:
@@ -215,7 +200,7 @@ components:
           type: integer
           format: int
           description: "id of the User, from /users endpoint"
-          example: 
+          example:
         createdAt:
           type: string
           description: "Date of creation"
@@ -230,8 +215,6 @@ components:
             - DRAFT
             - SUBMITTED
           example: "DRAFT"
-        taxCountry:
-          $ref: '#/components/schemas/TaxCountry'
         totalPrice:
           type: number
           format: double
@@ -239,7 +222,7 @@ components:
           items:
             type: array
             items:
-              $ref: '#/components/schemas/Product'
+              $ref: "#/components/schemas/Product"
     ErrorResponse:
       type: object
       properties:
