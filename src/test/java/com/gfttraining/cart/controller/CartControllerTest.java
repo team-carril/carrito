@@ -15,6 +15,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.gfttraining.cart.api.controller.CartController;
+import com.gfttraining.cart.api.controller.dto.User;
+import com.gfttraining.cart.exception.BadRequestBodyException;
 import com.gfttraining.cart.exception.BadRequestParamException;
 import com.gfttraining.cart.service.CartService;
 
@@ -29,12 +31,6 @@ class CartControllerTest {
 	@BeforeEach
 	public void init() {
 		MockitoAnnotations.openMocks(this);
-	}
-
-	@Test
-	public void findAllCartTest() {
-		cartController.findAllCarts();
-		verify(cartService).findAll();
 	}
 
 	@ParameterizedTest
@@ -52,6 +48,13 @@ class CartControllerTest {
 		} else {
 			verify(cartService).findByStatus(status);
 		}
+	}
+
+	@Test
+	public void create_cart() throws BadRequestBodyException {
+		User user = new User(1);
+		cartController.createCart(user);
+		verify(cartService).postNewCart(user);
 	}
 
 	static Stream<Arguments> statusArguments() {
