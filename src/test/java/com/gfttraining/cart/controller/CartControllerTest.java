@@ -69,7 +69,6 @@ class CartControllerTest {
 		cartController.addProductToCart(product, UUID.randomUUID());
 		verify(cartService).addProductToCart(any(Product.class), any(UUID.class));
 	}
-
 	static Stream<Arguments> statusArguments() {
 		return Stream.of(
 				Arguments.of("DRAFT"),

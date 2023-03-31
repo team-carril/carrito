@@ -115,8 +115,7 @@ public class CartServiceTest extends BaseTestWithConstructors {
 		cartService.postNewCart(user);
 		verify(cartRepository).save(any(CartEntity.class));
 	}
-
-	@Test
+  @Test
 	public void add_product_existing_product() {
 		UUID uuid = UUID.randomUUID();
 		Product product = productDto(1, 1, null, null, uuid, 0, 1);
@@ -140,7 +139,6 @@ public class CartServiceTest extends BaseTestWithConstructors {
 		when(cartRepository.findById(uuid)).thenReturn(Optional.ofNullable(null));
 		assertThrows(EntityNotFoundException.class, () -> cartService.addProductToCart(new Product(), uuid));
 	}
-
 	static Stream<Arguments> statusArguments() {
 		return Stream.of(
 				Arguments.of("DRAFT"),
