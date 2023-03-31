@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -66,9 +67,11 @@ class CartControllerTest {
 		ProductFromCatalog product = new ProductFromCatalog();
 		product.setId(1);
 		product.setName("test");
+		product.setPrice(new BigDecimal(15));
 		cartController.addProductToCart(product, UUID.randomUUID());
 		verify(cartService).addProductToCart(any(Product.class), any(UUID.class));
 	}
+
 	static Stream<Arguments> statusArguments() {
 		return Stream.of(
 				Arguments.of("DRAFT"),

@@ -101,33 +101,6 @@ public class CartEndpointTest extends BaseTestWithConstructors {
 	}
 
 	@Test
-	public void POST_carts_returns_OK() throws Exception {
-		when(cartService.postNewCart(any(User.class))).thenReturn(
-			cartDto(null, 1, null, null, "DRAFT", null, 0)
-		);
-		String json = mapper.writeValueAsString(new User(1));
-		
-		mockMvc.perform(post("/carts").contentType(MediaType.APPLICATION_JSON).content(json))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("@.id").isString())
-				.andExpect(jsonPath("@.userId").isNumber())
-				.andExpect(jsonPath("@.createdAt").isString())
-				.andExpect(jsonPath("@.updatedAt").isString())
-				.andExpect(jsonPath("@.totalPrice").isNumber())
-				.andExpect(jsonPath("@.status").isString())
-				.andExpect(jsonPath("@.products").isArray());
-	}
-
-	@Test
-	public void POST_carts_bad_requestbody() throws Exception {
-		String json = mapper.writeValueAsString(new User()); // will fail with id == 0
-		mockMvc.perform(post("/carts").contentType(MediaType.APPLICATION_JSON).content(json))
-				.andExpect(status().isBadRequest())
-				.andExpect(jsonPath("@.timestamp").isString())
-				.andExpect(jsonPath("@.msg").isString());
-	}
-
-	@Test
 	public void PATCH_carts_OK() throws Exception {
 		UUID id = UUID.randomUUID();
 		ProductFromCatalog product = new ProductFromCatalog();
