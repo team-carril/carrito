@@ -1,0 +1,31 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: admin
+    password: 1234
+    driverClassName: org.h2.Driver
+  jpa:
+    databasePlatform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: none
+  sql:
+    init:
+      data-locations:
+        - classpath*:sql/*.sql
+      mode: always 
+  h2:
+    console:
+      enabled: true
+rates:
+  paymentMethod:
+    VISA: 0
+    TRANSFER: 2
+    PAYPAL: 0
+  country:
+    SPAIN: 21
+    ESTONIA: 20
+    FINLAND: 24
+    FRANCE: 20
+    ITALY: 22
+    PORTUGAL: 20
+    GREECE: 23
