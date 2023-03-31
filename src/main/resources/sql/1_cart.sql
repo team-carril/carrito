@@ -1,67 +1,100 @@
-insert into
-	CART (
-		id,
-		to_user,
-		created_at,
-		updated_at,
-		status
-	)
-values
-	(
-		'17d95cad-c198-4c06-812d-2cd2f345685f',
-		1,
-		'1970-02-02 22:22:22',
-		'1970-02-02 22:22:22',
-		'DRAFT'
-	);
-
-INSERT INTO
-	CART (
-		id,
-		to_user,
-		created_at,
-		updated_at,
-		status
-	)
-VALUES
-	(
-		'9f99c3d3-1c8a-4e11-81e5-7c76e32c8d7f',
-		123,
-		'2023-03-29 10:30:00',
-		'2023-03-29 10:31:00',
-		'DRAFT'
-	);
-
-INSERT INTO
-	CART (
-		id,
-		to_user,
-		created_at,
-		updated_at,
-		status
-	)
-VALUES
-	(
-		'73fbba50-6a2d-4218-a6a8-6fbd1d7b98c5',
-		456,
-		'2023-03-28 18:45:00',
-		'2023-03-28 18:50:00',
-		'SUBMITTED'
-	);
-
-INSERT INTO
-	CART (
-		id,
-		to_user,
-		created_at,
-		updated_at,
-		status
-	)
-VALUES
-	(
-		'afa4bc90-2efd-46ad-ba72-61219ac9b8f5',
-		156,
-		'2023-03-28 18:45:00',
-		'2023-03-28 18:50:00',
-		'DRAFT'
-	);
+insert into CART (id, to_user, created_at, updated_at, status) values ('0aa4e49a-dbba-4a9e-a162-c3a9dc350f7f', 1,  '2022-10-21 06:51:18','2022-08-20 14:20:02','ALL');
+insert into CART (id, to_user, created_at, updated_at, status) values ('6e7baf09-9877-4c26-a4fb-21e0e2572819', 2,  '2022-06-22 07:08:42','2022-11-16 22:02:01','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('78fca8d3-05f6-4f1a-859f-ddab850ceec3', 3,  '2022-08-30 19:47:26','2022-09-24 05:20:44','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('7e2bb8f9-6bbc-4bc4-915f-f72cb21b035f', 4,  '2022-06-06 17:55:19','2022-05-17 20:29:01','DRAFT');
+insert into CART (id, to_user, created_at, updated_at, status) values ('f92f3177-78cd-4e5d-9324-1954cae5e016', 5,  '2022-12-04 01:18:35','2022-11-10 08:49:39','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('50d0ffdd-a7c3-4bce-aadd-3dac8732571f', 6,  '2023-01-16 06:54:34','2023-03-01 01:37:59','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('0f6f7a4f-1097-4624-8973-ae6966728647', 7,  '2023-02-02 17:38:36','2022-11-14 17:49:42','DRAFT');
+insert into CART (id, to_user, created_at, updated_at, status) values ('dc6148c4-5aec-4b77-8de7-c041ebd3e42c', 8,  '2022-07-26 15:35:43','2022-11-19 23:00:43','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('3a9018dc-1506-439a-b0d4-1451fd5d8dae', 9,  '2022-07-28 14:42:22','2022-08-05 15:43:05','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('18df6192-4b31-4951-9756-4a277acba7ae', 10, '2022-11-24 11:11:59','2022-12-10 05:19:30','DRAFT');
+insert into CART (id, to_user, created_at, updated_at, status) values ('9539592d-d50f-4495-b99f-f89dc5c53f6e', 11, '2022-10-27 16:00:18','2023-03-01 01:25:37','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('34e837a7-9b40-4d64-8b77-4a298ce0a2df', 12, '2022-11-14 02:26:16','2023-03-08 17:30:18','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('1ef1ad6c-8716-4a66-a449-f17bdb92a84a', 13, '2023-01-18 06:44:27','2022-12-06 21:58:07','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('df41978f-e48c-479a-915c-ac36661e3b81', 14, '2022-04-18 20:57:29','2023-01-26 03:33:46','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('a5f29c42-5ed4-4848-abde-13c8b99694bd', 15, '2022-04-08 17:35:03','2022-11-28 03:24:28','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('aab5c4fb-56a1-4eb6-ad53-da3083143f43', 16, '2023-01-03 04:47:08','2023-01-04 06:12:52','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('e95fd321-bd88-47e8-a815-07d6ef656008', 17, '2022-04-28 14:30:28','2022-05-10 01:30:42','ALL');
+insert into CART (id, to_user, created_at, updated_at, status) values ('8d9ce756-d7cc-4532-ae25-ecdaf848a224', 18, '2022-09-25 20:26:31','2022-06-24 08:07:25','DRAFT');
+insert into CART (id, to_user, created_at, updated_at, status) values ('dba4f978-064b-43c4-aae0-426ff9df6f88', 19, '2022-09-03 22:46:18','2022-06-29 12:58:31','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('b5187287-87fe-4620-8553-44e53398dd3d', 20, '2022-10-22 13:27:01','2022-06-17 15:20:38','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('885e6e92-de5b-4f74-826c-2182bbe0eb01', 21, '2022-07-25 17:25:34','2022-11-14 02:19:55','DRAFT');
+insert into CART (id, to_user, created_at, updated_at, status) values ('d88486a7-8808-4249-993f-10454fabe77e', 22, '2022-05-30 22:04:28','2022-03-30 08:33:44','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('341dac71-877a-4563-ad24-1a1f7ac2f9f6', 23, '2022-04-07 09:12:41','2023-01-13 17:42:47','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('5fa529da-ac71-4924-a7d0-c1ae17eabee5', 24, '2022-04-29 21:46:26','2022-12-11 19:15:21','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('2f1d12b4-8a3a-4b53-b8bf-380b7583f6e2', 25, '2022-08-10 14:10:12','2022-04-28 12:16:46','ALL');
+insert into CART (id, to_user, created_at, updated_at, status) values ('b2499fd9-3433-41fd-b0ac-84c96398aefb', 26, '2023-03-08 11:58:22','2023-02-26 05:35:10','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('64ab5318-1a5d-45e8-8470-92d2854a3c15', 27, '2022-10-21 10:27:36','2022-10-16 08:20:18','ALL');
+insert into CART (id, to_user, created_at, updated_at, status) values ('71214b44-caaf-4d56-b7e3-efce03d56f83', 28, '2022-11-23 07:46:20','2023-01-17 05:00:58','ALL');
+insert into CART (id, to_user, created_at, updated_at, status) values ('57030d57-f0c7-4bca-85df-8bdd666da482', 29, '2022-05-26 15:38:15','2022-11-08 15:25:27','DRAFT');
+insert into CART (id, to_user, created_at, updated_at, status) values ('6819b624-9d92-48d2-9e34-a4ed7bee8a49', 30, '2022-10-01 02:37:35','2023-02-16 06:02:29','ALL');
+insert into CART (id, to_user, created_at, updated_at, status) values ('cd8518a2-590c-447f-89b5-bc04e0fc106a', 31, '2023-02-18 13:20:43','2022-11-21 16:04:08','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('22f250c4-4392-42c9-9ab9-098188f27e30', 32, '2023-03-29 08:41:40','2022-11-26 18:45:50','DRAFT');
+insert into CART (id, to_user, created_at, updated_at, status) values ('1400dcac-2a55-43ae-a554-06911b38ff52', 33, '2022-11-13 17:41:05','2022-04-29 15:10:21','ALL');
+insert into CART (id, to_user, created_at, updated_at, status) values ('87db9518-0241-42ad-b5c8-3a396b595d47', 34, '2023-01-13 17:54:38','2022-05-08 23:45:15','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('125faf6d-530c-4e04-b888-fc2f40573625', 35, '2022-12-28 07:56:43','2022-04-30 22:26:23','DRAFT');
+insert into CART (id, to_user, created_at, updated_at, status) values ('b372a279-3f64-43ed-b53e-2f474893377a', 36, '2023-02-03 12:18:20','2022-09-11 13:30:25','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('09fbdd9f-cb50-45de-afd3-db226122c1a6', 37, '2022-12-23 11:55:56','2022-04-29 09:53:49','DRAFT');
+insert into CART (id, to_user, created_at, updated_at, status) values ('0740f41d-abc8-4190-88d1-af46d7ef3316', 38, '2022-10-26 10:24:30','2023-01-24 16:41:21','DRAFT');
+insert into CART (id, to_user, created_at, updated_at, status) values ('8c66918d-8d54-4c08-84b4-3cc9c2b010a9', 39, '2022-04-09 17:36:12','2022-09-23 05:49:15','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('af53051d-1842-40c1-9c2e-6edde3472a75', 40, '2023-01-02 13:38:02','2023-03-04 20:09:01','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('28a737cb-b7ac-4068-938e-8ad20744ba5c', 41, '2022-10-18 12:13:44','2022-08-16 11:12:37','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('7cb5d411-e08a-40a9-9def-33c25c54e832', 42, '2022-12-26 17:50:57','2022-04-19 23:28:59','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('c6fe9dca-23ef-45bc-96d9-869fdecd380e', 43, '2022-09-25 14:19:15','2022-07-15 05:57:24','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('a4ff13dd-3708-459c-9cc1-9edff18f30a4', 44, '2022-08-03 09:59:40','2022-04-18 05:34:56','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('070b2aa2-39a8-4e48-b8ad-630fa6f8bc78', 45, '2023-02-08 01:58:12','2022-06-17 14:37:42','DRAFT');
+insert into CART (id, to_user, created_at, updated_at, status) values ('8e6f8eb9-e164-4aba-9192-016521706328', 46, '2023-01-26 14:50:25','2022-09-28 15:31:04','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('ee2bd206-9cdd-47c5-baaf-74b5d397a103', 47, '2023-01-31 10:14:46','2023-01-09 10:27:53','ALL');
+insert into CART (id, to_user, created_at, updated_at, status) values ('b348d65d-ca5c-4fd6-b0cf-1d4b007c0f67', 48, '2022-05-22 19:47:53','2022-12-25 19:01:57','DRAFT');
+insert into CART (id, to_user, created_at, updated_at, status) values ('77ad4aab-bb1c-4748-92ef-e8290de3d94d', 49, '2023-03-05 19:01:57','2022-06-20 08:37:32','ALL');
+insert into CART (id, to_user, created_at, updated_at, status) values ('e456a1c1-e75d-4daf-9365-843b7f7760a3', 50, '2023-01-04 05:09:39','2023-03-05 22:28:27','ALL');
+insert into CART (id, to_user, created_at, updated_at, status) values ('cf229cf6-ad34-4e84-a4e2-8679ec13af53', 51, '2022-06-16 04:45:06','2023-01-23 23:25:09','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('a3658a89-1727-4065-9fc5-209e2f2efda1', 52, '2022-05-08 04:15:12','2022-05-23 23:53:31','ALL');
+insert into CART (id, to_user, created_at, updated_at, status) values ('64fbef64-a74f-4f29-9222-6a7ec945f254', 53, '2022-09-29 08:02:05','2022-05-09 23:37:59','ALL');
+insert into CART (id, to_user, created_at, updated_at, status) values ('daea01a6-3c48-4ee3-8ca4-477840b13233', 54, '2023-03-13 06:23:39','2023-02-10 14:43:46','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('5b4bef6b-bcb6-42c2-9cec-2ce6af90100d', 55, '2022-11-05 10:30:27','2022-11-17 04:33:37','DRAFT');
+insert into CART (id, to_user, created_at, updated_at, status) values ('26d67f55-b015-4e18-afe8-491ca24dc9ed', 56, '2022-05-10 15:19:02','2022-11-17 04:50:08','DRAFT');
+insert into CART (id, to_user, created_at, updated_at, status) values ('fcbdcc1d-0285-478d-96ba-95bd877d24fb', 57, '2022-08-12 19:52:17','2023-02-18 00:30:14','ALL');
+insert into CART (id, to_user, created_at, updated_at, status) values ('6fff10e2-57de-4395-90d8-b0727c44aec0', 58, '2022-12-20 07:41:43','2022-07-02 07:56:48','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('07d1a5e0-968c-4e7c-9314-46cc991767bb', 59, '2023-01-02 23:10:46','2022-10-12 16:23:28','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('2133bcc6-6977-4e5c-b03e-6acb21c4f380', 60, '2023-02-23 05:45:58','2023-03-27 01:54:58','DRAFT');
+insert into CART (id, to_user, created_at, updated_at, status) values ('0231d09b-4ec3-4d78-98d4-92ec60309d3d', 61, '2022-12-22 07:51:25','2022-04-24 19:02:58','ALL');
+insert into CART (id, to_user, created_at, updated_at, status) values ('0be40469-1d08-4f49-9b63-e02a7c40773f', 62, '2023-01-30 13:35:40','2022-11-25 07:57:46','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('0e3d80c9-708c-48b4-8813-6c53fc3b9bad', 63, '2023-02-02 18:32:22','2022-09-16 23:51:43','DRAFT');
+insert into CART (id, to_user, created_at, updated_at, status) values ('f371bb6a-62ec-467d-a739-9790f70928b6', 64, '2022-07-15 21:00:12','2022-07-13 03:27:39','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('09973a25-0e80-46c0-840d-48fbc673d297', 65, '2023-01-11 20:45:41','2022-04-08 15:28:03','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('b94589a7-1b82-44bb-9c98-5c9969af4b2a', 66, '2022-08-30 11:49:58','2022-11-24 15:12:49','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('29bda320-53b2-424a-ad08-306b9785eee1', 67, '2022-05-03 06:51:50','2022-07-04 16:11:45','DRAFT');
+insert into CART (id, to_user, created_at, updated_at, status) values ('7d2acbc5-e326-4d44-8315-bce6d7fc2e9d', 68, '2022-04-10 21:38:41','2022-10-31 06:41:01','DRAFT');
+insert into CART (id, to_user, created_at, updated_at, status) values ('da07a7d3-fcdd-46ee-8d35-16b158d1ac6b', 69, '2023-03-29 15:27:32','2023-03-06 09:52:46','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('97f80c2b-6b22-4a06-951e-49cf19b9c006', 70, '2022-11-26 07:03:25','2022-07-26 03:45:41','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('f03040ac-4336-4706-9fd3-bb27ce2851fd', 71, '2022-09-12 09:53:53','2022-07-08 20:04:15','DRAFT');
+insert into CART (id, to_user, created_at, updated_at, status) values ('7dcde47c-0954-4177-a2e5-86d224d9bf4f', 72, '2023-01-05 22:18:09','2022-09-25 11:15:47','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('2070fefe-afcf-4f92-8c6a-2aee94a27ab1', 73, '2022-08-27 02:16:43','2022-04-23 05:30:45','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('7a5453e6-53a9-4cfb-aa1d-f4dc78a8d9ea', 74, '2023-01-17 21:05:56','2022-10-07 16:34:30','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('91a1c1f3-510a-483a-ac15-3558401e4d72', 75, '2022-12-07 17:45:24','2023-03-23 16:25:10','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('999afc28-e809-4b87-b6ac-c0144eb7c3da', 76, '2022-09-21 21:54:43','2022-08-13 04:40:18','DRAFT');
+insert into CART (id, to_user, created_at, updated_at, status) values ('3a1477a2-ae96-4d73-aae6-de16b2619c46', 77, '2023-03-05 21:18:40','2022-10-20 09:37:45','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('c16d08bb-427d-42dc-889e-e8ac8725ba4d', 78, '2022-08-16 14:38:59','2022-11-25 03:08:16','DRAFT');
+insert into CART (id, to_user, created_at, updated_at, status) values ('d001ab85-830c-4aaf-89a6-9a6324af7825', 79, '2023-01-10 20:22:03','2022-09-24 14:37:47','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('055c5b48-85c1-4387-bf08-825054b08713', 80, '2023-02-12 23:16:13','2023-01-22 15:34:55','ALL');
+insert into CART (id, to_user, created_at, updated_at, status) values ('f006890b-3b65-46b9-bb9a-3201bdc80d8e', 81, '2023-03-08 04:30:24','2023-03-11 03:59:53','ALL');
+insert into CART (id, to_user, created_at, updated_at, status) values ('0567c98a-786b-439b-b388-adc4f883daf2', 82, '2022-10-13 03:36:31','2023-02-01 22:45:17','ALL');
+insert into CART (id, to_user, created_at, updated_at, status) values ('17d457f1-1015-48fb-a673-85e989aeac04', 83, '2022-12-25 09:05:45','2022-08-19 00:38:37','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('9fce36c7-0e7d-4e82-b42c-a5f669da8c9c', 84, '2023-01-05 05:18:59','2022-08-02 17:06:13','DRAFT');
+insert into CART (id, to_user, created_at, updated_at, status) values ('7c237c97-5315-4298-b3ac-9a326edbceef', 85, '2022-10-26 18:47:06','2022-07-26 13:02:06','ALL');
+insert into CART (id, to_user, created_at, updated_at, status) values ('7eb50da0-13d8-4d39-91a1-1c4636f3f3cf', 86, '2022-10-09 06:37:49','2022-11-25 19:27:22','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('79452853-f3bb-46ca-9cc3-e920bb15b31e', 87, '2022-12-31 06:43:03','2022-06-14 10:46:12','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('53d3befc-7994-4288-a627-0bf7e43b7761', 88, '2022-09-28 14:40:31','2022-09-01 12:23:08','ALL');
+insert into CART (id, to_user, created_at, updated_at, status) values ('09eace29-6b52-4355-a029-777a3ff0adcb', 89, '2022-11-09 04:36:48','2023-01-26 20:50:17','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('7ed04001-b1c5-4248-a835-b96c7a0e4189', 90, '2022-07-25 02:18:42','2022-06-12 07:02:53','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('6f7d477c-86f0-4b5d-9c7f-a2fcbee9f0d6', 91, '2022-11-28 20:52:11','2023-03-27 19:32:12','ALL');
+insert into CART (id, to_user, created_at, updated_at, status) values ('926ef256-fc7a-40a9-9feb-3dbb77ced4a1', 92, '2022-12-30 03:23:10','2022-06-20 02:03:56','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('67bbadb9-9354-4536-9aea-4614b4987014', 93, '2023-02-04 10:21:05','2022-06-13 02:38:02','DRAFT');
+insert into CART (id, to_user, created_at, updated_at, status) values ('91d83df0-6fb0-419a-b994-267687da6d23', 94, '2022-09-24 05:33:11','2022-08-10 21:19:02','ALL');
+insert into CART (id, to_user, created_at, updated_at, status) values ('d7602532-47b8-4288-8c46-12475169f33e', 95, '2023-02-20 05:45:26','2023-01-23 12:15:18','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('6d482677-30c8-465b-abcc-009ee7a4bec4', 96, '2022-10-17 02:05:03','2022-05-24 19:44:30','DRAFT');
+insert into CART (id, to_user, created_at, updated_at, status) values ('50990d12-1726-4712-bdbd-b55c17245867', 97, '2023-02-28 03:56:30','2022-10-31 14:10:40','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('48afd013-ccb4-4cc8-bcfa-3b90cf693edd', 98, '2022-06-01 05:17:32','2023-03-09 20:50:42','ALL');
+insert into CART (id, to_user, created_at, updated_at, status) values ('a0fea603-060f-43ac-b54d-603efeb4b3e8', 99, '2022-06-19 07:14:34','2022-10-05 04:13:22','SUBMITTED');
+insert into CART (id, to_user, created_at, updated_at, status) values ('5e55a630-f338-4bc1-9fc7-142b9cc25f47', 100, '2022-05-20 10:56:05','2023-01-15 07:33:34', 'ALL');
