@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gfttraining.cart.BaseTestWithConstructors;
 import com.gfttraining.cart.api.controller.CartController;
 import com.gfttraining.cart.api.controller.dto.Cart;
+
 import com.gfttraining.cart.api.controller.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.controller.dto.User;
 import com.gfttraining.cart.jpa.CartRepository;
@@ -97,6 +98,7 @@ public class CartEndpointTest extends BaseTestWithConstructors {
 	public void POST_carts_bad_requestbody() throws Exception {
 		String json = mapper.writeValueAsString(new User()); // will fail with id == 0
 		mockMvc.perform(post("/carts").contentType(MediaType.APPLICATION_JSON).content(json))
+
 				.andExpect(status().isBadRequest())
 				.andExpect(jsonPath("@.timestamp").isString())
 				.andExpect(jsonPath("@.msg").isString());

@@ -67,7 +67,7 @@ public class CartService {
 		return CartEntity.toDTO(entity);
 	}
 
-	public Cart deleteById(UUID cartId) {
+  public Cart deleteById(UUID cartId) {
 		Optional<CartEntity> entityOptional = cartRepository.findById(cartId);
 		if (entityOptional.isEmpty())
 			throw new EntityNotFoundException("Cart " + cartId + " not found.");
