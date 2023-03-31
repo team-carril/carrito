@@ -1,14 +1,19 @@
 package com.gfttraining.cart.api.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gfttraining.cart.api.controller.dto.Cart;
+import com.gfttraining.cart.api.controller.dto.Product;
+import com.gfttraining.cart.api.controller.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.controller.dto.User;
 import com.gfttraining.cart.exception.BadRequestBodyException;
 import com.gfttraining.cart.exception.BadRequestParamException;
@@ -45,6 +50,13 @@ public class CartController {
 		if (user.getId() == 0)
 			throw new BadRequestBodyException("Missing User id");
 		return cartService.postNewCart(user);
+	}
+
+	@PatchMapping("/carts/{id}")
+	public Cart addProductToCart(@RequestBody ProductFromCatalog productFromCatalog, @PathVariable UUID id)
+			throws BadRequestBodyException {
+		Product product = Product.fromCatalog(productFromCatalog, id);
+		return cartService.addProductToCart(product, id);
 	}
 
 	public static boolean isValidStatus(String str) {

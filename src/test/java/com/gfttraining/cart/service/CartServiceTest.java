@@ -1,6 +1,7 @@
 package com.gfttraining.cart.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -8,10 +9,14 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -61,12 +66,12 @@ public class CartServiceTest extends BaseTestWithConstructors {
 		UUID uuidB = UUID.randomUUID();
 		UUID uuidC = UUID.randomUUID();
 
-		List<ProductEntity> p1 = toList(productEntity(1, "test_item", "asdf", uuidA, 5.0, 1),
-				productEntity(2, "test_item", "asdf", uuidA, 5.0, 1),
-				productEntity(3, "test_item", "asdf", uuidA, 5.0, 1));
-		List<Product> p2 = toList(productDto(1, "test_item", "asdf", uuidA, 5.0, 1),
-				productDto(2, "test_item", "asdf", uuidA, 5.0, 1),
-				productDto(3, "test_item", "asdf", uuidA, 5.0, 1));
+		List<ProductEntity> p1 = toList(productEntity(1, 1, "test_item", "asdf", uuidA, 5.0, 1),
+				productEntity(2, 2, "test_item", "asdf", uuidA, 5.0, 1),
+				productEntity(3, 3, "test_item", "asdf", uuidA, 5.0, 1));
+		List<Product> p2 = toList(productDto(1, 1, "test_item", "asdf", uuidA, 5.0, 1),
+				productDto(2, 2, "test_item", "asdf", uuidA, 5.0, 1),
+				productDto(3, 3, "test_item", "asdf", uuidA, 5.0, 1));
 
 		List<CartEntity> listInput = toList(
 				cartEntity(uuidA, 1, testDate, testDate, "DRAFT", p1),
@@ -110,7 +115,30 @@ public class CartServiceTest extends BaseTestWithConstructors {
 		cartService.postNewCart(user);
 		verify(cartRepository).save(any(CartEntity.class));
 	}
+  @Test
+	public void add_product_existing_product() {
+		UUID uuid = UUID.randomUUID();
+		Product product = productDto(1, 1, null, null, uuid, 0, 1);
+		CartEntity entity = cartEntity(uuid, 0, null, null, null, toList(productEntity(1, 1, null, null, uuid, 0, 1)));
 
+		when(cartRepository.findById(uuid)).thenReturn(Optional.of(entity));
+		when(cartRepository.saveAndFlush(entity)).thenReturn(entity);
+		cartService.addProductToCart(product, uuid);
+		verify(cartRepository).findById(uuid);
+		verify(cartRepository).saveAndFlush(entity);
+	}
+
+	@Test
+	@Disabled // TODO
+	public void add_product_new_product() {
+	}
+
+	@Test
+	public void add_product_throws_cart_not_found() {
+		UUID uuid = UUID.randomUUID();
+		when(cartRepository.findById(uuid)).thenReturn(Optional.ofNullable(null));
+		assertThrows(EntityNotFoundException.class, () -> cartService.addProductToCart(new Product(), uuid));
+	}
 	static Stream<Arguments> statusArguments() {
 		return Stream.of(
 				Arguments.of("DRAFT"),

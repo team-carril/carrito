@@ -2,6 +2,8 @@ package com.gfttraining.cart.exception;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -25,6 +27,14 @@ public class GlobalExceptionHandler {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
 
 		return new ResponseEntity<ErrorResponse>(res, HttpStatus.BAD_REQUEST);
+	}
+
+
+	@ExceptionHandler(EntityNotFoundException.class)
+	public ResponseEntity<ErrorResponse> handlesBadRequestBodyException(EntityNotFoundException ex, WebRequest req) {
+		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
+
+		return new ResponseEntity<ErrorResponse>(res, HttpStatus.NOT_FOUND);
 	}
 
 }
