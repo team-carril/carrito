@@ -8,6 +8,8 @@ import java.math.BigDecimal;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -70,6 +72,13 @@ class CartControllerTest {
 		product.setPrice(new BigDecimal(15));
 		cartController.addProductToCart(product, UUID.randomUUID());
 		verify(cartService).addProductToCart(any(Product.class), any(UUID.class));
+	}
+
+	@Test
+	public void delete_cart() throws EntityNotFoundException {
+		UUID id = UUID.randomUUID();
+		cartController.deleteCartById(id);
+		verify(cartService).deleteById(id);
 	}
 
 	static Stream<Arguments> statusArguments() {

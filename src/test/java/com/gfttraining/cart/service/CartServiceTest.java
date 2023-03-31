@@ -139,6 +139,21 @@ public class CartServiceTest extends BaseTestWithConstructors {
 		when(cartRepository.findById(uuid)).thenReturn(Optional.ofNullable(null));
 		assertThrows(EntityNotFoundException.class, () -> cartService.addProductToCart(new Product(), uuid));
 	}
+	@Test
+	public void delete_product_OK() {
+		UUID id = UUID.randomUUID();
+		when(cartRepository.findById(id)).thenReturn(Optional.of(new CartEntity()));
+		cartService.deleteById(id);
+		verify(cartRepository).delete(any(CartEntity.class));
+	}
+
+	@Test
+	public void delete_product_throws_NOT_FOUND() {
+		UUID id = UUID.randomUUID();
+		when(cartRepository.findById(id)).thenReturn(Optional.ofNullable(null));
+		assertThrows(EntityNotFoundException.class, () -> cartService.deleteById(id));
+	}
+
 	static Stream<Arguments> statusArguments() {
 		return Stream.of(
 				Arguments.of("DRAFT"),

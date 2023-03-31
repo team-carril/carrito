@@ -3,6 +3,7 @@ package com.gfttraining.cart.api.controller;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,6 +58,11 @@ public class CartController {
 			throws BadRequestBodyException {
 		Product product = Product.fromCatalog(productFromCatalog, id);
 		return cartService.addProductToCart(product, id);
+	}
+
+	@DeleteMapping("/carts/{id}")
+	public void deleteCartById(@PathVariable UUID id) {
+		cartService.deleteById(id);
 	}
 
 	public static boolean isValidStatus(String str) {
