@@ -1,7 +1,9 @@
 package com.gfttraining.cart.mvc;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -11,6 +13,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,6 +120,21 @@ public class CartEndpointTest extends BaseTestWithConstructors {
 		mockMvc.perform(patch("/carts/1").contentType(MediaType.APPLICATION_JSON).content(json))
 				.andExpect(status().isBadRequest());
 
+	}
+
+	@Test
+	public void DELETE_carts_OK() throws Exception {
+		UUID id = UUID.randomUUID();
+		mockMvc.perform(delete("/carts/" + id)).andExpect(status().isOk());
+		verify(cartService).deleteById(id);
+	}
+
+	@Test
+	public void DELETE_cart_NOT_FOUND() throws Exception {
+		UUID id = UUID.randomUUID();
+		when(cartService.deleteById(id)).thenThrow(EntityNotFoundException.class);
+		mockMvc.perform(delete("/carts/" + id)).andExpect(status().isNotFound());
+		verify(cartService).deleteById(id);
 	}
 
 }

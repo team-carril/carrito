@@ -4,8 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 import java.util.stream.Stream;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -66,8 +69,16 @@ class CartControllerTest {
 		ProductFromCatalog product = new ProductFromCatalog();
 		product.setId(1);
 		product.setName("test");
+		product.setPrice(new BigDecimal(15));
 		cartController.addProductToCart(product, UUID.randomUUID());
 		verify(cartService).addProductToCart(any(Product.class), any(UUID.class));
+	}
+
+	@Test
+	public void delete_cart() throws EntityNotFoundException {
+		UUID id = UUID.randomUUID();
+		cartController.deleteCartById(id);
+		verify(cartService).deleteById(id);
 	}
 
 	static Stream<Arguments> statusArguments() {
