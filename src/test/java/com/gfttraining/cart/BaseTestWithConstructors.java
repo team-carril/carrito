@@ -7,8 +7,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import com.gfttraining.cart.api.controller.dto.Cart;
-import com.gfttraining.cart.api.controller.dto.Product;
+import com.gfttraining.cart.api.dto.Cart;
+import com.gfttraining.cart.api.dto.Product;
 import com.gfttraining.cart.jpa.model.CartEntity;
 import com.gfttraining.cart.jpa.model.ProductEntity;
 

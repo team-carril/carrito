@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
-import com.gfttraining.cart.api.controller.dto.ErrorResponse;
+import com.gfttraining.cart.api.dto.ErrorResponse;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -28,7 +28,6 @@ public class GlobalExceptionHandler {
 
 		return new ResponseEntity<ErrorResponse>(res, HttpStatus.BAD_REQUEST);
 	}
-
 
 	@ExceptionHandler(EntityNotFoundException.class)
 	public ResponseEntity<ErrorResponse> handlesBadRequestBodyException(EntityNotFoundException ex, WebRequest req) {

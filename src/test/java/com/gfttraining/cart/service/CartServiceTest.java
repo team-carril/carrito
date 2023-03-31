@@ -26,9 +26,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.gfttraining.cart.BaseTestWithConstructors;
-import com.gfttraining.cart.api.controller.dto.Cart;
-import com.gfttraining.cart.api.controller.dto.Product;
-import com.gfttraining.cart.api.controller.dto.User;
+import com.gfttraining.cart.api.dto.Cart;
+import com.gfttraining.cart.api.dto.Product;
+import com.gfttraining.cart.api.dto.User;
 import com.gfttraining.cart.jpa.CartRepository;
 import com.gfttraining.cart.jpa.model.CartEntity;
 import com.gfttraining.cart.jpa.model.ProductEntity;
@@ -115,7 +115,8 @@ public class CartServiceTest extends BaseTestWithConstructors {
 		cartService.postNewCart(user);
 		verify(cartRepository).save(any(CartEntity.class));
 	}
-  @Test
+
+	@Test
 	public void add_product_existing_product() {
 		UUID uuid = UUID.randomUUID();
 		Product product = productDto(1, 1, null, null, uuid, 0, 1);
@@ -139,6 +140,7 @@ public class CartServiceTest extends BaseTestWithConstructors {
 		when(cartRepository.findById(uuid)).thenReturn(Optional.ofNullable(null));
 		assertThrows(EntityNotFoundException.class, () -> cartService.addProductToCart(new Product(), uuid));
 	}
+
 	@Test
 	public void delete_product_OK() {
 		UUID id = UUID.randomUUID();

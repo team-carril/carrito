@@ -20,9 +20,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.gfttraining.cart.api.controller.CartController;
-import com.gfttraining.cart.api.controller.dto.Product;
-import com.gfttraining.cart.api.controller.dto.ProductFromCatalog;
-import com.gfttraining.cart.api.controller.dto.User;
+import com.gfttraining.cart.api.dto.Product;
+import com.gfttraining.cart.api.dto.ProductFromCatalog;
+import com.gfttraining.cart.api.dto.User;
 import com.gfttraining.cart.exception.BadRequestBodyException;
 import com.gfttraining.cart.exception.BadRequestParamException;
 import com.gfttraining.cart.service.CartService;

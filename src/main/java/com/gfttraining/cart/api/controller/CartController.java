@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gfttraining.cart.api.controller.dto.Cart;
-import com.gfttraining.cart.api.controller.dto.Product;
-import com.gfttraining.cart.api.controller.dto.ProductFromCatalog;
-import com.gfttraining.cart.api.controller.dto.User;
+import com.gfttraining.cart.api.dto.Cart;
+import com.gfttraining.cart.api.dto.Product;
+import com.gfttraining.cart.api.dto.ProductFromCatalog;
+import com.gfttraining.cart.api.dto.User;
 import com.gfttraining.cart.exception.BadRequestBodyException;
 import com.gfttraining.cart.exception.BadRequestParamException;
 import com.gfttraining.cart.service.CartService;

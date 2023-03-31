@@ -26,10 +26,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gfttraining.cart.BaseTestWithConstructors;
 import com.gfttraining.cart.api.controller.CartController;
-import com.gfttraining.cart.api.controller.dto.Cart;
-
-import com.gfttraining.cart.api.controller.dto.ProductFromCatalog;
-import com.gfttraining.cart.api.controller.dto.User;
+import com.gfttraining.cart.api.dto.Cart;
+import com.gfttraining.cart.api.dto.ProductFromCatalog;
+import com.gfttraining.cart.api.dto.User;
 import com.gfttraining.cart.jpa.CartRepository;
 import com.gfttraining.cart.service.CartService;
 
