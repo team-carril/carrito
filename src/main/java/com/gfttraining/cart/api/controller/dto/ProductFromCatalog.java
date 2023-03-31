@@ -9,5 +9,6 @@ public class ProductFromCatalog {
 	private int id;
 	private String name;
 	private BigDecimal price;
+	private String description;
 	private int stock;
 }

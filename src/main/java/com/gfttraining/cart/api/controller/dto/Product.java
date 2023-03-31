@@ -41,6 +41,7 @@ public class Product {
 		return Product.builder().catalogId(productFromCatalog.getId())
 				.name(productFromCatalog.getName())
 				.cartId(cartId)
+				.description(productFromCatalog.getDescription())
 				.price(productFromCatalog.getPrice())
 				.quantity(1)
 				.build();

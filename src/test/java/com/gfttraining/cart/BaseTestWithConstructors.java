@@ -46,15 +46,15 @@ public class BaseTestWithConstructors {
 		return Arrays.asList(dtos);
 	}
 
-	protected ProductEntity productEntity(int id, String name, String description, UUID cartId,
+	protected ProductEntity productEntity(int id, int catalogId, String name, String description, UUID cartId,
 			double price, int quantity) {
-		return ProductEntity.builder().id(id).name(name).cartId(cartId).description(description)
+		return ProductEntity.builder().id(id).catalogId(catalogId).name(name).cartId(cartId).description(description)
 				.price(BigDecimal.valueOf(price)).quantity(quantity).build();
 	}
 
-	protected Product productDto(int id, String name, String description, UUID cartId, double price,
+	protected Product productDto(int id, int catalogId, String name, String description, UUID cartId, double price,
 			int quantity) {
-		return Product.builder().id(id).name(name).description(description)
+		return Product.builder().id(id).catalogId(catalogId).name(name).description(description)
 				.price(BigDecimal.valueOf(price)).quantity(quantity).cartId(cartId).build();
 	}
 
