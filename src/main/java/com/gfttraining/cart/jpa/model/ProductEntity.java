@@ -59,7 +59,7 @@ public class ProductEntity {
 
 	static public Product toDTO(ProductEntity entity) {
 		return Product.builder().id(entity.getId()).catalogId(entity.getCatalogId()).name(entity.getName())
-				.description(entity.getDescription()).price(entity.getPrice()).cartId(entity.getCartId())
+				.description(entity.getDescription()).price(entity.getPrice())
 				.quantity(entity.getQuantity()).build();
 	}
 
@@ -68,7 +68,6 @@ public class ProductEntity {
 				.id(product.getId())
 				.catalogId(product.getCatalogId())
 				.name(product.getName())
-				.cartId(product.getCartId())
 				.description(product.getDescription())
 				.price(product.getPrice())
 				.quantity(product.getQuantity())

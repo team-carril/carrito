@@ -83,7 +83,7 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 		String json = mapper.writeValueAsString(new User(1));
 		
 		mockMvc.perform(post("/carts").contentType(MediaType.APPLICATION_JSON).content(json))
-				.andExpect(status().isOk())
+				.andExpect(status().isCreated())
 				.andExpect(jsonPath("@.id").isString())
 				.andExpect(jsonPath("@.userId").isNumber())
 				.andExpect(jsonPath("@.createdAt").isString())
@@ -116,9 +116,17 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 	}
 
 	@Test
-	public void PATCH_carts_bad_requestbody() throws Exception {
+	public void PATCH_carts_bad_request_pathvariable() throws Exception {
 		String json = mapper.writeValueAsString(new ProductFromCatalog());
-		mockMvc.perform(patch("/carts/1").contentType(MediaType.APPLICATION_JSON).content(json))
+		mockMvc.perform(patch("/carts/asdf").contentType(MediaType.APPLICATION_JSON).content(json))
+				.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	public void PATCH_carts_bad_requestbody() throws Exception {
+		UUID id = UUID.randomUUID();
+		String json = mapper.writeValueAsString(new ProductFromCatalog());
+		mockMvc.perform(patch("/carts/" + id).contentType(MediaType.APPLICATION_JSON).content(json))
 				.andExpect(status().isBadRequest());
 
 	}

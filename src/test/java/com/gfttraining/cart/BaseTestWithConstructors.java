@@ -55,7 +55,7 @@ public class BaseTestWithConstructors {
 	protected Product productDto(int id, int catalogId, String name, String description, UUID cartId, double price,
 			int quantity) {
 		return Product.builder().id(id).catalogId(catalogId).name(name).description(description)
-				.price(BigDecimal.valueOf(price)).quantity(quantity).cartId(cartId).build();
+				.price(BigDecimal.valueOf(price)).quantity(quantity).build();
 	}
 
 	protected List<ProductEntity> toList(ProductEntity... entities) {
