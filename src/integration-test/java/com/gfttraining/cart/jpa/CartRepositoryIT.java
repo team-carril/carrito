@@ -17,7 +17,7 @@ import com.gfttraining.cart.BaseTestWithConstructors;
 import com.gfttraining.cart.jpa.model.CartEntity;
 
 @DataJpaTest
-public class CartRepositoryTest extends BaseTestWithConstructors {
+public class CartRepositoryIT extends BaseTestWithConstructors {
 
 	@Autowired
 	CartRepository cartRepository;

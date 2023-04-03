@@ -33,7 +33,7 @@ import com.gfttraining.cart.jpa.CartRepository;
 import com.gfttraining.cart.service.CartService;
 
 @WebMvcTest(CartController.class)
-public class CartEndpointTest extends BaseTestWithConstructors {
+public class CartEndpointIT extends BaseTestWithConstructors {
 	@Autowired
 	private ObjectMapper mapper;
 
