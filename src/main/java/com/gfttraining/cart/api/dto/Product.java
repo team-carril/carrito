@@ -18,16 +18,13 @@ public class Product {
 	private BigDecimal price;
 	private Integer quantity;
 
-	private UUID cartId;
-
 	@Builder
-	static public Product create(int id, int catalogId, String name, String description, UUID cartId, BigDecimal price,
+	static public Product create(int id, int catalogId, String name, String description, BigDecimal price,
 			int quantity) {
 		Product product = new Product();
 		product.setId(id);
 		product.setCatalogId(catalogId);
 		product.setName(name);
-		product.setCartId(cartId);
 		product.setPrice(price);
 		product.setQuantity(quantity);
 		return product;
@@ -40,7 +37,6 @@ public class Product {
 			throw new BadRequestBodyException("Wrong Product JSON.");
 		return Product.builder().catalogId(productFromCatalog.getId())
 				.name(productFromCatalog.getName())
-				.cartId(cartId)
 				.description(productFromCatalog.getDescription())
 				.price(productFromCatalog.getPrice())
 				.quantity(1)
