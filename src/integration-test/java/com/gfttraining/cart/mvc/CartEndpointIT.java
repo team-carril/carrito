@@ -110,6 +110,7 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 		product.setId(1);
 		product.setName("test");
 		product.setPrice(new BigDecimal(15));
+		product.setDescription("");
 		String json = mapper.writeValueAsString(product);
 		mockMvc.perform(patch("/carts/" + id).contentType(MediaType.APPLICATION_JSON).content(json))
 				.andExpect(status().isOk());
