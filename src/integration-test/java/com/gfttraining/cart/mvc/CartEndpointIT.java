@@ -83,7 +83,7 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 		String json = mapper.writeValueAsString(new User(1));
 		
 		mockMvc.perform(post("/carts").contentType(MediaType.APPLICATION_JSON).content(json))
-				.andExpect(status().isOk())
+				.andExpect(status().isCreated())
 				.andExpect(jsonPath("@.id").isString())
 				.andExpect(jsonPath("@.userId").isNumber())
 				.andExpect(jsonPath("@.createdAt").isString())

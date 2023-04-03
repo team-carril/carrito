@@ -3,6 +3,8 @@ package com.gfttraining.cart.api.controller;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -47,10 +49,10 @@ public class CartController {
 	}
 
 	@PostMapping("/carts")
-	public Cart createCart(@RequestBody User user) throws BadRequestBodyException {
+	public ResponseEntity<Cart> createCart(@RequestBody User user) throws BadRequestBodyException {
 		if (user.getId() == 0)
 			throw new BadRequestBodyException("Missing User id");
-		return cartService.postNewCart(user);
+		return new ResponseEntity<>(cartService.postNewCart(user), HttpStatus.CREATED);
 	}
 
 	@PatchMapping("/carts/{id}")
