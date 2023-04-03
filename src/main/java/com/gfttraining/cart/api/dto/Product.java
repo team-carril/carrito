@@ -38,9 +38,6 @@ public class Product {
 
 	static public Product fromCatalog(ProductFromCatalog productFromCatalog, UUID cartId)
 			throws BadRequestBodyException {
-		// if (productFromCatalog.getId() == 0 || productFromCatalog.getName() == null
-		// || productFromCatalog.getPrice() == null)
-		// throw new BadRequestBodyException("Wrong Product JSON.");
 		return Product.builder().catalogId(productFromCatalog.getId())
 				.name(productFromCatalog.getName())
 				.description(productFromCatalog.getDescription())
