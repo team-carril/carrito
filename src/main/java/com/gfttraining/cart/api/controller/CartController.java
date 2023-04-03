@@ -51,7 +51,7 @@ public class CartController {
 	}
 
 	@PostMapping("/carts")
-	public ResponseEntity<Cart> createCart(@RequestBody User user) throws BadRequestBodyException {
+	public ResponseEntity<Cart> createCart(@Valid @RequestBody User user) throws BadRequestBodyException {
 		if (user.getId() == 0)
 			throw new BadRequestBodyException("Missing User id");
 		return new ResponseEntity<>(cartService.postNewCart(user), HttpStatus.CREATED);

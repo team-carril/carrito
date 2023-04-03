@@ -95,12 +95,12 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 
 	@Test
 	public void POST_carts_bad_requestbody() throws Exception {
-		String json = mapper.writeValueAsString(new User()); // will fail with id == 0
+		String json = mapper.writeValueAsString(new User());
 		mockMvc.perform(post("/carts").contentType(MediaType.APPLICATION_JSON).content(json))
-
 				.andExpect(status().isBadRequest())
 				.andExpect(jsonPath("@.timestamp").isString())
-				.andExpect(jsonPath("@.msg").isString());
+				.andExpect(jsonPath("@.errorCount").isNumber())
+				.andExpect(jsonPath("@.errors").isMap());
 	}
 
 	@Test
