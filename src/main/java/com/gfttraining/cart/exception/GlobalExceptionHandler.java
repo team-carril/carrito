@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import com.gfttraining.cart.api.dto.ErrorResponse;
 
@@ -34,6 +35,14 @@ public class GlobalExceptionHandler {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
 
 		return new ResponseEntity<ErrorResponse>(res, HttpStatus.NOT_FOUND);
+	}
+
+	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
+	public ResponseEntity<ErrorResponse> handlesBadPathVariableException(MethodArgumentTypeMismatchException ex,
+			WebRequest req) {
+		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
+
+		return new ResponseEntity<ErrorResponse>(res, HttpStatus.BAD_REQUEST);
 	}
 
 }
