@@ -1,4 +1,4 @@
-package com.gfttraining.cart.api.controller.dto;
+package com.gfttraining.cart.api.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

@@ -15,7 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.gfttraining.cart.api.controller.dto.Cart;
+import com.gfttraining.cart.api.dto.Cart;
 
 import lombok.Builder;
 import lombok.Data;

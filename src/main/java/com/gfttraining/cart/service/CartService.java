@@ -12,9 +12,9 @@ import javax.persistence.EntityNotFoundException;
 
 import org.springframework.stereotype.Service;
 
-import com.gfttraining.cart.api.controller.dto.Cart;
-import com.gfttraining.cart.api.controller.dto.Product;
-import com.gfttraining.cart.api.controller.dto.User;
+import com.gfttraining.cart.api.dto.Cart;
+import com.gfttraining.cart.api.dto.Product;
+import com.gfttraining.cart.api.dto.User;
 import com.gfttraining.cart.jpa.CartRepository;
 import com.gfttraining.cart.jpa.model.CartEntity;
 import com.gfttraining.cart.jpa.model.ProductEntity;
@@ -67,7 +67,7 @@ public class CartService {
 		return CartEntity.toDTO(entity);
 	}
 
-  public Cart deleteById(UUID cartId) {
+	public Cart deleteById(UUID cartId) {
 		Optional<CartEntity> entityOptional = cartRepository.findById(cartId);
 		if (entityOptional.isEmpty())
 			throw new EntityNotFoundException("Cart " + cartId + " not found.");
