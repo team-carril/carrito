@@ -128,7 +128,10 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 		UUID id = UUID.randomUUID();
 		String json = mapper.writeValueAsString(new ProductFromCatalog());
 		mockMvc.perform(patch("/carts/" + id).contentType(MediaType.APPLICATION_JSON).content(json))
-				.andExpect(status().isBadRequest());
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("@.timestamp").isString())
+				.andExpect(jsonPath("@.errorCount").isNumber())
+				.andExpect(jsonPath("@.errors").isMap());
 
 	}
 
