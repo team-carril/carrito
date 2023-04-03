@@ -95,12 +95,12 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 
 	@Test
 	public void POST_carts_bad_requestbody() throws Exception {
-		String json = mapper.writeValueAsString(new User()); // will fail with id == 0
+		String json = mapper.writeValueAsString(new User());
 		mockMvc.perform(post("/carts").contentType(MediaType.APPLICATION_JSON).content(json))
-
 				.andExpect(status().isBadRequest())
 				.andExpect(jsonPath("@.timestamp").isString())
-				.andExpect(jsonPath("@.msg").isString());
+				.andExpect(jsonPath("@.errorCount").isNumber())
+				.andExpect(jsonPath("@.errors").isMap());
 	}
 
 	@Test
@@ -110,6 +110,7 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 		product.setId(1);
 		product.setName("test");
 		product.setPrice(new BigDecimal(15));
+		product.setDescription("");
 		String json = mapper.writeValueAsString(product);
 		mockMvc.perform(patch("/carts/" + id).contentType(MediaType.APPLICATION_JSON).content(json))
 				.andExpect(status().isOk());
@@ -127,7 +128,10 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 		UUID id = UUID.randomUUID();
 		String json = mapper.writeValueAsString(new ProductFromCatalog());
 		mockMvc.perform(patch("/carts/" + id).contentType(MediaType.APPLICATION_JSON).content(json))
-				.andExpect(status().isBadRequest());
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("@.timestamp").isString())
+				.andExpect(jsonPath("@.errorCount").isNumber())
+				.andExpect(jsonPath("@.errors").isMap());
 
 	}
 

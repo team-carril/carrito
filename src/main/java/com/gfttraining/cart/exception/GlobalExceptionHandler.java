@@ -1,11 +1,14 @@
 package com.gfttraining.cart.exception;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -43,6 +46,29 @@ public class GlobalExceptionHandler {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
 
 		return new ResponseEntity<ErrorResponse>(res, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<Object> handleValidationError(MethodArgumentNotValidException ex,
+			WebRequest req) {
+		Map<String, Object> fieldErrors = new HashMap<>();
+		fieldErrors.put("timestamp", LocalDateTime.now());
+		// List<String> errors = ex.getBindingResult().getFieldErrors()
+		// .stream().map((x) -> x.getDefaultMessage()).collect(Collectors.toList());
+
+		Map<String, String> errors = ex.getBindingResult().getFieldErrors()
+				.stream()
+				.reduce(new HashMap<String, String>(),
+						(m, err) -> {
+							m.put(err.getField(), err.getDefaultMessage());
+							return m;
+						},
+						(m1, m2) -> m1);
+
+		fieldErrors.put("errorCount", ex.getErrorCount());
+		fieldErrors.put("errors", errors);
+
+		return new ResponseEntity<>(fieldErrors, HttpStatus.BAD_REQUEST);
 	}
 
 }
