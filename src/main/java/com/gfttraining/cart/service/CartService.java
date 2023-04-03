@@ -57,9 +57,9 @@ public class CartService {
 				.filter(p -> (p.getCatalogId() == product.getCatalogId() && p.getCartId().equals(cartId)))
 				.findFirst();
 		if (sameProduct.isEmpty()) {
+			// ProductEntity
 			entity.getProducts().add(ProductEntity.fromDTO(product));
 			entity = cartRepository.saveAndFlush(entity);
-			System.out.println(entity);
 			return CartEntity.toDTO(entity);
 		}
 		sameProduct.get().addOne();
