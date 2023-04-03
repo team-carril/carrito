@@ -16,6 +16,14 @@ spring:
   h2:
     console:
       enabled: true
+management:
+ endpoints:
+  web:
+    exposure:
+     include: '*'
+ endpoint:
+  health:
+    show-details: always
 rates:
   paymentMethod:
     VISA: 0
