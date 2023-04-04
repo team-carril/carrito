@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,6 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gfttraining.cart.BaseTestWithConstructors;
 import com.gfttraining.cart.api.controller.CartController;
 import com.gfttraining.cart.api.dto.Cart;
+import com.gfttraining.cart.api.dto.Product;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
 import com.gfttraining.cart.jpa.CartRepository;
@@ -80,7 +82,9 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 		when(cartService.postNewCart(any(User.class))).thenReturn(
 			cartDto(null, 1, null, null, "DRAFT", null, 0)
 		);
-		String json = mapper.writeValueAsString(new User(1));
+		User user = new User();
+		user.setId(1);
+		String json = mapper.writeValueAsString(user);
 		
 		mockMvc.perform(post("/carts").contentType(MediaType.APPLICATION_JSON).content(json))
 				.andExpect(status().isCreated())
@@ -112,6 +116,8 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 		product.setPrice(new BigDecimal(15));
 		product.setDescription("");
 		String json = mapper.writeValueAsString(product);
+		when(cartService.addProductToCart(any(Product.class), any(UUID.class)))
+				.thenReturn(cartDto(id, 0, null, null, json, Collections.emptyList(), 0));
 		mockMvc.perform(patch("/carts/" + id).contentType(MediaType.APPLICATION_JSON).content(json))
 				.andExpect(status().isOk());
 	}

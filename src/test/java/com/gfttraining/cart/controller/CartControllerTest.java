@@ -3,8 +3,10 @@ package com.gfttraining.cart.controller;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -19,7 +21,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.gfttraining.cart.BaseTestWithConstructors;
 import com.gfttraining.cart.api.controller.CartController;
+import com.gfttraining.cart.api.dto.Cart;
 import com.gfttraining.cart.api.dto.Product;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
@@ -27,7 +31,7 @@ import com.gfttraining.cart.exception.BadRequestBodyException;
 import com.gfttraining.cart.exception.BadRequestParamException;
 import com.gfttraining.cart.service.CartService;
 
-class CartControllerTest {
+class CartControllerTest extends BaseTestWithConstructors {
 
 	@Mock
 	CartService cartService;
@@ -59,7 +63,9 @@ class CartControllerTest {
 
 	@Test
 	public void create_cart() throws BadRequestBodyException {
-		User user = new User(1);
+		User user = new User();
+		Cart cart = cartDto(UUID.randomUUID(), 1, null, null, null, null, 0);
+		when(cartService.postNewCart(user)).thenReturn(cart);
 		cartController.createCart(user);
 		verify(cartService).postNewCart(user);
 	}
@@ -70,6 +76,9 @@ class CartControllerTest {
 		product.setId(1);
 		product.setName("test");
 		product.setPrice(new BigDecimal(15));
+
+		Cart cart = cartDto(null, 1, null, null, null, Collections.emptyList(), 0);
+		when(cartService.addProductToCart(any(Product.class), any(UUID.class))).thenReturn(cart);
 		cartController.addProductToCart(product, UUID.randomUUID());
 		verify(cartService).addProductToCart(any(Product.class), any(UUID.class));
 	}

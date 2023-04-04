@@ -56,10 +56,11 @@ public class CartController {
 
 	@PostMapping("/carts")
 	public ResponseEntity<Cart> createCart(@Valid @RequestBody User user) throws BadRequestBodyException {
-		ResponseEntity<Cart> CreateCartLog = new ResponseEntity<>(cartService.postNewCart(user), HttpStatus.CREATED);	
-		
-		log.info("Creating cart with id: " + CreateCartLog.getBody().getId() + " and user id: " + CreateCartLog.getBody().getUserId());
-	
+		ResponseEntity<Cart> CreateCartLog = new ResponseEntity<>(cartService.postNewCart(user), HttpStatus.CREATED);
+
+		log.info("Creating cart with id: " + CreateCartLog.getBody().getId() + " and user id: "
+				+ CreateCartLog.getBody().getUserId());
+
 		return CreateCartLog;
 	}
 
@@ -67,17 +68,17 @@ public class CartController {
 	public Cart addProductToCart(@Valid @RequestBody ProductFromCatalog productFromCatalog, @PathVariable UUID id)
 			throws BadRequestBodyException {
 		Product product = Product.fromCatalog(productFromCatalog, id);
-Cart AddProductToCartLog = cartService.addProductToCart(product, id);
-		
+		Cart AddProductToCartLog = cartService.addProductToCart(product, id);
+
 		log.info("Product " + AddProductToCartLog.getProducts() + " added");
-		
+
 		return AddProductToCartLog;
 	}
 
 	@DeleteMapping("/carts/{id}")
 	public void deleteCartById(@PathVariable UUID id) {
-	Cart deleteCartLog = cartService.deleteById(id);
-	log.info("Cart" + deleteCartLog.getId() + "deleted");
+		cartService.deleteById(id);
+		log.info("Cart" + id + "deleted");
 	}
 
 	public static boolean isValidStatus(String str) {
