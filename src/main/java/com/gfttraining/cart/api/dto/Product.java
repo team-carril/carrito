@@ -38,14 +38,13 @@ public class Product {
 		return product;
 	}
 
-	// TODO Allow quantity over 1, default to 1
 	static public Product fromCatalog(ProductFromCatalog productFromCatalog)
 			throws BadRequestBodyException {
 		return Product.builder().catalogId(productFromCatalog.getId())
 				.name(productFromCatalog.getName())
 				.description(productFromCatalog.getDescription())
 				.price(productFromCatalog.getPrice())
-				.quantity(productFromCatalog.getQuantity() < 1 ? 1 : productFromCatalog.getQuantity())
+				.quantity(productFromCatalog.getQuantity())
 				.build();
 	}
 }

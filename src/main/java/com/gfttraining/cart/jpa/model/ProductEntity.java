@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.gfttraining.cart.api.dto.Product;
+import com.gfttraining.cart.exception.NegativeQuantityException;
 
 import lombok.Builder;
 import lombok.Data;
@@ -39,8 +40,11 @@ public class ProductEntity {
 		return this.getPrice().multiply(BigDecimal.valueOf(this.getQuantity()));
 	}
 
-	public void addOne() {
-		this.quantity += 1;
+	public void addToQuantity(int x) throws NegativeQuantityException {
+		if ((this.quantity + x) < 0)
+			throw new NegativeQuantityException(
+					"Quantity must result in a positive integer. Current quantity: " + this.quantity);
+		this.quantity += x;
 	}
 
 	@Builder
