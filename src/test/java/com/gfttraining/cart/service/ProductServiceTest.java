@@ -1,5 +1,6 @@
 package com.gfttraining.cart.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.verify;
@@ -17,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.gfttraining.cart.BaseTestWithConstructors;
+import com.gfttraining.cart.api.dto.CartCountDTO;
 import com.gfttraining.cart.api.dto.Product;
 import com.gfttraining.cart.jpa.ProductRepository;
 import com.gfttraining.cart.jpa.model.ProductEntity;
@@ -52,9 +54,10 @@ public class ProductServiceTest extends BaseTestWithConstructors {
 				productEntity(0, 1, "C", null, null, 0, 0),
 				productEntity(0, 1, "C", null, null, 0, 0));
 		when(productRepository.findByCatalogId(1)).thenReturn(entities);
-		service.updateAllById(product, 1);
+		CartCountDTO counter = service.updateAllById(product, 1);
 		verify(productRepository).findByCatalogId(1);
 		verify(productRepository).saveAllAndFlush(entitiesUpdated);
+		assertEquals(3, counter.getCartsChanged());
 	}
 
 	@Test
@@ -64,9 +67,10 @@ public class ProductServiceTest extends BaseTestWithConstructors {
 				productEntity(0, 1, "B", null, null, 0, 0),
 				productEntity(0, 1, "B", null, null, 0, 0));
 		when(productRepository.findByCatalogId(1)).thenReturn(entities);
-		service.deleteAllById(1);
+		CartCountDTO counter = service.deleteAllById(1);
 		verify(productRepository).findByCatalogId(1);
 		verify(productRepository).deleteAll(anyList());
+		assertEquals(3, counter.getCartsChanged());
 	}
 
 }

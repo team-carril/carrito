@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gfttraining.cart.api.dto.CartCountDTO;
 import com.gfttraining.cart.api.dto.Product;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.exception.BadRequestBodyException;
@@ -22,18 +23,17 @@ public class ProductController {
 		this.productService = productService;
 	}
 
-	// TODO RETURN COUNT OF ITEMS FOUND
 	// TODO CHECK FOR STATUS OF CART: in JPA Query???
 	@PatchMapping(value = "/products/{id}")
-	public void updateAllById(@Valid @RequestBody ProductFromCatalog productFromCatalog, @PathVariable int id)
+	public CartCountDTO updateAllById(@Valid @RequestBody ProductFromCatalog productFromCatalog, @PathVariable int id)
 			throws BadRequestBodyException {
 		Product product = Product.fromCatalog(productFromCatalog);
-		productService.updateAllById(product, id);
+		return productService.updateAllById(product, id);
 	}
 
 	@DeleteMapping(value = "/products/{id}")
-	public void deleteAllById(@PathVariable int id) {
-		productService.deleteAllById(id);
+	public CartCountDTO deleteAllById(@PathVariable int id) {
+		return productService.deleteAllById(id);
 	}
 
 }

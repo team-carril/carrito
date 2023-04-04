@@ -6,6 +6,7 @@ import javax.persistence.EntityNotFoundException;
 
 import org.springframework.stereotype.Service;
 
+import com.gfttraining.cart.api.dto.CartCountDTO;
 import com.gfttraining.cart.api.dto.Product;
 import com.gfttraining.cart.jpa.ProductRepository;
 import com.gfttraining.cart.jpa.model.ProductEntity;
@@ -26,16 +27,22 @@ public class ProductService {
 		return entities;
 	}
 
-	public void updateAllById(Product product, int catalogId) {
+	public CartCountDTO updateAllById(Product product, int catalogId) {
 		List<ProductEntity> entities = findByCatalogId(catalogId);
 		for (ProductEntity entity : entities)
 			updateEntity(product, entity);
+		CartCountDTO counter = new CartCountDTO();
+		counter.setCartsChanged(entities.size());
 		productRepository.saveAllAndFlush(entities);
+		return counter;
 	}
 
-	public void deleteAllById(int catalogId) {
+	public CartCountDTO deleteAllById(int catalogId) {
 		List<ProductEntity> entities = findByCatalogId(catalogId);
+		CartCountDTO counter = new CartCountDTO();
+		counter.setCartsChanged(entities.size());
 		productRepository.deleteAll(entities);
+		return counter;
 	}
 
 	private void updateEntity(Product product, ProductEntity entity) {
