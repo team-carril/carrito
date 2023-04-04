@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gfttraining.cart.exception.BadRequestBodyException;
 
 import lombok.Builder;
@@ -12,6 +13,7 @@ import lombok.Data;
 @Data
 public class Product {
 
+	@JsonIgnore
 	private Integer id;
 	@NotNull
 	private Integer catalogId;
@@ -23,7 +25,6 @@ public class Product {
 	private BigDecimal price;
 	private Integer quantity;
 
-	// TODO remove id from Product
 	@Builder
 	static public Product create(int id, int catalogId, String name, String description, BigDecimal price,
 			int quantity) {
