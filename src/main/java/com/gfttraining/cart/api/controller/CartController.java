@@ -42,7 +42,6 @@ public class CartController {
 		return cartService.findAll();
 	}
 
-	// TODO BUG PRODUCT JSON Description is Always Empty
 	@GetMapping("/carts")
 	public List<Cart> findByStatus(@RequestParam(required = false) String status) throws BadRequestParamException {
 		if (status == null)
@@ -67,7 +66,7 @@ public class CartController {
 	@PatchMapping("/carts/{id}")
 	public Cart addProductToCart(@Valid @RequestBody ProductFromCatalog productFromCatalog, @PathVariable UUID id)
 			throws BadRequestBodyException {
-		Product product = Product.fromCatalog(productFromCatalog, id);
+		Product product = Product.fromCatalog(productFromCatalog);
 		Cart AddProductToCartLog = cartService.addProductToCart(product, id);
 
 		log.info("Product " + AddProductToCartLog.getProducts() + " added");

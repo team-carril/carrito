@@ -191,10 +191,7 @@ components:
       type: object
       required:
         - id
-        - name
-        - description
         - price
-        - quantity
       properties:
         id:
           type: integer
@@ -214,6 +211,10 @@ components:
           type: integer
           format: int64
           example: 48
+        quantity:
+          type: integer
+          format: int64
+          example: 42
     Product:
       type: object
       properties:

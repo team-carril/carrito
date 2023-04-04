@@ -1,7 +1,6 @@
 package com.gfttraining.cart.api.dto;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
@@ -24,6 +23,7 @@ public class Product {
 	private BigDecimal price;
 	private Integer quantity;
 
+	// TODO remove id from Product
 	@Builder
 	static public Product create(int id, int catalogId, String name, String description, BigDecimal price,
 			int quantity) {
@@ -31,30 +31,20 @@ public class Product {
 		product.setId(id);
 		product.setCatalogId(catalogId);
 		product.setName(name);
+		product.setDescription(description);
 		product.setPrice(price);
 		product.setQuantity(quantity);
 		return product;
 	}
 
+	// TODO Allow quantity over 1, default to 1
 	static public Product fromCatalog(ProductFromCatalog productFromCatalog)
 			throws BadRequestBodyException {
 		return Product.builder().catalogId(productFromCatalog.getId())
 				.name(productFromCatalog.getName())
 				.description(productFromCatalog.getDescription())
 				.price(productFromCatalog.getPrice())
-				.quantity(1)
+				.quantity(productFromCatalog.getQuantity() < 1 ? 1 : productFromCatalog.getQuantity())
 				.build();
 	}
-
-	// TODO DELETE
-	static public Product fromCatalog(ProductFromCatalog productFromCatalog, UUID cartId)
-			throws BadRequestBodyException {
-		return Product.builder().catalogId(productFromCatalog.getId())
-				.name(productFromCatalog.getName())
-				.description(productFromCatalog.getDescription())
-				.price(productFromCatalog.getPrice())
-				.quantity(1)
-				.build();
-	}
-
 }
