@@ -19,7 +19,10 @@ import com.gfttraining.cart.jpa.CartRepository;
 import com.gfttraining.cart.jpa.model.CartEntity;
 import com.gfttraining.cart.jpa.model.ProductEntity;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class CartService {
 
 	private CartRepository cartRepository;
@@ -36,6 +39,7 @@ public class CartService {
 
 	public List<Cart> findByStatus(String status) {
 		List<CartEntity> entities = cartRepository.findByStatus(status);
+		
 		return entities.stream().map(CartEntity::toDTO).collect(Collectors.toList());
 	}
 
@@ -44,6 +48,9 @@ public class CartService {
 				.userId(user.getId())
 				.status("DRAFT").products(Collections.emptyList()).build();
 		CartEntity result = cartRepository.save(entity);
+		
+		log.debug("Id: " + entity.getId() + " User Id: " + entity.getUserId() + " Products: " + entity.getProducts() + " Status: " + entity.getStatus());
+		
 		return CartEntity.toDTO(result);
 	}
 
@@ -64,6 +71,9 @@ public class CartService {
 		}
 		sameProduct.get().addOne();
 		entity = cartRepository.saveAndFlush(entity);
+		
+		log.debug("Id: " + entity.getId() + " User Id: " + entity.getUserId() + " Products: " + entity.getProducts() + " Status: " + entity.getStatus());
+		
 		return CartEntity.toDTO(entity);
 	}
 
@@ -72,6 +82,9 @@ public class CartService {
 		if (entityOptional.isEmpty())
 			throw new EntityNotFoundException("Cart " + cartId + " not found.");
 		cartRepository.delete(entityOptional.get());
+		
+		log.debug(cartId + "deleted");
+		
 		return new Cart();
 	}
 }

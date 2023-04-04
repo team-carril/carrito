@@ -24,7 +24,10 @@ import com.gfttraining.cart.exception.BadRequestBodyException;
 import com.gfttraining.cart.exception.BadRequestParamException;
 import com.gfttraining.cart.service.CartService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
+@Slf4j
 public class CartController {
 
 	static final String[] STATUSES = { "ALL", "SUBMITTED", "DRAFT" };
@@ -52,19 +55,28 @@ public class CartController {
 
 	@PostMapping("/carts")
 	public ResponseEntity<Cart> createCart(@Valid @RequestBody User user) throws BadRequestBodyException {
-		return new ResponseEntity<>(cartService.postNewCart(user), HttpStatus.CREATED);
+		ResponseEntity<Cart> CreateCartLog = new ResponseEntity<>(cartService.postNewCart(user), HttpStatus.CREATED);	
+		
+		log.info("Creating cart with id: " + CreateCartLog.getBody().getId() + " and user id: " + CreateCartLog.getBody().getUserId());
+	
+		return CreateCartLog;
 	}
 
 	@PatchMapping("/carts/{id}")
 	public Cart addProductToCart(@Valid @RequestBody ProductFromCatalog productFromCatalog, @PathVariable UUID id)
 			throws BadRequestBodyException {
 		Product product = Product.fromCatalog(productFromCatalog, id);
-		return cartService.addProductToCart(product, id);
+Cart AddProductToCartLog = cartService.addProductToCart(product, id);
+		
+		log.info("Product " + AddProductToCartLog.getProducts() + " added");
+		
+		return AddProductToCartLog;
 	}
 
 	@DeleteMapping("/carts/{id}")
 	public void deleteCartById(@PathVariable UUID id) {
-		cartService.deleteById(id);
+	Cart deleteCartLog = cartService.deleteById(id);
+	log.info("Cart" + deleteCartLog.getId() + "deleted");
 	}
 
 	public static boolean isValidStatus(String str) {
