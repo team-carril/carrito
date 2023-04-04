@@ -16,13 +16,18 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import com.gfttraining.cart.api.dto.ErrorResponse;
 
+import lombok.extern.slf4j.Slf4j;
+
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(BadRequestParamException.class)
 	public ResponseEntity<ErrorResponse> handlesBadRequestParamException(BadRequestParamException ex, WebRequest req) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
 
+		log.error("Message: " + ex.getMessage() + " Cause: " + ex.getCause() + " Stack Trace: " + ex.getStackTrace() + " Localized Message: " + ex.getLocalizedMessage());
+		
 		return new ResponseEntity<ErrorResponse>(res, HttpStatus.BAD_REQUEST);
 	}
 
@@ -30,6 +35,8 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ErrorResponse> handlesBadRequestBodyException(BadRequestBodyException ex, WebRequest req) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
 
+		log.error("Message: " + ex.getMessage() + " Cause: " + ex.getCause() + " Stack Trace: " + ex.getStackTrace() + " Localized Message: " + ex.getLocalizedMessage());
+		
 		return new ResponseEntity<ErrorResponse>(res, HttpStatus.BAD_REQUEST);
 	}
 
@@ -37,6 +44,8 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ErrorResponse> handlesBadRequestBodyException(EntityNotFoundException ex, WebRequest req) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
 
+		log.error("Message: " + ex.getMessage() + " Cause: " + ex.getCause() + " Stack Trace: " + ex.getStackTrace() + " Localized Message: " + ex.getLocalizedMessage());
+		
 		return new ResponseEntity<ErrorResponse>(res, HttpStatus.NOT_FOUND);
 	}
 
@@ -45,6 +54,8 @@ public class GlobalExceptionHandler {
 			WebRequest req) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
 
+		log.error("Message: " + ex.getMessage() + " Cause: " + ex.getCause() + " Stack Trace: " + ex.getStackTrace() + " Localized Message: " + ex.getLocalizedMessage());
+		
 		return new ResponseEntity<ErrorResponse>(res, HttpStatus.BAD_REQUEST);
 	}
 
@@ -68,6 +79,8 @@ public class GlobalExceptionHandler {
 		fieldErrors.put("errorCount", ex.getErrorCount());
 		fieldErrors.put("errors", errors);
 
+		log.error("Message: " + ex.getMessage() + " Cause: " + ex.getCause() + " Stack Trace: " + ex.getStackTrace() + " Localized Message: " + ex.getLocalizedMessage());
+		
 		return new ResponseEntity<>(fieldErrors, HttpStatus.BAD_REQUEST);
 	}
 
