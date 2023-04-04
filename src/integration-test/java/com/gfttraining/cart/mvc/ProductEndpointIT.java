@@ -22,6 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gfttraining.cart.BaseTestWithConstructors;
 import com.gfttraining.cart.api.controller.ProductController;
 import com.gfttraining.cart.api.dto.CartCountDTO;
 import com.gfttraining.cart.api.dto.Product;
@@ -29,7 +30,7 @@ import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.service.ProductService;
 
 @WebMvcTest(ProductController.class)
-public class ProductEndpointIT {
+public class ProductEndpointIT extends BaseTestWithConstructors {
 
 	@Autowired
 	MockMvc mvc;
@@ -42,11 +43,7 @@ public class ProductEndpointIT {
 
 	@Test
 	public void PATCH_products_OK() throws Exception {
-		ProductFromCatalog product = new ProductFromCatalog();
-		product.setId(1);
-		product.setName("test");
-		product.setPrice(new BigDecimal(15));
-		product.setDescription("");
+		ProductFromCatalog product = productFromCatalog(1, "test", null, 15);
 		String json = mapper.writeValueAsString(product);
 		when(productService.updateAllById(any(Product.class), anyInt())).thenReturn(new CartCountDTO());
 		mvc.perform(patch("/products/1").contentType(MediaType.APPLICATION_JSON).content(json))
@@ -56,11 +53,7 @@ public class ProductEndpointIT {
 
 	@Test
 	public void PATCH_products_NOT_FOUND() throws Exception {
-		ProductFromCatalog product = new ProductFromCatalog();
-		product.setId(1);
-		product.setName("test");
-		product.setPrice(new BigDecimal(15));
-		product.setDescription("");
+		ProductFromCatalog product = productFromCatalog(1, "test", null, 15);
 		String json = mapper.writeValueAsString(product);
 		when(productService.updateAllById(any(Product.class), anyInt()))
 				.thenThrow(new EntityNotFoundException("test string"));
@@ -85,11 +78,7 @@ public class ProductEndpointIT {
 
 	@Test
 	public void PATCH_products_BAD_REQUEST_PATH_VARIABLE() throws Exception {
-		ProductFromCatalog product = new ProductFromCatalog();
-		product.setId(1);
-		product.setName("test");
-		product.setPrice(new BigDecimal(15));
-		product.setDescription("");
+		ProductFromCatalog product = productFromCatalog(1, "test", null, 15);
 		String json = mapper.writeValueAsString(product);
 		mvc.perform(patch("/products/BADPATHVARIABLE").contentType(MediaType.APPLICATION_JSON).content(json))
 				.andExpect(status().isBadRequest())

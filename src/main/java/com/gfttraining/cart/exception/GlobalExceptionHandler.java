@@ -26,8 +26,9 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ErrorResponse> handlesBadRequestParamException(BadRequestParamException ex, WebRequest req) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
 
-		log.error("Message: " + ex.getMessage() + " Cause: " + ex.getCause() + " Stack Trace: " + ex.getStackTrace() + " Localized Message: " + ex.getLocalizedMessage());
-		
+		log.error("Message: " + ex.getMessage() + " Cause: " + ex.getCause() + " Stack Trace: " + ex.getStackTrace()
+				+ " Localized Message: " + ex.getLocalizedMessage());
+
 		return new ResponseEntity<ErrorResponse>(res, HttpStatus.BAD_REQUEST);
 	}
 
@@ -35,8 +36,9 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ErrorResponse> handlesBadRequestBodyException(BadRequestBodyException ex, WebRequest req) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
 
-		log.error("Message: " + ex.getMessage() + " Cause: " + ex.getCause() + " Stack Trace: " + ex.getStackTrace() + " Localized Message: " + ex.getLocalizedMessage());
-		
+		log.error("Message: " + ex.getMessage() + " Cause: " + ex.getCause() + " Stack Trace: " + ex.getStackTrace()
+				+ " Localized Message: " + ex.getLocalizedMessage());
+
 		return new ResponseEntity<ErrorResponse>(res, HttpStatus.BAD_REQUEST);
 	}
 
@@ -44,8 +46,9 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ErrorResponse> handlesBadRequestBodyException(EntityNotFoundException ex, WebRequest req) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
 
-		log.error("Message: " + ex.getMessage() + " Cause: " + ex.getCause() + " Stack Trace: " + ex.getStackTrace() + " Localized Message: " + ex.getLocalizedMessage());
-		
+		log.error("Message: " + ex.getMessage() + " Cause: " + ex.getCause() + " Stack Trace: " + ex.getStackTrace()
+				+ " Localized Message: " + ex.getLocalizedMessage());
+
 		return new ResponseEntity<ErrorResponse>(res, HttpStatus.NOT_FOUND);
 	}
 
@@ -54,8 +57,15 @@ public class GlobalExceptionHandler {
 			WebRequest req) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
 
-		log.error("Message: " + ex.getMessage() + " Cause: " + ex.getCause() + " Stack Trace: " + ex.getStackTrace() + " Localized Message: " + ex.getLocalizedMessage());
-		
+		log.error("Message: " + ex.getMessage() + " Cause: " + ex.getCause() + " Stack Trace: " + ex.getStackTrace()
+				+ " Localized Message: " + ex.getLocalizedMessage());
+
+		return new ResponseEntity<ErrorResponse>(res, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(NegativeQuantityException.class)
+	public ResponseEntity<ErrorResponse> handleNegativeQuantityException(NegativeQuantityException ex, WebRequest req) {
+		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
 		return new ResponseEntity<ErrorResponse>(res, HttpStatus.BAD_REQUEST);
 	}
 
@@ -77,8 +87,9 @@ public class GlobalExceptionHandler {
 		fieldErrors.put("errorCount", ex.getErrorCount());
 		fieldErrors.put("errors", errors);
 
-		log.error("Message: " + ex.getMessage() + " Cause: " + ex.getCause() + " Stack Trace: " + ex.getStackTrace() + " Localized Message: " + ex.getLocalizedMessage());
-		
+		log.error("Message: " + ex.getMessage() + " Cause: " + ex.getCause() + " Stack Trace: " + ex.getStackTrace()
+				+ " Localized Message: " + ex.getLocalizedMessage());
+
 		return new ResponseEntity<>(fieldErrors, HttpStatus.BAD_REQUEST);
 	}
 

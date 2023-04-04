@@ -34,6 +34,8 @@ public class ProductService {
 		entities = entities.stream()
 				.filter((e) -> checkCartStatus(e.getCartId()).equals("DRAFT"))
 				.collect(Collectors.toList());
+		if (entities.isEmpty())
+			throw new EntityNotFoundException("No product with id: " + catalogId + " found.");
 		return entities;
 	}
 

@@ -108,8 +108,7 @@ public class CartServiceTest extends BaseTestWithConstructors {
 
 	@Test
 	public void create_calls_repository() {
-		User user = new User();
-		user.setId(0);
+		User user = userDTO(0);
 		when(cartRepository.save(any(CartEntity.class)))
 				.thenReturn(cartEntity(null, 0, null, null, null, Collections.emptyList()));
 		cartService.postNewCart(user);

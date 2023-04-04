@@ -1,10 +1,10 @@
 package com.gfttraining.cart.api.dto;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gfttraining.cart.exception.BadRequestBodyException;
 
 import lombok.Builder;
@@ -13,6 +13,7 @@ import lombok.Data;
 @Data
 public class Product {
 
+	@JsonIgnore
 	private Integer id;
 	@NotNull
 	private Integer catalogId;
@@ -31,6 +32,7 @@ public class Product {
 		product.setId(id);
 		product.setCatalogId(catalogId);
 		product.setName(name);
+		product.setDescription(description);
 		product.setPrice(price);
 		product.setQuantity(quantity);
 		return product;
@@ -42,19 +44,7 @@ public class Product {
 				.name(productFromCatalog.getName())
 				.description(productFromCatalog.getDescription())
 				.price(productFromCatalog.getPrice())
-				.quantity(1)
+				.quantity(productFromCatalog.getQuantity())
 				.build();
 	}
-
-	// TODO DELETE
-	static public Product fromCatalog(ProductFromCatalog productFromCatalog, UUID cartId)
-			throws BadRequestBodyException {
-		return Product.builder().catalogId(productFromCatalog.getId())
-				.name(productFromCatalog.getName())
-				.description(productFromCatalog.getDescription())
-				.price(productFromCatalog.getPrice())
-				.quantity(1)
-				.build();
-	}
-
 }

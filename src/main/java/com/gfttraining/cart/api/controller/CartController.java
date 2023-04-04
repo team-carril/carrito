@@ -42,7 +42,6 @@ public class CartController {
 		return cartService.findAll();
 	}
 
-	// TODO BUG PRODUCT JSON Description is Always Empty
 	@GetMapping("/carts")
 	public List<Cart> findByStatus(@RequestParam(required = false) String status) throws BadRequestParamException {
 		if (status == null)
@@ -56,28 +55,31 @@ public class CartController {
 
 	@PostMapping("/carts")
 	public ResponseEntity<Cart> createCart(@Valid @RequestBody User user) throws BadRequestBodyException {
-		ResponseEntity<Cart> CreateCartLog = new ResponseEntity<>(cartService.postNewCart(user), HttpStatus.CREATED);	
-		
-		log.info("Creating cart with id: " + CreateCartLog.getBody().getId() + " and user id: " + CreateCartLog.getBody().getUserId());
-	
-		return CreateCartLog;
+		Cart cart = cartService.postNewCart(user);
+
+		log.info("Creating cart with id: " + cart.getId() + " and user id: "
+				+ cart.getUserId());
+
+		ResponseEntity<Cart> createCartLog = new ResponseEntity<>(cart, HttpStatus.CREATED);
+
+		return createCartLog;
 	}
 
 	@PatchMapping("/carts/{id}")
 	public Cart addProductToCart(@Valid @RequestBody ProductFromCatalog productFromCatalog, @PathVariable UUID id)
 			throws BadRequestBodyException {
-		Product product = Product.fromCatalog(productFromCatalog, id);
-Cart AddProductToCartLog = cartService.addProductToCart(product, id);
-		
-		log.info("Product " + AddProductToCartLog.getProducts() + " added");
-		
-		return AddProductToCartLog;
+		Product product = Product.fromCatalog(productFromCatalog);
+		Cart addProductToCartLog = cartService.addProductToCart(product, id);
+
+		log.info("Product " + addProductToCartLog.getProducts() + " added");
+
+		return addProductToCartLog;
 	}
 
 	@DeleteMapping("/carts/{id}")
 	public void deleteCartById(@PathVariable UUID id) {
-	Cart deleteCartLog = cartService.deleteById(id);
-	log.info("Cart" + deleteCartLog.getId() + "deleted");
+		cartService.deleteById(id);
+		log.info("Cart" + id + "deleted");
 	}
 
 	public static boolean isValidStatus(String str) {

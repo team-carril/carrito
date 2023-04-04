@@ -18,5 +18,6 @@ public class ProductFromCatalog {
 	private BigDecimal price;
 	@NotNull
 	private String description;
+	private int quantity;
 	private int stock;
 }

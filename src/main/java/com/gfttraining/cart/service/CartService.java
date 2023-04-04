@@ -39,7 +39,7 @@ public class CartService {
 
 	public List<Cart> findByStatus(String status) {
 		List<CartEntity> entities = cartRepository.findByStatus(status);
-		
+
 		return entities.stream().map(CartEntity::toDTO).collect(Collectors.toList());
 	}
 
@@ -48,9 +48,10 @@ public class CartService {
 				.userId(user.getId())
 				.status("DRAFT").products(Collections.emptyList()).build();
 		CartEntity result = cartRepository.save(entity);
-		
-		log.debug("Id: " + entity.getId() + " User Id: " + entity.getUserId() + " Products: " + entity.getProducts() + " Status: " + entity.getStatus());
-		
+
+		log.debug("Id: " + entity.getId() + " User Id: " + entity.getUserId() + " Products: " + entity.getProducts()
+				+ " Status: " + entity.getStatus());
+
 		return CartEntity.toDTO(result);
 	}
 
@@ -64,16 +65,16 @@ public class CartService {
 				.filter(p -> (p.getCatalogId() == product.getCatalogId() && p.getCartId().equals(cartId)))
 				.findFirst();
 		if (sameProduct.isEmpty()) {
-			// ProductEntity
 			entity.getProducts().add(ProductEntity.fromDTO(product));
 			entity = cartRepository.saveAndFlush(entity);
 			return CartEntity.toDTO(entity);
 		}
-		sameProduct.get().addOne();
+		sameProduct.get().addToQuantity(product.getQuantity());
 		entity = cartRepository.saveAndFlush(entity);
-		
-		log.debug("Id: " + entity.getId() + " User Id: " + entity.getUserId() + " Products: " + entity.getProducts() + " Status: " + entity.getStatus());
-		
+
+		log.debug("Id: " + entity.getId() + " User Id: " + entity.getUserId() + " Products: " + entity.getProducts()
+				+ " Status: " + entity.getStatus());
+
 		return CartEntity.toDTO(entity);
 	}
 
@@ -82,9 +83,9 @@ public class CartService {
 		if (entityOptional.isEmpty())
 			throw new EntityNotFoundException("Cart " + cartId + " not found.");
 		cartRepository.delete(entityOptional.get());
-		
+
 		log.debug(cartId + "deleted");
-		
+
 		return new Cart();
 	}
 }
