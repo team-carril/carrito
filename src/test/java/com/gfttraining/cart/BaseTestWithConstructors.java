@@ -9,6 +9,8 @@ import java.util.UUID;
 
 import com.gfttraining.cart.api.dto.Cart;
 import com.gfttraining.cart.api.dto.Product;
+import com.gfttraining.cart.api.dto.ProductFromCatalog;
+import com.gfttraining.cart.api.dto.User;
 import com.gfttraining.cart.jpa.model.CartEntity;
 import com.gfttraining.cart.jpa.model.ProductEntity;
 
@@ -64,5 +66,21 @@ public class BaseTestWithConstructors {
 
 	protected List<Product> toList(Product... dtos) {
 		return Arrays.asList(dtos);
+	}
+
+	protected User userDTO(int id) {
+		User user = new User();
+		user.setId(id);
+
+		return user;
+	}
+
+	protected ProductFromCatalog productFromCatalog(int id, String name, String description, double price) {
+		ProductFromCatalog product = new ProductFromCatalog();
+		product.setId(id);
+		product.setName(name);
+		product.setPrice(new BigDecimal(price).stripTrailingZeros());
+		product.setDescription(description == null ? "" : description);
+		return product;
 	}
 }

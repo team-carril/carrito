@@ -55,23 +55,25 @@ public class CartController {
 
 	@PostMapping("/carts")
 	public ResponseEntity<Cart> createCart(@Valid @RequestBody User user) throws BadRequestBodyException {
-		ResponseEntity<Cart> CreateCartLog = new ResponseEntity<>(cartService.postNewCart(user), HttpStatus.CREATED);
+		Cart cart = cartService.postNewCart(user);
 
-		log.info("Creating cart with id: " + CreateCartLog.getBody().getId() + " and user id: "
-				+ CreateCartLog.getBody().getUserId());
+		log.info("Creating cart with id: " + cart.getId() + " and user id: "
+				+ cart.getUserId());
 
-		return CreateCartLog;
+		ResponseEntity<Cart> createCartLog = new ResponseEntity<>(cart, HttpStatus.CREATED);
+
+		return createCartLog;
 	}
 
 	@PatchMapping("/carts/{id}")
 	public Cart addProductToCart(@Valid @RequestBody ProductFromCatalog productFromCatalog, @PathVariable UUID id)
 			throws BadRequestBodyException {
 		Product product = Product.fromCatalog(productFromCatalog);
-		Cart AddProductToCartLog = cartService.addProductToCart(product, id);
+		Cart addProductToCartLog = cartService.addProductToCart(product, id);
 
-		log.info("Product " + AddProductToCartLog.getProducts() + " added");
+		log.info("Product " + addProductToCartLog.getProducts() + " added");
 
-		return AddProductToCartLog;
+		return addProductToCartLog;
 	}
 
 	@DeleteMapping("/carts/{id}")

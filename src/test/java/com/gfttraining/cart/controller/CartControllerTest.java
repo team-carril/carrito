@@ -5,7 +5,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -62,7 +61,7 @@ class CartControllerTest extends BaseTestWithConstructors {
 	}
 
 	@Test
-	public void create_cart() throws BadRequestBodyException {
+	public void createCart() throws BadRequestBodyException {
 		User user = new User();
 		Cart cart = cartDto(UUID.randomUUID(), 1, null, null, null, null, 0);
 		when(cartService.postNewCart(user)).thenReturn(cart);
@@ -71,11 +70,8 @@ class CartControllerTest extends BaseTestWithConstructors {
 	}
 
 	@Test
-	public void add_product_to_cart() throws BadRequestBodyException {
-		ProductFromCatalog product = new ProductFromCatalog();
-		product.setId(1);
-		product.setName("test");
-		product.setPrice(new BigDecimal(15));
+	public void addProductToCart() throws BadRequestBodyException {
+		ProductFromCatalog product = productFromCatalog(1, "test", null, 15);
 
 		Cart cart = cartDto(null, 1, null, null, null, Collections.emptyList(), 0);
 		when(cartService.addProductToCart(any(Product.class), any(UUID.class))).thenReturn(cart);
@@ -84,7 +80,7 @@ class CartControllerTest extends BaseTestWithConstructors {
 	}
 
 	@Test
-	public void delete_cart() throws EntityNotFoundException {
+	public void deleteCart() throws EntityNotFoundException {
 		UUID id = UUID.randomUUID();
 		cartController.deleteCartById(id);
 		verify(cartService).deleteById(id);
