@@ -23,7 +23,6 @@ public class ProductController {
 		this.productService = productService;
 	}
 
-	// TODO CHECK FOR STATUS OF CART: in JPA Query???
 	@PatchMapping(value = "/products/{id}")
 	public CartCountDTO updateAllById(@Valid @RequestBody ProductFromCatalog productFromCatalog, @PathVariable int id)
 			throws BadRequestBodyException {

@@ -39,6 +39,7 @@ public class CartController {
 		return cartService.findAll();
 	}
 
+	// TODO BUG PRODUCT JSON Description is Always Empty
 	@GetMapping("/carts")
 	public List<Cart> findByStatus(@RequestParam(required = false) String status) throws BadRequestParamException {
 		if (status == null)
