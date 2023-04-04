@@ -36,6 +36,17 @@ public class Product {
 		return product;
 	}
 
+	static public Product fromCatalog(ProductFromCatalog productFromCatalog)
+			throws BadRequestBodyException {
+		return Product.builder().catalogId(productFromCatalog.getId())
+				.name(productFromCatalog.getName())
+				.description(productFromCatalog.getDescription())
+				.price(productFromCatalog.getPrice())
+				.quantity(1)
+				.build();
+	}
+
+	// TODO DELETE
 	static public Product fromCatalog(ProductFromCatalog productFromCatalog, UUID cartId)
 			throws BadRequestBodyException {
 		return Product.builder().catalogId(productFromCatalog.getId())

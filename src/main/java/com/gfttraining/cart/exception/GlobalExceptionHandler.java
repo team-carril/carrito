@@ -64,8 +64,6 @@ public class GlobalExceptionHandler {
 			WebRequest req) {
 		Map<String, Object> fieldErrors = new HashMap<>();
 		fieldErrors.put("timestamp", LocalDateTime.now());
-		// List<String> errors = ex.getBindingResult().getFieldErrors()
-		// .stream().map((x) -> x.getDefaultMessage()).collect(Collectors.toList());
 
 		Map<String, String> errors = ex.getBindingResult().getFieldErrors()
 				.stream()
