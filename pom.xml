@@ -73,6 +73,11 @@
     		<version>1.2.3</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.jacoco</groupId>
+			<artifactId>jacoco-maven-plugin</artifactId>
+			<version>0.8.9</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -124,6 +129,25 @@
 								<source>src/integration-test/java</source>
 							</sources>
 						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.9</version>
+				<executions>
+					<execution>
+						<id>preapre-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+					<goals>
+						<goal>report</goal>
+					</goals>
 					</execution>
 				</executions>
 			</plugin>
