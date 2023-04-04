@@ -175,6 +175,12 @@ components:
       properties:
         id:
           type: integer
+        name:
+          type: string
+        address:
+          type: string
+        email:
+          type: string
         paymentMethod:
           type: string
           enum:
