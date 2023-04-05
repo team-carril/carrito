@@ -5,6 +5,16 @@ info:
 paths:
   /carts:
     get:
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - DRAFT
+              - SUBMITTED
+              - ALL
       responses:
         "200":
           description: Returns list of Carts sorted by status
@@ -31,18 +41,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Cart"
-        "422":
+        "400":
           description: Wrong request body, must be User
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "400":
-          description: Cart already exists.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
+                $ref: "#/components/schemas/BadRequestBodyResponse"
 
   /carts/{id}:
     parameters:
@@ -53,12 +57,12 @@ paths:
           type: string
     patch:
       requestBody:
-        description: Product JSON
+        description: ProductFromCatalog JSON
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ProductfromCatalog"
+              $ref: "#/components/schemas/ProductFromCatalog"
       responses:
         "200":
           description: Cart updated
@@ -68,11 +72,11 @@ paths:
                 $ref: "#/components/schemas/Cart"
 
         "400":
-          description: Cart status invalid, wrong Product JSON (?)
+          description: Wrong ProductFromCatalog JSON
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
+                $ref: "#/components/schemas/BadRequestBodyResponse"
         "404":
           description: Cart not found
           content:
@@ -83,18 +87,64 @@ paths:
       responses:
         "200":
           description: Cart deleted.
-        "400":
-          description: Cart status invalid (?)
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
         "404":
           description: Cart not found.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /products/{id}:
+    summary: Controls the state of products in every cart with a DRAFT status.
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    patch:
+      description: Updates every product with matching id with the given requestBody
+      requestBody:
+        description: ProductFromCatalog JSON
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductFromCatalog"
+      responses:
+        "200":
+          description: Products updated correctly.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CartCountResponse"
+        "400":
+          description: Wrong ProducJSON
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestBodyResponse"
+        "404":
+          description: No product with the given id found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestBodyResponse"
+    delete:
+      description: Deletes product with matching id with the given requestBody
+      responses:
+        "200":
+          description: Products deleted correctly.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CartCountResponse"
+        "404":
+          description: No product with the given id found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestBodyResponse"
+
   /carts/submit/{id}:
     parameters:
       - name: id
@@ -125,20 +175,23 @@ components:
       properties:
         id:
           type: integer
+        name:
+          type: string
+        address:
+          type: string
+        email:
+          type: string
         paymentMethod:
           type: string
           enum:
             - VISA
             - PAYPAL
             - TRANSFER
-    ProductfromCatalog:
+    ProductFromCatalog:
       type: object
       required:
         - id
-        - name
-        - description
         - price
-        - quantity
       properties:
         id:
           type: integer
@@ -158,15 +211,12 @@ components:
           type: integer
           format: int64
           example: 48
+        quantity:
+          type: integer
+          format: int64
+          example: 42
     Product:
       type: object
-      required:
-        - id
-        - name
-        - description
-        - price
-        - quantity
-        - cartId
       properties:
         id:
           type: integer
@@ -186,9 +236,6 @@ components:
           type: integer
           format: int64
           example: 48
-        cartId:
-          type: string
-          example: "73fbba50-6a2d-4218-a6a8-6fbd1d7b98c5"
     Cart:
       type: object
       properties:
@@ -223,12 +270,31 @@ components:
             type: array
             items:
               $ref: "#/components/schemas/Product"
+    CartCountResponse:
+      description: For the /products/ routes, holds the number of carts affected.
+      type: object
+      properties:
+        cartsChanged:
+          type: integer
     ErrorResponse:
       type: object
       properties:
         timestamp:
           type: string
-          example: "yyyy-MM-dd HH:mm:s"
+          example: "yyyy-MM-dd HH:mm:ss"
         msg:
           type: string
           example: "Missing User id"
+    BadRequestBodyResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          example: "yyyy-MM-dd HH:mm:ss"
+        errorCount:
+          type: integer
+        errors:
+          type: object
+          properties:
+            nameOfField:
+              type: string

@@ -12,14 +12,17 @@ import javax.persistence.EntityNotFoundException;
 
 import org.springframework.stereotype.Service;
 
-import com.gfttraining.cart.api.controller.dto.Cart;
-import com.gfttraining.cart.api.controller.dto.Product;
-import com.gfttraining.cart.api.controller.dto.User;
+import com.gfttraining.cart.api.dto.Cart;
+import com.gfttraining.cart.api.dto.Product;
+import com.gfttraining.cart.api.dto.User;
 import com.gfttraining.cart.jpa.CartRepository;
 import com.gfttraining.cart.jpa.model.CartEntity;
 import com.gfttraining.cart.jpa.model.ProductEntity;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class CartService {
 
 	private CartRepository cartRepository;
@@ -36,6 +39,7 @@ public class CartService {
 
 	public List<Cart> findByStatus(String status) {
 		List<CartEntity> entities = cartRepository.findByStatus(status);
+
 		return entities.stream().map(CartEntity::toDTO).collect(Collectors.toList());
 	}
 
@@ -44,6 +48,10 @@ public class CartService {
 				.userId(user.getId())
 				.status("DRAFT").products(Collections.emptyList()).build();
 		CartEntity result = cartRepository.save(entity);
+
+		log.debug("Id: " + entity.getId() + " User Id: " + entity.getUserId() + " Products: " + entity.getProducts()
+				+ " Status: " + entity.getStatus());
+
 		return CartEntity.toDTO(result);
 	}
 
@@ -59,19 +67,25 @@ public class CartService {
 		if (sameProduct.isEmpty()) {
 			entity.getProducts().add(ProductEntity.fromDTO(product));
 			entity = cartRepository.saveAndFlush(entity);
-			System.out.println(entity);
 			return CartEntity.toDTO(entity);
 		}
-		sameProduct.get().addOne();
+		sameProduct.get().addToQuantity(product.getQuantity());
 		entity = cartRepository.saveAndFlush(entity);
+
+		log.debug("Id: " + entity.getId() + " User Id: " + entity.getUserId() + " Products: " + entity.getProducts()
+				+ " Status: " + entity.getStatus());
+
 		return CartEntity.toDTO(entity);
 	}
 
-  public Cart deleteById(UUID cartId) {
+	public Cart deleteById(UUID cartId) {
 		Optional<CartEntity> entityOptional = cartRepository.findById(cartId);
 		if (entityOptional.isEmpty())
 			throw new EntityNotFoundException("Cart " + cartId + " not found.");
 		cartRepository.delete(entityOptional.get());
+
+		log.debug(cartId + "deleted");
+
 		return new Cart();
 	}
 }
