@@ -88,4 +88,13 @@ public class CartService {
 
 		return new Cart();
 	}
+	
+	public Cart getByUserId(UUID cartId) {
+		Optional<CartEntity> entityOptional = cartRepository.findById(cartId);
+		if (entityOptional.isEmpty())
+			throw new EntityNotFoundException("Cart " + cartId + " not found.");
+		log.debug(cartId + "is the id from the cart");
+		
+		return CartEntity.toDTO(entityOptional.get());
+	}
 }

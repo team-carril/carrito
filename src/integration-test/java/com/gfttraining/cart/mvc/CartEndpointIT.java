@@ -156,5 +156,29 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 		mockMvc.perform(delete("/carts/" + id)).andExpect(status().isNotFound());
 		verify(cartService).deleteById(id);
 	}
-
+	
+	@Test
+	public void GET_carts_by_UserId_OK() throws Exception {
+		UUID id = UUID.randomUUID();
+		
+		mockMvc.perform(get("/carts/" + id))
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("@[0].id").isString())
+		.andExpect(jsonPath("@[0].userId").isNumber());		
+	}
+	
+	@Test
+	public void GET_carts_by_UserId_BAD_REQUEST_PATH_VARIABLE() throws Exception {
+		
+	}
+	
+	@Test
+	public void GET_carts_by_UserId_NOT_FOUND() throws Exception {
+		UUID id = UUID.randomUUID();		
+		String json = mapper.writeValueAsString(id);
+		when(cartService.getByUserId(id))
+				.thenThrow(EntityNotFoundException.class);
+		mockMvc.perform(get("/carts/" + id).contentType(MediaType.APPLICATION_JSON).content(json))
+				.andExpect(status().isNotFound());
+	}
 }

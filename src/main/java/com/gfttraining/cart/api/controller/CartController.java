@@ -22,6 +22,7 @@ import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
 import com.gfttraining.cart.exception.BadRequestBodyException;
 import com.gfttraining.cart.exception.BadRequestParamException;
+import com.gfttraining.cart.jpa.model.CartEntity;
 import com.gfttraining.cart.service.CartService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -88,6 +89,12 @@ public class CartController {
 				return true;
 		}
 		return false;
+	}
+	
+	@GetMapping("/carts/{id}")
+	public void getCartsByUserId(@PathVariable UUID id) {
+		cartService.getByUserId(id);
+		log.info("Cart " + id);
 	}
 
 }
