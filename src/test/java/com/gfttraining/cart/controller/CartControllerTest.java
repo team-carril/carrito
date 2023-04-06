@@ -97,7 +97,6 @@ class CartControllerTest extends BaseTestWithConstructors {
 	
 	@Test
 	public void getCartsByUserIdTest() throws EntityNotFoundException {
-		UUID id = UUID.randomUUID();
 		cartController.getAllCartEntitiesByUserIdFilteredByStatus(1);
 		verify(cartService).getAllCartEntitiesByUserIdFilteredByStatus(1);
 	}
