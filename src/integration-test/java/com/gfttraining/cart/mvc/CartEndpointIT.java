@@ -160,11 +160,21 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 	@Test
 	public void GET_carts_by_UserId_OK() throws Exception {
 		UUID id = UUID.randomUUID();
+		List<Cart> l1 = toList(
+				cartDto(null, 0, null, null, "SUBMITTED", null, 0),
+				cartDto(null, 0, null, null, "SUBMITTED", null, 0));
 		
-		mockMvc.perform(get("/carts/" + id))
+		when(cartService.findByStatus("SUBMITTED")).thenReturn(l1);
+		
+		mockMvc.perform(get("/carts?status=SUBMITTED"))
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("@[0].id").isString())
-		.andExpect(jsonPath("@[0].userId").isNumber());		
+		.andExpect(jsonPath("@[0].userId").isNumber())
+		.andExpect(jsonPath("@[0].createdAt").isString())
+		.andExpect(jsonPath("@[0].updatedAt").isString())
+		.andExpect(jsonPath("@[0].totalPrice").isNumber())
+		.andExpect(jsonPath("@[0].status").isString())
+		.andExpect(jsonPath("@[0].products").isArray());		
 	}
 	
 	@Test
@@ -176,7 +186,7 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 	public void GET_carts_by_UserId_NOT_FOUND() throws Exception {
 		UUID id = UUID.randomUUID();		
 		String json = mapper.writeValueAsString(id);
-		when(cartService.getByUserId(id))
+		when(cartService.getAllCartEntitiesByUserIdFilteredByStatus(1))
 				.thenThrow(EntityNotFoundException.class);
 		mockMvc.perform(get("/carts/" + id).contentType(MediaType.APPLICATION_JSON).content(json))
 				.andExpect(status().isNotFound());

@@ -91,10 +91,12 @@ public class CartController {
 		return false;
 	}
 	
-	@GetMapping("/carts/{id}")
-	public void getCartsByUserId(@PathVariable UUID id) {
-		cartService.getByUserId(id);
-		log.info("Cart " + id);
+	@GetMapping("/carts/user/{userId}")
+		public List<CartEntity> getAllCartEntitiesByUserIdFilteredByStatus(@PathVariable Integer userId){
+			return cartService.getAllCartEntitiesByUserIdFilteredByStatus(userId);
+		}
 	}
+	
+	
 
-}
+

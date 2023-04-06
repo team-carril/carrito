@@ -1,6 +1,7 @@
 package com.gfttraining.cart.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -89,12 +90,15 @@ public class CartService {
 		return new Cart();
 	}
 	
-	public Cart getByUserId(UUID cartId) {
-		Optional<CartEntity> entityOptional = cartRepository.findById(cartId);
-		if (entityOptional.isEmpty())
-			throw new EntityNotFoundException("Cart " + cartId + " not found.");
-		log.debug(cartId + "is the id from the cart");
-		
-		return CartEntity.toDTO(entityOptional.get());
+	public List<CartEntity> getAllCartEntitiesByUserIdFilteredByStatus(Integer userId){
+		List<CartEntity> cartEntities = cartRepository.findByUserId(userId);
+		List<CartEntity> cartEntitiesFiltered = new ArrayList<>();
+		for (CartEntity cartEntity : cartEntities) {
+			if (cartEntity.getStatus().equals("SUBMITTED")) {
+				cartEntitiesFiltered.add(cartEntity);
+			}
+		}
+
+		return cartEntitiesFiltered;
 	}
 }
