@@ -178,11 +178,6 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 	}
 	
 	@Test
-	public void GET_carts_by_UserId_BAD_REQUEST_PATH_VARIABLE() throws Exception {
-		
-	}
-	
-	@Test
 	public void GET_carts_by_UserId_NOT_FOUND() throws Exception {
 		UUID id = UUID.randomUUID();		
 		String json = mapper.writeValueAsString(id);
