@@ -50,12 +50,13 @@ public class CartService {
 		CartEntity entity = CartEntity.builder().createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now())
 				.userId(user.getId())
 				.status("DRAFT").products(Collections.emptyList()).build();
+
 		CartEntity result = cartRepository.save(entity);
 
 		log.debug("Id: " + entity.getId() + " User Id: " + entity.getUserId() + " Products: " + entity.getProducts()
 				+ " Status: " + entity.getStatus());
 
-		return CartEntity.toDTO(result);
+		return mapper.toCartDTO(result);
 	}
 
 	public Cart addProductToCart(ProductFromCatalog productFromCatalog, UUID cartId) {
@@ -71,9 +72,9 @@ public class CartService {
 				.filter(p -> (p.getCatalogId() == product.getCatalogId() && p.getCartId().equals(cartId)))
 				.findFirst();
 		if (sameProduct.isEmpty()) {
-			entity.getProducts().add(ProductEntity.fromDTO(product));
+			entity.getProducts().add(mapper.toProductEntity(product));
 			entity = cartRepository.saveAndFlush(entity);
-			return CartEntity.toDTO(entity);
+			return mapper.toCartDTO(entity);
 		}
 		sameProduct.get().addToQuantity(product.getQuantity());
 		entity = cartRepository.saveAndFlush(entity);
@@ -81,7 +82,7 @@ public class CartService {
 		log.debug("Id: " + entity.getId() + " User Id: " + entity.getUserId() + " Products: " + entity.getProducts()
 				+ " Status: " + entity.getStatus());
 
-		return CartEntity.toDTO(entity);
+		return mapper.toCartDTO(entity);
 	}
 
 	public Cart deleteById(UUID cartId) {

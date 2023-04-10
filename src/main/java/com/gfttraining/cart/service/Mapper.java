@@ -34,6 +34,10 @@ public class Mapper {
 				.build();
 	}
 
+	public ProductEntity toProductEntity(Product product) {
+		return mapper.map(product, ProductEntity.class);
+	}
+
 	public Cart toCartDTO(CartEntity entity) {
 		Cart dto = mapper.map(entity, Cart.class);
 		BigDecimal totalPrice = entity.getProducts().stream().reduce(BigDecimal.valueOf(0.0),

@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.gfttraining.cart.api.dto.Product;
 import com.gfttraining.cart.exception.NegativeQuantityException;
 
 import lombok.Builder;
@@ -59,22 +58,5 @@ public class ProductEntity {
 		entity.setPrice(price);
 		entity.setQuantity(quantity);
 		return entity;
-	}
-
-	static public Product toDTO(ProductEntity entity) {
-		return Product.builder().id(entity.getId()).catalogId(entity.getCatalogId()).name(entity.getName())
-				.description(entity.getDescription()).price(entity.getPrice())
-				.quantity(entity.getQuantity()).build();
-	}
-
-	static public ProductEntity fromDTO(Product product) {
-		return ProductEntity.builder()
-				.id(product.getId())
-				.catalogId(product.getCatalogId())
-				.name(product.getName())
-				.description(product.getDescription())
-				.price(product.getPrice())
-				.quantity(product.getQuantity())
-				.build();
 	}
 }

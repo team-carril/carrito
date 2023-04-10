@@ -67,12 +67,12 @@ public class CartServiceTest extends BaseTestWithConstructors {
 		UUID uuidB = UUID.randomUUID();
 		UUID uuidC = UUID.randomUUID();
 
-		List<ProductEntity> p1 = toList(productEntity(1, 1, "test_item", "asdf", uuidA, 5.0, 1),
-				productEntity(2, 2, "test_item", "asdf", uuidA, 5.0, 1),
-				productEntity(3, 3, "test_item", "asdf", uuidA, 5.0, 1));
-		List<Product> p2 = toList(productDto(1, 1, "test_item", "asdf", uuidA, 5.0, 1),
-				productDto(2, 2, "test_item", "asdf", uuidA, 5.0, 1),
-				productDto(3, 3, "test_item", "asdf", uuidA, 5.0, 1));
+		List<ProductEntity> p1 = toList(productEntity(1, 1, "test_item", "asdf", uuidA, 5, 1),
+				productEntity(2, 2, "test_item", "asdf", uuidA, 5, 1),
+				productEntity(3, 3, "test_item", "asdf", uuidA, 5, 1));
+		List<Product> p2 = toList(productDto(1, 1, "test_item", "asdf", uuidA, 5, 1),
+				productDto(2, 2, "test_item", "asdf", uuidA, 5, 1),
+				productDto(3, 3, "test_item", "asdf", uuidA, 5, 1));
 
 		List<CartEntity> listInput = toList(
 				cartEntity(uuidA, 1, testDate, testDate, "DRAFT", p1),
@@ -109,7 +109,7 @@ public class CartServiceTest extends BaseTestWithConstructors {
 
 	@Test
 	public void create_calls_repository() {
-		User user = userDTO(0);
+		User user = userDTO(1);
 		when(cartRepository.save(any(CartEntity.class)))
 				.thenReturn(cartEntity(null, 0, null, null, null, Collections.emptyList()));
 		cartService.postNewCart(user);
