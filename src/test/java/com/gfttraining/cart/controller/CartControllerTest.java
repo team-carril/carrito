@@ -23,7 +23,6 @@ import org.mockito.MockitoAnnotations;
 import com.gfttraining.cart.BaseTestWithConstructors;
 import com.gfttraining.cart.api.controller.CartController;
 import com.gfttraining.cart.api.dto.Cart;
-import com.gfttraining.cart.api.dto.Product;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
 import com.gfttraining.cart.exception.BadRequestBodyException;
@@ -74,9 +73,9 @@ class CartControllerTest extends BaseTestWithConstructors {
 		ProductFromCatalog product = productFromCatalog(1, "test", null, 15);
 
 		Cart cart = cartDto(null, 1, null, null, null, Collections.emptyList(), 0);
-		when(cartService.addProductToCart(any(Product.class), any(UUID.class))).thenReturn(cart);
+		when(cartService.addProductToCart(any(ProductFromCatalog.class), any(UUID.class))).thenReturn(cart);
 		cartController.addProductToCart(product, UUID.randomUUID());
-		verify(cartService).addProductToCart(any(Product.class), any(UUID.class));
+		verify(cartService).addProductToCart(any(ProductFromCatalog.class), any(UUID.class));
 	}
 
 	@Test

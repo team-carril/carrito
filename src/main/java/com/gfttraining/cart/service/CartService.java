@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.gfttraining.cart.api.dto.Cart;
 import com.gfttraining.cart.api.dto.Product;
+import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
 import com.gfttraining.cart.jpa.CartRepository;
 import com.gfttraining.cart.jpa.model.CartEntity;
@@ -26,21 +27,23 @@ import lombok.extern.slf4j.Slf4j;
 public class CartService {
 
 	private CartRepository cartRepository;
+	private Mapper mapper;
 
-	public CartService(CartRepository cartRepository) {
+	public CartService(CartRepository cartRepository, Mapper mapper) {
 		this.cartRepository = cartRepository;
+		this.mapper = mapper;
 	}
 
 	public List<Cart> findAll() {
 		List<CartEntity> cartEntityList = cartRepository.findAll();
-		return cartEntityList.stream().map(CartEntity::toDTO)
+		return cartEntityList.stream().map((e) -> mapper.toCartDTO(e))
 				.sorted(Comparator.comparing(Cart::getStatus)).collect(Collectors.toList());
 	}
 
 	public List<Cart> findByStatus(String status) {
 		List<CartEntity> entities = cartRepository.findByStatus(status);
 
-		return entities.stream().map(CartEntity::toDTO).collect(Collectors.toList());
+		return entities.stream().map((e) -> mapper.toCartDTO(e)).collect(Collectors.toList());
 	}
 
 	public Cart postNewCart(User user) {
@@ -55,7 +58,10 @@ public class CartService {
 		return CartEntity.toDTO(result);
 	}
 
-	public Cart addProductToCart(Product product, UUID cartId) {
+	public Cart addProductToCart(ProductFromCatalog productFromCatalog, UUID cartId) {
+
+		Product product = mapper.toProductDTO(productFromCatalog);
+
 		Optional<CartEntity> entityOptional = cartRepository.findById(cartId);
 		if (entityOptional.isEmpty())
 			throw new EntityNotFoundException("Cart " + cartId + " not found.");
