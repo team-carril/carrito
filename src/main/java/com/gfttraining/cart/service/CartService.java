@@ -16,6 +16,7 @@ import com.gfttraining.cart.api.dto.Cart;
 import com.gfttraining.cart.api.dto.Product;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
+import com.gfttraining.cart.exception.ImpossibleQuantityException;
 import com.gfttraining.cart.jpa.CartRepository;
 import com.gfttraining.cart.jpa.model.CartEntity;
 import com.gfttraining.cart.jpa.model.ProductEntity;
@@ -72,11 +73,16 @@ public class CartService {
 				.filter(p -> (p.getCatalogId() == product.getCatalogId() && p.getCartId().equals(cartId)))
 				.findFirst();
 		if (sameProduct.isEmpty()) {
+			if (product.getQuantity() < 1)
+				throw new ImpossibleQuantityException(
+						"Quantity must restult in an integer bigger than 0.");
 			entity.getProducts().add(mapper.toProductEntity(product));
 			entity = cartRepository.saveAndFlush(entity);
 			return mapper.toCartDTO(entity);
 		}
 		sameProduct.get().addToQuantity(product.getQuantity());
+		// if (sameProduct.get().getQuantity() < 1)
+
 		entity = cartRepository.saveAndFlush(entity);
 
 		log.debug("Id: " + entity.getId() + " User Id: " + entity.getUserId() + " Products: " + entity.getProducts()

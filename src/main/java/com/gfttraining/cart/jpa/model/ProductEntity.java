@@ -10,7 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.gfttraining.cart.exception.NegativeQuantityException;
+import com.gfttraining.cart.exception.ImpossibleQuantityException;
 
 import lombok.Builder;
 import lombok.Data;
@@ -39,10 +39,10 @@ public class ProductEntity {
 		return this.getPrice().multiply(BigDecimal.valueOf(this.getQuantity()));
 	}
 
-	public void addToQuantity(int x) throws NegativeQuantityException {
-		if ((this.quantity + x) < 0)
-			throw new NegativeQuantityException(
-					"Quantity must result in a positive integer. Current quantity: " + this.quantity);
+	public void addToQuantity(int x) throws ImpossibleQuantityException {
+		if ((this.quantity + x) < 1)
+			throw new ImpossibleQuantityException(
+					"Quantity must restult in an integer bigger than 0. Current quantity is: " + this.quantity);
 		this.quantity += x;
 	}
 
