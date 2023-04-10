@@ -53,7 +53,6 @@ public class ProductServiceTest extends BaseTestWithConstructors {
 	public void updateAll_calls_service() {
 		UUID cartId = UUID.randomUUID();
 		CartEntity draftCart = cartEntity(cartId, 0, null, null, "DRAFT", null);
-		// Product product = productDto(0, 1, "C", null, null, 0, 0);
 		ProductFromCatalog product = productFromCatalog(1, "C", null, 0);
 		List<ProductEntity> entities = toList(
 				productEntity(0, 1, "A", "", cartId, 0, 0),

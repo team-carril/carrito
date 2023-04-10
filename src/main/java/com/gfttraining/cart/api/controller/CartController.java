@@ -67,7 +67,7 @@ public class CartController {
 	@PatchMapping("/carts/{id}")
 	public Cart addProductToCart(@Valid @RequestBody ProductFromCatalog productFromCatalog, @PathVariable UUID id)
 			throws BadRequestBodyException {
-		// Product product = Product.fromCatalog(productFromCatalog);
+
 		Cart addProductToCartLog = cartService.addProductToCart(productFromCatalog, id);
 
 		log.info("Product " + addProductToCartLog.getProducts() + " added");

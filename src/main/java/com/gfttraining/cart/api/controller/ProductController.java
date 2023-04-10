@@ -25,7 +25,6 @@ public class ProductController {
 	@PatchMapping(value = "/products/{id}")
 	public CartCountDTO updateAllById(@Valid @RequestBody ProductFromCatalog productFromCatalog, @PathVariable int id)
 			throws BadRequestBodyException {
-		// Product product = Product.fromCatalog(productFromCatalog);
 		return productService.updateAllById(productFromCatalog, id);
 	}
 

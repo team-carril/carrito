@@ -120,9 +120,6 @@ public class CartServiceTest extends BaseTestWithConstructors {
 	public void add_product_existing_product() {
 		UUID uuid = UUID.randomUUID();
 		ProductFromCatalog product = productFromCatalog(1, null, null, 0);
-		// ProductFromCatalog productFromCatalog = productDto(1, 1, null, null, uuid, 0,
-		// 1);
-
 		CartEntity entity = cartEntity(uuid, 0, null, null, null, toList(productEntity(1, 1, null, null, uuid, 0, 1)));
 
 		when(cartRepository.findById(uuid)).thenReturn(Optional.of(entity));
