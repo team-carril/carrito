@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.gfttraining.cart.exception.BadRequestBodyException;
 
 import lombok.Builder;
 import lombok.Data;
@@ -36,15 +35,5 @@ public class Product {
 		product.setPrice(price);
 		product.setQuantity(quantity);
 		return product;
-	}
-
-	static public Product fromCatalog(ProductFromCatalog productFromCatalog)
-			throws BadRequestBodyException {
-		return Product.builder().catalogId(productFromCatalog.getId())
-				.name(productFromCatalog.getName())
-				.description(productFromCatalog.getDescription())
-				.price(productFromCatalog.getPrice())
-				.quantity(productFromCatalog.getQuantity())
-				.build();
 	}
 }

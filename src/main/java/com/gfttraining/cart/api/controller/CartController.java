@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gfttraining.cart.api.dto.Cart;
-import com.gfttraining.cart.api.dto.Product;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
 import com.gfttraining.cart.exception.BadRequestBodyException;
@@ -68,8 +67,8 @@ public class CartController {
 	@PatchMapping("/carts/{id}")
 	public Cart addProductToCart(@Valid @RequestBody ProductFromCatalog productFromCatalog, @PathVariable UUID id)
 			throws BadRequestBodyException {
-		Product product = Product.fromCatalog(productFromCatalog);
-		Cart addProductToCartLog = cartService.addProductToCart(product, id);
+
+		Cart addProductToCartLog = cartService.addProductToCart(productFromCatalog, id);
 
 		log.info("Product " + addProductToCartLog.getProducts() + " added");
 

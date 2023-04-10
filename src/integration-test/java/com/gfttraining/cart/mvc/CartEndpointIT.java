@@ -27,7 +27,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gfttraining.cart.BaseTestWithConstructors;
 import com.gfttraining.cart.api.controller.CartController;
 import com.gfttraining.cart.api.dto.Cart;
-import com.gfttraining.cart.api.dto.Product;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
 import com.gfttraining.cart.jpa.CartRepository;
@@ -106,7 +105,7 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 		UUID id = UUID.randomUUID();
 		ProductFromCatalog product = productFromCatalog(1, "test", null, 15);
 		String json = mapper.writeValueAsString(product);
-		when(cartService.addProductToCart(any(Product.class), any(UUID.class)))
+		when(cartService.addProductToCart(any(ProductFromCatalog.class), any(UUID.class)))
 				.thenReturn(cartDto(id, 0, null, null, json, Collections.emptyList(), 0));
 		mockMvc.perform(patch("/carts/" + id).contentType(MediaType.APPLICATION_JSON).content(json))
 				.andExpect(status().isOk());
@@ -136,7 +135,7 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 		UUID id = UUID.randomUUID();
 		ProductFromCatalog product = productFromCatalog(1, "test", null, 15);
 		String json = mapper.writeValueAsString(product);
-		when(cartService.addProductToCart(any(Product.class), any(UUID.class)))
+		when(cartService.addProductToCart(any(ProductFromCatalog.class), any(UUID.class)))
 				.thenThrow(EntityNotFoundException.class);
 		mockMvc.perform(patch("/carts/" + id).contentType(MediaType.APPLICATION_JSON).content(json))
 				.andExpect(status().isNotFound());

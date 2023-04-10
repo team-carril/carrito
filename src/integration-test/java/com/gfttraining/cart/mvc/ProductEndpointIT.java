@@ -10,8 +10,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.math.BigDecimal;
-
 import javax.persistence.EntityNotFoundException;
 
 import org.junit.jupiter.api.Test;
@@ -25,7 +23,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gfttraining.cart.BaseTestWithConstructors;
 import com.gfttraining.cart.api.controller.ProductController;
 import com.gfttraining.cart.api.dto.CartCountDTO;
-import com.gfttraining.cart.api.dto.Product;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.service.ProductService;
 
@@ -45,7 +42,7 @@ public class ProductEndpointIT extends BaseTestWithConstructors {
 	public void PATCH_products_OK() throws Exception {
 		ProductFromCatalog product = productFromCatalog(1, "test", null, 15);
 		String json = mapper.writeValueAsString(product);
-		when(productService.updateAllById(any(Product.class), anyInt())).thenReturn(new CartCountDTO());
+		when(productService.updateAllById(any(ProductFromCatalog.class), anyInt())).thenReturn(new CartCountDTO());
 		mvc.perform(patch("/products/1").contentType(MediaType.APPLICATION_JSON).content(json))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("@.cartsChanged").isNumber());
@@ -55,7 +52,7 @@ public class ProductEndpointIT extends BaseTestWithConstructors {
 	public void PATCH_products_NOT_FOUND() throws Exception {
 		ProductFromCatalog product = productFromCatalog(1, "test", null, 15);
 		String json = mapper.writeValueAsString(product);
-		when(productService.updateAllById(any(Product.class), anyInt()))
+		when(productService.updateAllById(any(ProductFromCatalog.class), anyInt()))
 				.thenThrow(new EntityNotFoundException("test string"));
 
 		mvc.perform(patch("/products/6").contentType(MediaType.APPLICATION_JSON).content(json))
@@ -73,7 +70,7 @@ public class ProductEndpointIT extends BaseTestWithConstructors {
 				.andExpect(jsonPath("@.timestamp").isString())
 				.andExpect(jsonPath("@.errorCount").isNumber())
 				.andExpect(jsonPath("@.errors").isMap());
-		verify(productService, never()).updateAllById(any(Product.class), anyInt());
+		verify(productService, never()).updateAllById(any(ProductFromCatalog.class), anyInt());
 	}
 
 	@Test
