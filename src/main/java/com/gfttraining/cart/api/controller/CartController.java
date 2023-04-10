@@ -37,14 +37,10 @@ public class CartController {
 		this.cartService = cartService;
 	}
 
-	public List<Cart> findAllCarts() {
-		return cartService.findAll();
-	}
-
 	@GetMapping("/carts")
-	public List<Cart> findByStatus(@RequestParam(required = false) String status) throws BadRequestParamException {
+	public List<Cart> findByStatus(@RequestParam String status) throws BadRequestParamException {
 		if (status == null)
-			status = "DRAFT";
+			return cartService.findByStatus("DRAFT");
 		if (status.equals("DRAFT") || status.equals("SUBMITTED"))
 			return cartService.findByStatus(status);
 		if (status.equals("ALL"))
