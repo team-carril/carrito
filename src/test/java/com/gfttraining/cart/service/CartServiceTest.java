@@ -161,4 +161,21 @@ public class CartServiceTest extends BaseTestWithConstructors {
 				Arguments.of("DRAFT"),
 				Arguments.of("SUBMITTED"));
 	}
+	
+	@Test
+	public void get_carts_by_UserId_throws_cart_not_found() {
+		UUID uuid = UUID.randomUUID();
+		when(cartRepository.findById(uuid)).thenReturn(Optional.ofNullable(null));
+		assertThrows(EntityNotFoundException.class, () -> cartService.getAllCartEntitiesByUserIdFilteredByStatus(1));
+	}
+	
+	@Test
+	public void get_Carts_By_UserId_OK() {
+		UUID id = UUID.randomUUID();
+		CartEntity entity = new CartEntity();
+		entity.setProducts(Collections.emptyList());
+		when(cartRepository.findById(id)).thenReturn(Optional.of(entity));
+		cartService.getAllCartEntitiesByUserIdFilteredByStatus(1);
+		verify(cartRepository).findById(id);
+	}
 }
