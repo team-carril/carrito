@@ -42,6 +42,12 @@ public class ProductService {
 		return entities;
 	}
 
+	public List<ProductEntity> findAllProductsSortedByPrice(){
+		List<ProductEntity> entities = productRepository.findAllAndSortByPrice();
+		return entities;
+	}
+
+
 	public CartCountDTO updateAllById(ProductFromCatalog productFromCatalog, int catalogId) {
 		Product product = mapper.toProductDTO(productFromCatalog);
 		List<ProductEntity> entities = findByCatalogId(catalogId);

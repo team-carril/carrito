@@ -87,4 +87,11 @@ public class ProductServiceTest extends BaseTestWithConstructors {
 		assertEquals(3, counter.getCartsChanged());
 	}
 
+	@Test
+	public void findAllProcuts(){
+		List<ProductEntity> list = productRepository.findAllAndSortByPrice();
+		when(productRepository.findAllAndSortByPrice()).thenReturn(list);
+		verify(productRepository).findAllAndSortByPrice();
+	}
+
 }

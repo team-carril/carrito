@@ -1,8 +1,10 @@
 package com.gfttraining.cart.api.controller;
 
 import javax.validation.Valid;
+import java.util.List;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gfttraining.cart.api.dto.CartCountDTO;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.exception.BadRequestBodyException;
+import com.gfttraining.cart.jpa.model.ProductEntity;
 import com.gfttraining.cart.service.ProductService;
 
 @RestController
@@ -31,6 +34,11 @@ public class ProductController {
 	@DeleteMapping(value = "/products/{id}")
 	public CartCountDTO deleteAllById(@PathVariable int id) {
 		return productService.deleteAllById(id);
+	}
+
+	@GetMapping(value = "/products")
+	public List<ProductEntity> findAllProductsSortedByPrice(){
+		return productService.findAllProductsSortedByPrice();
 	}
 
 }

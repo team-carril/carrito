@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import com.gfttraining.cart.BaseTestWithConstructors;
+import com.gfttraining.cart.api.dto.Product;
 import com.gfttraining.cart.jpa.model.ProductEntity;
 
 @DataJpaTest
@@ -44,6 +45,15 @@ public class ProductRepositoryIT extends BaseTestWithConstructors {
 
 		List<ProductEntity> entities = repository.findByCatalogId(1);
 		assertTrue(entities.isEmpty());
+	}
+
+	@Test
+	public void findAllAndSortByPrice(){
+		repository.saveAndFlush(productEntity(1, 5, null, null, null, 0, 0));
+
+		List<ProductEntity> entities = repository.findAllAndSortByPrice();
+
+		assertTrue(!entities.isEmpty());
 	}
 
 }

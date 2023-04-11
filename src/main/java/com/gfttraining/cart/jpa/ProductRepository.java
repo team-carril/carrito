@@ -12,4 +12,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
 	@Query("from ProductEntity p where p.catalogId=:catalogId")
 	List<ProductEntity> findByCatalogId(int catalogId);
 
+	@Query("from ProductEntity order by price desc")
+	List<ProductEntity> findAllAndSortByPrice();
 }
