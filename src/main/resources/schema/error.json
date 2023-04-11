@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "Product",
+  "type": "object",
+  "properties": {
+    "timestamp": {
+      "type": "string"
+    },
+    "msg": {
+      "type": "string"
+    }
+  },
+  "required": ["timestamp", "msg"]
+}
