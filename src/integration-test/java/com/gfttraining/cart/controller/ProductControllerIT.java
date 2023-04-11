@@ -1,4 +1,4 @@
-package com.gfttraining.cart.mvc;
+package com.gfttraining.cart.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -27,7 +27,7 @@ import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.service.ProductService;
 
 @WebMvcTest(ProductController.class)
-public class ProductEndpointIT extends BaseTestWithConstructors {
+public class ProductControllerIT extends BaseTestWithConstructors {
 
 	@Autowired
 	MockMvc mvc;

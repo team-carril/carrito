@@ -1,4 +1,4 @@
-package com.gfttraining.cart.mvc;
+package com.gfttraining.cart.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -33,7 +33,7 @@ import com.gfttraining.cart.jpa.CartRepository;
 import com.gfttraining.cart.service.CartService;
 
 @WebMvcTest(CartController.class)
-public class CartEndpointIT extends BaseTestWithConstructors {
+public class CartControllerIT extends BaseTestWithConstructors {
 	@Autowired
 	private ObjectMapper mapper;
 
