@@ -159,7 +159,6 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 	
 	@Test
 	public void GET_carts_by_UserId_OK() throws Exception {
-		UUID id = UUID.randomUUID();
 		List<Cart> l1 = toList(
 				cartDto(null, 0, null, null, "SUBMITTED", null, 0),
 				cartDto(null, 0, null, null, "SUBMITTED", null, 0));
@@ -178,12 +177,11 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 	}
 	
 	@Test
-	public void GET_carts_by_UserId_NOT_FOUND() throws Exception {
-		UUID id = UUID.randomUUID();		
-		String json = mapper.writeValueAsString(id);
+	public void GET_carts_by_UserId_NOT_FOUND() throws Exception {		
+		String json = mapper.writeValueAsString(1);
 		when(cartService.getAllCartEntitiesByUserIdFilteredByStatus(1))
 				.thenThrow(EntityNotFoundException.class);
-		mockMvc.perform(get("/carts/" + id).contentType(MediaType.APPLICATION_JSON).content(json))
+		mockMvc.perform(get("/carts/user/" + 1).contentType(MediaType.APPLICATION_JSON).content(json))
 				.andExpect(status().isNotFound());
 	}
 }

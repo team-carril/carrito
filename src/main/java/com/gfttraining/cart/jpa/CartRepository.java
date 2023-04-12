@@ -12,7 +12,10 @@ public interface CartRepository extends JpaRepository<CartEntity, UUID> {
 
 	@Query("from CartEntity c where c.status=:status")
 	List<CartEntity> findByStatus(String status);
-	
-	List<CartEntity> findByUserId(int id);
 
+	@Query("from CartEntity c where c.userId=:id and c.status='SUBMITTED'")
+	List<CartEntity> findByUserId(int id);
+	
 }
+
+

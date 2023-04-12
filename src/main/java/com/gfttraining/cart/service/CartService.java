@@ -92,13 +92,6 @@ public class CartService {
 	
 	public List<CartEntity> getAllCartEntitiesByUserIdFilteredByStatus(Integer userId){
 		List<CartEntity> cartEntities = cartRepository.findByUserId(userId);
-		List<CartEntity> cartEntitiesFiltered = new ArrayList<>();
-		for (CartEntity cartEntity : cartEntities) {
-			if (cartEntity.getStatus().equals("SUBMITTED")) {
-				cartEntitiesFiltered.add(cartEntity);
-			}
-		}
-
-		return cartEntitiesFiltered;
+		return cartEntities;
 	}
 }
