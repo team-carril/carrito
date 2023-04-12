@@ -25,19 +25,20 @@ public class ProductController {
 		this.productService = productService;
 	}
 
-	@PatchMapping(value = "/products/{id}")
-	public CartCountDTO updateAllById(@Valid @RequestBody ProductFromCatalog productFromCatalog, @PathVariable int id)
+	@PatchMapping(value = "/products/{catalogId}")
+	public CartCountDTO updateAllById(@Valid @RequestBody ProductFromCatalog productFromCatalog,
+			@PathVariable int catalogId)
 			throws BadRequestBodyException {
-		return productService.updateAllById(productFromCatalog, id);
+		return productService.updateAllById(productFromCatalog, catalogId);
 	}
 
-	@DeleteMapping(value = "/products/{id}")
-	public CartCountDTO deleteAllById(@PathVariable int id) {
-		return productService.deleteAllById(id);
+	@DeleteMapping(value = "/products/{catalogId}")
+	public CartCountDTO deleteAllById(@PathVariable int catalogId) {
+		return productService.deleteAllById(catalogId);
 	}
 
 	@GetMapping(value = "/products")
-	public List<Product> findAllProductsSortedByPrice(){
+	public List<Product> findAllProductsSortedByPrice() {
 		return productService.findAllProductsSortedByPrice();
 	}
 
