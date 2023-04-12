@@ -75,6 +75,17 @@ public class BaseTestWithConstructors {
 		return user;
 	}
 
+	protected ProductFromCatalog productFromCatalog(int id, String name, String description, double price,
+			int quantity) {
+		ProductFromCatalog product = new ProductFromCatalog();
+		product.setId(id);
+		product.setName(name);
+		product.setDescription(description == null ? "" : description);
+		product.setPrice(new BigDecimal(price).stripTrailingZeros());
+		product.setQuantity(quantity);
+		return product;
+	}
+
 	protected ProductFromCatalog productFromCatalog(int id, String name, String description, double price) {
 		ProductFromCatalog product = new ProductFromCatalog();
 		product.setId(id);

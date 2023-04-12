@@ -38,7 +38,7 @@ public class CartController {
 	}
 
 	@GetMapping("/carts")
-	public List<Cart> findByStatus(@RequestParam String status) throws BadRequestParamException {
+	public List<Cart> findByStatus(@RequestParam(required = false) String status) throws BadRequestParamException {
 		if (status == null)
 			return cartService.findByStatus("DRAFT");
 		if (status.equals("DRAFT") || status.equals("SUBMITTED"))
@@ -84,13 +84,9 @@ public class CartController {
 		}
 		return false;
 	}
-	
-	@GetMapping("/carts/user/{userId}")
-		public List<Cart> getAllCartEntitiesByUserIdFilteredByStatus(@PathVariable Integer userId){
-			return cartService.getAllCartEntitiesByUserIdFilteredByStatus(userId);
-		}
+
+	@GetMapping("/carts/users/{userId}")
+	public List<Cart> getAllCartEntitiesByUserIdFilteredByStatus(@PathVariable Integer userId) {
+		return cartService.getAllCartEntitiesByUserIdFilteredByStatus(userId);
 	}
-	
-	
-
-
+}
