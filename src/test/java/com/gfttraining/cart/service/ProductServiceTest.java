@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,7 @@ import java.util.UUID;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -20,6 +22,7 @@ import org.mockito.MockitoAnnotations;
 
 import com.gfttraining.cart.BaseTestWithConstructors;
 import com.gfttraining.cart.api.dto.CartCountDTO;
+import com.gfttraining.cart.api.dto.Product;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.jpa.CartRepository;
 import com.gfttraining.cart.jpa.ProductRepository;
@@ -85,6 +88,26 @@ public class ProductServiceTest extends BaseTestWithConstructors {
 		verify(productRepository).findByCatalogId(1);
 		verify(productRepository).deleteAll(anyList());
 		assertEquals(3, counter.getCartsChanged());
+	}
+
+	@Test
+	public void findAllProducts(){
+		
+		UUID cartId = UUID.randomUUID();
+		List<Product> entities = toList(
+				productDto(1, 1, "A", null, cartId, 5, 1),
+				productDto(2, 1, "B", null, cartId, 8, 2),
+				productDto(3, 1, "B", null, cartId, 15, 9));
+
+		when(service.findAllProductsSortedByPrice()).thenReturn(entities);
+		
+		Assertions.assertThat(entities)
+				  .extracting(Product::getPrice)
+				  .contains(BigDecimal.valueOf(15),
+				  			BigDecimal.valueOf(8),
+							BigDecimal.valueOf(5)).isSorted();
+
+
 	}
 
 }

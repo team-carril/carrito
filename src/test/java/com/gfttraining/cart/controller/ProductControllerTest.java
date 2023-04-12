@@ -45,4 +45,10 @@ public class ProductControllerTest extends BaseTestWithConstructors {
 		verify(productService).deleteAllById(1);
 	}
 
+	@Test
+	public void findAllProductsSortedByPrice(){
+		productController.findAllProductsSortedByPrice();
+		verify(productService).findAllProductsSortedByPrice();
+	}
+
 }
