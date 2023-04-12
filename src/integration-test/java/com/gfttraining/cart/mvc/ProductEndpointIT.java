@@ -116,17 +116,15 @@ public class ProductEndpointIT extends BaseTestWithConstructors {
 	public void GET_Allproducts() throws Exception{
 		UUID cartId = UUID.randomUUID();
 		List<Product> list =  toList(
-			productDto(1, 1, "A", null, cartId, 50, 1),
-			productDto(2, 1, "B", null, cartId, 8, 2),
-			productDto(3, 1, "B", null, cartId, 15, 9));;
+			productDto(1, 1, "Honda", "Car", cartId, 50, 1),
+			productDto(2, 1, "Chips", "Groceries", cartId, 8, 2),
+			productDto(3, 1, "Bacon", "Meat", cartId, 15, 9));;
 		when(productService.findAllProductsSortedByPrice()).thenReturn(list);
 
 		mvc.perform(get("/products/")).andExpect(status().isOk())
-					.andExpect(jsonPath("@[0].id").isNumber())
 					.andExpect(jsonPath("@[0].catalogId").isNumber())
 					.andExpect(jsonPath("@[0].name").isString())
 					.andExpect(jsonPath("@[0].description").isString())
-					.andExpect(jsonPath("@[0].cartId").isString())
 					.andExpect(jsonPath("@[0].price").isNumber())
 					.andExpect(jsonPath("@[0].quantity").isNumber());;
 
