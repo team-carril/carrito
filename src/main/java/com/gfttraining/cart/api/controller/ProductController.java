@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gfttraining.cart.api.dto.CartCountDTO;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.exception.BadRequestBodyException;
-import com.gfttraining.cart.jpa.model.ProductEntity;
 import com.gfttraining.cart.service.ProductService;
+import com.gfttraining.cart.api.dto.Product;
 
 @RestController
 public class ProductController {
@@ -37,7 +37,7 @@ public class ProductController {
 	}
 
 	@GetMapping(value = "/products")
-	public List<ProductEntity> findAllProductsSortedByPrice(){
+	public List<Product> findAllProductsSortedByPrice(){
 		return productService.findAllProductsSortedByPrice();
 	}
 

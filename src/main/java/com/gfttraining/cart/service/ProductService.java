@@ -42,9 +42,9 @@ public class ProductService {
 		return entities;
 	}
 
-	public List<ProductEntity> findAllProductsSortedByPrice(){
+	public List<Product> findAllProductsSortedByPrice(){
 		List<ProductEntity> entities = productRepository.findAllAndSortByPrice();
-		return entities;
+		return entities.stream().map((s)-> mapper.toProductDTO(s)).collect(Collectors.toList());
 	}
 
 

@@ -13,26 +13,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import javax.persistence.EntityNotFoundException;
 
-import java.net.http.HttpRequest;
 import java.util.List;
 import java.util.UUID;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder.*;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gfttraining.cart.BaseTestWithConstructors;
 import com.gfttraining.cart.api.controller.ProductController;
 import com.gfttraining.cart.api.dto.CartCountDTO;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.service.ProductService;
-import com.gfttraining.cart.jpa.model.ProductEntity;
+import com.gfttraining.cart.api.dto.Product;
 
 @WebMvcTest(ProductController.class)
 public class ProductEndpointIT extends BaseTestWithConstructors {
@@ -119,10 +114,11 @@ public class ProductEndpointIT extends BaseTestWithConstructors {
 
 	@Test
 	public void GET_Allproducts() throws Exception{
-
-		UUID uuid = UUID.randomUUID();
-		List<ProductEntity> list = toList(productEntity(1, 5, "Water", "A bottle of water", uuid, 0, 0));
-		
+		UUID cartId = UUID.randomUUID();
+		List<Product> list =  toList(
+			productDto(1, 1, "A", null, cartId, 50, 1),
+			productDto(2, 1, "B", null, cartId, 8, 2),
+			productDto(3, 1, "B", null, cartId, 15, 9));;
 		when(productService.findAllProductsSortedByPrice()).thenReturn(list);
 
 		mvc.perform(get("/products/")).andExpect(status().isOk())
