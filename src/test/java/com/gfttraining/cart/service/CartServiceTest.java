@@ -161,4 +161,12 @@ public class CartServiceTest extends BaseTestWithConstructors {
 				Arguments.of("DRAFT"),
 				Arguments.of("SUBMITTED"));
 	}
+	
+	@Test
+	public void get_Carts_By_UserId_OK() {
+		List<CartEntity> entities = Collections.emptyList();
+		when(cartRepository.findByUserId(1)).thenReturn(entities);
+		cartService.getAllCartEntitiesByUserIdFilteredByStatus(1);
+		verify(cartRepository).findByUserId(1);
+	}
 }
