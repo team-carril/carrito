@@ -16,6 +16,9 @@
     "updatedAt": {
       "type": "string"
     },
+    "totalPrice": {
+      "type": "number"
+    },
     "status": {
       "type": "string",
       "enum": ["SUBMITTED", "DRAFT"]
