@@ -31,3 +31,8 @@ insert into PRODUCT (catalog_id , to_cart, name, description, price, quantity) v
 insert into PRODUCT (catalog_id , to_cart, name, description, price, quantity) values (2, '3a9018dc-1506-439a-b0d4-1451fd5d8dae', 'Beef - Ground Medium', 'Kids', 16, 20);
 
 insert into PRODUCT (catalog_id , to_cart, name, description, price, quantity) values (10, '18df6192-4b31-4951-9756-4a277acba7ae', 'Glaze - Clear', 'Movies', 97, 4);
+
+insert into PRODUCT (catalog_id , to_cart, name, description, price, quantity) values (10, 'afa3350e-51da-468a-b288-1c41e317eb73', 'Glaze - Clear', 'Movies', 47, 2);
+insert into PRODUCT (catalog_id , to_cart, name, description, price, quantity) values (62, 'afa3350e-51da-468a-b288-1c41e317eb73', 'Kiwi', 'Sports', 35, 2);
+insert into PRODUCT (catalog_id , to_cart, name, description, price, quantity) values (1, 'afa3350e-51da-468a-b288-1c41e317eb73', 'Wine - Chablis 2003 Champs', 'Garden', 120, 5);
+

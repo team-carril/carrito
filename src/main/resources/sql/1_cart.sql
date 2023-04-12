@@ -8,3 +8,5 @@ insert into CART (id, to_user, created_at, updated_at, status) values ('0f6f7a4f
 insert into CART (id, to_user, created_at, updated_at, status) values ('3a9018dc-1506-439a-b0d4-1451fd5d8dae', 9,  '2022-07-28 14:42:22','2022-08-05 15:43:05','SUBMITTED');
 
 insert into CART (id, to_user, created_at, updated_at, status) values ('18df6192-4b31-4951-9756-4a277acba7ae', 10, '2022-11-24 11:11:59','2022-12-10 05:19:30','DRAFT');
+
+insert into CART (id, to_user, created_at, updated_at, status) values ('afa3350e-51da-468a-b288-1c41e317eb73', 5,  '2023-01-16 06:54:34','2023-03-01 01:37:59', 'SUBMITTED');
