@@ -102,8 +102,8 @@ public class CartService {
 		return new Cart();
 	}
 	
-	public List<CartEntity> getAllCartEntitiesByUserIdFilteredByStatus(Integer userId){
+	public List<Cart> getAllCartEntitiesByUserIdFilteredByStatus(Integer userId){
 		List<CartEntity> cartEntities = cartRepository.findByUserId(userId);
-		return cartEntities;
+		return cartEntities.stream().map((e) -> mapper.toCartDTO(e)).collect(Collectors.toList());
 	}
 }

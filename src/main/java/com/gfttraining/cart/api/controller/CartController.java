@@ -21,7 +21,6 @@ import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
 import com.gfttraining.cart.exception.BadRequestBodyException;
 import com.gfttraining.cart.exception.BadRequestParamException;
-import com.gfttraining.cart.jpa.model.CartEntity;
 import com.gfttraining.cart.service.CartService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -87,7 +86,7 @@ public class CartController {
 	}
 	
 	@GetMapping("/carts/user/{userId}")
-		public List<CartEntity> getAllCartEntitiesByUserIdFilteredByStatus(@PathVariable Integer userId){
+		public List<Cart> getAllCartEntitiesByUserIdFilteredByStatus(@PathVariable Integer userId){
 			return cartService.getAllCartEntitiesByUserIdFilteredByStatus(userId);
 		}
 	}
