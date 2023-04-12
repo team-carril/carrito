@@ -155,5 +155,32 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 		mockMvc.perform(delete("/carts/" + id)).andExpect(status().isNotFound());
 		verify(cartService).deleteById(id);
 	}
-
+	
+	@Test
+	public void GET_carts_by_UserId_OK() throws Exception {
+		List<Cart> l1 = toList(
+				cartDto(null, 0, null, null, "SUBMITTED", null, 0),
+				cartDto(null, 0, null, null, "SUBMITTED", null, 0));
+		
+		when(cartService.findByStatus("SUBMITTED")).thenReturn(l1);
+		
+		mockMvc.perform(get("/carts?status=SUBMITTED"))
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("@[0].id").isString())
+		.andExpect(jsonPath("@[0].userId").isNumber())
+		.andExpect(jsonPath("@[0].createdAt").isString())
+		.andExpect(jsonPath("@[0].updatedAt").isString())
+		.andExpect(jsonPath("@[0].totalPrice").isNumber())
+		.andExpect(jsonPath("@[0].status").isString())
+		.andExpect(jsonPath("@[0].products").isArray());		
+	}
+	
+	@Test
+	public void GET_carts_by_UserId_NOT_FOUND() throws Exception {		
+		String json = mapper.writeValueAsString(1);
+		when(cartService.getAllCartEntitiesByUserIdFilteredByStatus(1))
+				.thenThrow(EntityNotFoundException.class);
+		mockMvc.perform(get("/carts/user/" + 1).contentType(MediaType.APPLICATION_JSON).content(json))
+				.andExpect(status().isNotFound());
+	}
 }

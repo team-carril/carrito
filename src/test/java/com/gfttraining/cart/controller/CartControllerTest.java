@@ -93,5 +93,11 @@ class CartControllerTest extends BaseTestWithConstructors {
 				Arguments.of("INVALID PARAM"),
 				Arguments.of(""));
 	}
+	
+	@Test
+	public void getCartsByUserIdTest() throws EntityNotFoundException {
+		cartController.getAllCartEntitiesByUserIdFilteredByStatus(1);
+		verify(cartService).getAllCartEntitiesByUserIdFilteredByStatus(1);
+	}
 
 }

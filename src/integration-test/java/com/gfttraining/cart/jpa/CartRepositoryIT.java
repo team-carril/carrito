@@ -51,5 +51,34 @@ public class CartRepositoryIT extends BaseTestWithConstructors {
 				Arguments.of("DRAFT"),
 				Arguments.of("SUBMITTED"));
 	}
+	
+	
+	
+	@ParameterizedTest
+	@MethodSource("statusArguments_GetCartsByUserId")
+	public void find_cartsByUserId(Integer userId) {
+		LocalDateTime testDate = LocalDateTime.of(1990, 03, 03, 12, 15, 15);
+		cartRepository
+				.saveAndFlush(cartEntity(null, 44, testDate, testDate, "DRAFT", null));
+		cartRepository
+				.saveAndFlush(cartEntity(null, 44, testDate, testDate, "DRAFT", null));
+		cartRepository
+				.saveAndFlush(cartEntity(null, 44, testDate, testDate, "SUBMITTED", null));
+		cartRepository
+				.saveAndFlush(
+						cartEntity(null, 44, testDate, testDate, "SUBMITTED", null));
+		List<CartEntity> actualList = cartRepository.findByUserId(userId);
+
+		for (CartEntity e : actualList)
+			assertTrue(e.getUserId() == userId);
+	}
+
+	
+	static Stream<Arguments> statusArguments_GetCartsByUserId() {
+		return Stream.of(
+				Arguments.of(44),
+				Arguments.of(20),
+				Arguments.of(4));
+	}
 
 }
