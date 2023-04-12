@@ -14,6 +14,7 @@ public class ITConfig {
 	// CartEndPointIT
 	public static final UUID CARTa_ID = UUID.fromString("6e7baf09-9877-4c26-a4fb-21e0e2572819");
 	public static final UUID CARTb_ID = UUID.fromString("0f6f7a4f-1097-4624-8973-ae6966728647");
+	public static final UUID CART_NOTFOUND_ID = UUID.fromString("163f923b-c48e-44f7-8428-c488a9ef23e5");
 
 	// ProductEndPointIT
 	public static final Integer PRODUCTa_ID = 2;

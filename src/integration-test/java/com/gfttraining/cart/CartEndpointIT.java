@@ -2,23 +2,25 @@ package com.gfttraining.cart;
 
 import static com.gfttraining.cart.ITConfig.BASE_ERROR_SCHEMA;
 import static com.gfttraining.cart.ITConfig.CART_ARRAY_SCHEMA;
+import static com.gfttraining.cart.ITConfig.CART_NOTFOUND_ID;
 import static com.gfttraining.cart.ITConfig.CART_SCHEMA;
 import static com.gfttraining.cart.ITConfig.CARTa_ID;
 import static com.gfttraining.cart.ITConfig.CARTb_ID;
 import static com.gfttraining.cart.ITConfig.VALIDATION_ERROR_SCHEMA;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.UUID;
 import java.util.stream.Stream;
 
-import static org.hamcrest.Matchers.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -39,7 +41,6 @@ import com.gfttraining.cart.api.dto.User;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class CartEndpointIT extends BaseTestWithConstructors {
-	// TODO Test Precise Values
 
 	@Autowired
 	MockMvc mvc;
@@ -86,7 +87,8 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 
 		mvc.perform(post("/carts").contentType(MediaType.APPLICATION_JSON).content(json))
 				.andExpect(status().isCreated())
-				.andExpect(content().string(matchesJsonSchemaInClasspath(CART_SCHEMA)));
+				.andExpect(content().string(matchesJsonSchemaInClasspath(CART_SCHEMA)))
+				.andExpect(jsonPath("@.userId", is(1)));
 	}
 
 	@DisplayName("given User JSON missing properties, when POST, should return 400 Validation Error JSON")
@@ -101,12 +103,13 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 	@DisplayName("given valid Product JSON, when PATCH, should return 200 Cart JSON")
 	@Test
 	public void PATCH_carts_OK() throws Exception {
-		ProductFromCatalog product = productFromCatalog(1, "test", null, 15, 1);
+		ProductFromCatalog product = productFromCatalog(1024, "test", null, 15, 1);
 		String json = mapper.writeValueAsString(product);
 
 		mvc.perform(patch("/carts/" + CARTa_ID).contentType(MediaType.APPLICATION_JSON).content(json))
 				.andExpect(status().isOk())
-				.andExpect(content().string(matchesJsonSchemaInClasspath(CART_SCHEMA)));
+				.andExpect(content().string(matchesJsonSchemaInClasspath(CART_SCHEMA)))
+				.andExpect(jsonPath("@.products[3].catalogId", is(1024)));
 	}
 
 	@DisplayName("given wrong path variable, when PATCH, should return 400 Error JSON")
@@ -133,13 +136,12 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 	@DisplayName("given non existing cartId, when PATCH, should return 404 Error JSON")
 	@Test
 	public void PATCH_carts_NOT_FOUND() throws Exception {
-		UUID notFoundId = UUID.randomUUID();
 		ProductFromCatalog product = productFromCatalog(1, "test", null, 15, 1);
 		String json = mapper.writeValueAsString(product);
-		mvc.perform(patch("/carts/" + notFoundId).contentType(MediaType.APPLICATION_JSON).content(json))
+		mvc.perform(patch("/carts/" + CART_NOTFOUND_ID).contentType(MediaType.APPLICATION_JSON).content(json))
 				.andExpect(status().isNotFound())
 				.andExpect(content().string(matchesJsonSchemaInClasspath(BASE_ERROR_SCHEMA)))
-				.andExpect(content().string(containsString(notFoundId.toString())));
+				.andExpect(content().string(containsString(CART_NOTFOUND_ID.toString())));
 	}
 
 	@DisplayName("given existing cartId, when DELETE, should return 200")
@@ -152,10 +154,9 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 	@DisplayName("given non existing cartid, when DELETE, should return 404 Error Json")
 	@Test
 	public void DELETE_cart_NOT_FOUND() throws Exception {
-		UUID notFoundId = UUID.randomUUID();
-		mvc.perform(delete("/carts/" + notFoundId))
+		mvc.perform(delete("/carts/" + CART_NOTFOUND_ID))
 				.andExpect(status().isNotFound())
-				.andExpect(content().string(containsString(notFoundId.toString())));
+				.andExpect(content().string(containsString(CART_NOTFOUND_ID.toString())));
 	}
 
 	static Stream<Arguments> provideStatusArguments() {
