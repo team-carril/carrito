@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "Validation Error",
+  "type": "object",
+  "properties": {
+    "errrorCount": {
+      "type": "integer"
+    },
+    "errors": {
+      "type": "object",
+      "minProperties": 1
+    }
+  },
+  "required": ["errorCount", "errors"]
+}
