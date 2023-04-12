@@ -73,7 +73,7 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 
 	@DisplayName("given invalid param, when GET /carts, should return 400 Error JSON")
 	@Test
-	public void GET_carts_BAD_REQUEST_PATH_VARIABLE() throws Exception {
+	public void GET_carts_BAD_QUERY_PARAM() throws Exception {
 		mvc.perform(get("/carts?status=BADPARAM"))
 				.andExpect(status().isBadRequest())
 				.andExpect(content().string(matchesJsonSchemaInClasspath(BASE_ERROR_SCHEMA)));
@@ -157,6 +157,27 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 		mvc.perform(delete("/carts/" + CART_NOTFOUND_ID))
 				.andExpect(status().isNotFound())
 				.andExpect(content().string(containsString(CART_NOTFOUND_ID.toString())));
+	}
+
+	@Test
+	public void GET_users_OK() throws Exception {
+		MvcResult res = mvc.perform(get("/carts/users/" + 5))
+				.andExpect(status().isOk())
+				.andExpect(content().string(matchesJsonSchemaInClasspath(CART_ARRAY_SCHEMA)))
+				.andReturn();
+
+		Cart carts[] = mapper.readValue(res.getResponse().getContentAsString(), Cart[].class);
+		for (Cart c : carts) {
+			assertEquals("SUBMITTED", c.getStatus());
+			assertEquals(5, c.getUserId());
+		}
+	}
+
+	@Test
+	public void GET_users_BAD_PARAM() throws Exception {
+		mvc.perform(get("/carts/users/BADPARAM"))
+				.andExpect(status().isBadRequest())
+				.andExpect(content().string(matchesJsonSchemaInClasspath(BASE_ERROR_SCHEMA)));
 	}
 
 	static Stream<Arguments> provideStatusArguments() {

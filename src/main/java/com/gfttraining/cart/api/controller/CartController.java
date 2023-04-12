@@ -84,13 +84,9 @@ public class CartController {
 		}
 		return false;
 	}
-	
-	@GetMapping("/carts/user/{userId}")
-		public List<Cart> getAllCartEntitiesByUserIdFilteredByStatus(@PathVariable Integer userId){
-			return cartService.getAllCartEntitiesByUserIdFilteredByStatus(userId);
-		}
+
+	@GetMapping("/carts/users/{userId}")
+	public List<Cart> getAllCartEntitiesByUserIdFilteredByStatus(@PathVariable Integer userId) {
+		return cartService.getAllCartEntitiesByUserIdFilteredByStatus(userId);
 	}
-	
-	
-
-
+}
