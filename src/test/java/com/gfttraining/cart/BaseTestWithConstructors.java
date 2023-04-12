@@ -51,13 +51,13 @@ public class BaseTestWithConstructors {
 	protected ProductEntity productEntity(int id, int catalogId, String name, String description, UUID cartId,
 			double price, int quantity) {
 		return ProductEntity.builder().id(id).catalogId(catalogId).name(name).cartId(cartId).description(description)
-				.price(BigDecimal.valueOf(price)).quantity(quantity).build();
+				.price(new BigDecimal(price).stripTrailingZeros()).quantity(quantity).build();
 	}
 
 	protected Product productDto(int id, int catalogId, String name, String description, UUID cartId, double price,
 			int quantity) {
 		return Product.builder().id(id).catalogId(catalogId).name(name).description(description)
-				.price(BigDecimal.valueOf(price)).quantity(quantity).build();
+				.price(new BigDecimal(price).stripTrailingZeros()).quantity(quantity).build();
 	}
 
 	protected List<ProductEntity> toList(ProductEntity... entities) {

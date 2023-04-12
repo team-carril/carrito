@@ -57,12 +57,12 @@ paths:
           type: string
     patch:
       requestBody:
-        description: ProductFromCatalog JSON
+        description: ProductToAdd JSON
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ProductFromCatalog"
+              $ref: "#/components/schemas/ProductToAdd"
       responses:
         "200":
           description: Cart updated
@@ -72,7 +72,7 @@ paths:
                 $ref: "#/components/schemas/Cart"
 
         "400":
-          description: Wrong ProductFromCatalog JSON
+          description: Wrong ProductToAdd JSON
           content:
             application/json:
               schema:
@@ -104,12 +104,12 @@ paths:
     patch:
       description: Updates every product with matching id with the given requestBody
       requestBody:
-        description: ProductFromCatalog JSON
+        description: ProductToAdd JSON
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ProductFromCatalog"
+              $ref: "#/components/schemas/ProductToEdit"
       responses:
         "200":
           description: Products updated correctly.
@@ -187,11 +187,12 @@ components:
             - VISA
             - PAYPAL
             - TRANSFER
-    ProductFromCatalog:
+    ProductToAdd:
       type: object
       required:
         - id
         - price
+        - quantity
       properties:
         id:
           type: integer
@@ -207,18 +208,31 @@ components:
           type: number
           format: double
           example: 19.99
-        stock:
-          type: integer
-          format: int64
-          example: 48
         quantity:
           type: integer
           format: int64
           example: 42
-    Product:
+    ProductToEdit:
       type: object
       properties:
         id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Pelota Adidas
+        description:
+          type: string
+          example: Pelota Adidas Futbol Profesional.
+        price:
+          type: number
+          format: double
+          example: 19.99
+    Product:
+      type: object
+      properties:
+        catalogId:
           type: integer
           format: int64
           example: 1
