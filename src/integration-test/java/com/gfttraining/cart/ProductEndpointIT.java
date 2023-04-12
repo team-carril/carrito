@@ -1,15 +1,8 @@
 package com.gfttraining.cart;
 
-//import static com.gfttraining.cart.ITConfig.BASE_ERROR_SCHEMA;
-//import static com.gfttraining.cart.ITConfig.CART_COUNT_SCHEMA;
-//import static com.gfttraining.cart.ITConfig.PRODUCT_NOTFOUND_ID;
-//import static com.gfttraining.cart.ITConfig.PRODUCTa_ID;
-//import static com.gfttraining.cart.ITConfig.PRODUCTa_RESULT;
-//import static com.gfttraining.cart.ITConfig.PRODUCTb_ID;
-//import static com.gfttraining.cart.ITConfig.PRODUCTb_RESULT;
-//import static com.gfttraining.cart.ITConfig.VALIDATION_ERROR_SCHEMA;
 import static com.gfttraining.cart.ITConfig.BASE_ERROR_SCHEMA;
 import static com.gfttraining.cart.ITConfig.CART_COUNT_SCHEMA;
+import static com.gfttraining.cart.ITConfig.PRODUCT_ARRAY_SCHEMA;
 import static com.gfttraining.cart.ITConfig.PRODUCT_NOTFOUND_ID;
 import static com.gfttraining.cart.ITConfig.PRODUCTa_ID;
 import static com.gfttraining.cart.ITConfig.PRODUCTa_RESULT;
@@ -20,6 +13,7 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -45,6 +39,13 @@ public class ProductEndpointIT extends BaseTestWithConstructors {
 
 	@Autowired
 	ObjectMapper mapper;
+
+	@Test
+	public void GET_products_OK() throws Exception {
+		mvc.perform(get("/products/"))
+				.andExpect(status().isOk())
+				.andExpect(content().string(matchesJsonSchemaInClasspath(PRODUCT_ARRAY_SCHEMA)));
+	}
 
 	@DisplayName("given valid Product JSON, when PATCH /products, should return 200 CartCount JSON")
 	@Test

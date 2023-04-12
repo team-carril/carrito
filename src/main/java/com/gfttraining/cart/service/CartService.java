@@ -81,8 +81,6 @@ public class CartService {
 			return mapper.toCartDTO(entity);
 		}
 		sameProduct.get().addToQuantity(product.getQuantity());
-		// if (sameProduct.get().getQuantity() < 1)
-
 		entity = cartRepository.saveAndFlush(entity);
 
 		log.debug("Id: " + entity.getId() + " User Id: " + entity.getUserId() + " Products: " + entity.getProducts()
@@ -101,8 +99,8 @@ public class CartService {
 
 		return new Cart();
 	}
-	
-	public List<Cart> getAllCartEntitiesByUserIdFilteredByStatus(Integer userId){
+
+	public List<Cart> getAllCartEntitiesByUserIdFilteredByStatus(Integer userId) {
 		List<CartEntity> cartEntities = cartRepository.findByUserId(userId);
 		return cartEntities.stream().map((e) -> mapper.toCartDTO(e)).collect(Collectors.toList());
 	}

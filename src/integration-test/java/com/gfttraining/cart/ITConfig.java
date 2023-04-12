@@ -8,6 +8,7 @@ public class ITConfig {
 	public static final String CART_ARRAY_SCHEMA = "schema/carts_array.json";
 	public static final String CART_SCHEMA = "schema/cart.json";
 	public static final String PRODUCT_SCHEMA = "schema/product.json";
+	public static final String PRODUCT_ARRAY_SCHEMA = "schema/products_array.json";
 	public static final String BASE_ERROR_SCHEMA = "schema/base_error.json";
 	public static final String VALIDATION_ERROR_SCHEMA = "schema/validation_error.json";
 
