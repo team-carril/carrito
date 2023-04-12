@@ -20,29 +20,14 @@ public class ProductRepositoryIT extends BaseTestWithConstructors {
 
 	@Test
 	public void findByCatalogId_filters() {
-		repository.saveAndFlush(productEntity(1, 5, null, null, null, 0, 0));
-		repository.saveAndFlush(productEntity(2, 5, null, null, null, 0, 0));
-		repository.saveAndFlush(productEntity(3, 3, null, null, null, 0, 0));
-		repository.saveAndFlush(productEntity(4, 5, null, null, null, 0, 0));
-		repository.saveAndFlush(productEntity(5, 4, null, null, null, 0, 0));
-		repository.saveAndFlush(productEntity(5, 2, null, null, null, 0, 0));
-
 		List<ProductEntity> entities = repository.findByCatalogId(5);
-
 		for (ProductEntity p : entities)
 			assertEquals(5, p.getCatalogId());
 	}
 
 	@Test
 	public void findByCatalogId_empty_list() {
-		repository.saveAndFlush(productEntity(1, 5, null, null, null, 0, 0));
-		repository.saveAndFlush(productEntity(2, 5, null, null, null, 0, 0));
-		repository.saveAndFlush(productEntity(3, 3, null, null, null, 0, 0));
-		repository.saveAndFlush(productEntity(4, 5, null, null, null, 0, 0));
-		repository.saveAndFlush(productEntity(5, 4, null, null, null, 0, 0));
-		repository.saveAndFlush(productEntity(5, 2, null, null, null, 0, 0));
-
-		List<ProductEntity> entities = repository.findByCatalogId(1);
+		List<ProductEntity> entities = repository.findByCatalogId(1000);
 		assertTrue(entities.isEmpty());
 	}
 

@@ -1,5 +1,11 @@
 package com.gfttraining.cart;
 
+import static com.gfttraining.cart.ITConfig.BASE_ERROR_SCHEMA;
+import static com.gfttraining.cart.ITConfig.CART_ARRAY_SCHEMA;
+import static com.gfttraining.cart.ITConfig.CART_SCHEMA;
+import static com.gfttraining.cart.ITConfig.CARTa_ID;
+import static com.gfttraining.cart.ITConfig.CARTb_ID;
+import static com.gfttraining.cart.ITConfig.VALIDATION_ERROR_SCHEMA;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -12,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import static org.hamcrest.Matchers.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -25,25 +32,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gfttraining.cart.api.controller.CartController;
 import com.gfttraining.cart.api.dto.Cart;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
-import com.gfttraining.cart.jpa.CartRepository;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 public class CartEndpointIT extends BaseTestWithConstructors {
-	static final String CART_ARRAY = "schema/carts_array.json";
-	static final String CART = "schema/cart.json";
-	static final String PRODUCT = "schema/product.json";
-	static final String BASE_ERROR = "schema/base_error.json";
-	static final String VALIDATION_ERROR = "schema/validation_error.json";
-	static final UUID CARTa_ID = UUID.fromString("6e7baf09-9877-4c26-a4fb-21e0e2572819");
-	static final UUID CARTb_ID = UUID.fromString("0f6f7a4f-1097-4624-8973-ae6966728647");
-
-	@Autowired
-	CartController controller;
+	// TODO Test Precise Values
 
 	@Autowired
 	MockMvc mvc;
@@ -51,15 +47,12 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 	@Autowired
 	ObjectMapper mapper;
 
-	@Autowired
-	CartRepository cartRepository;
-
 	@DisplayName("given no param, when GET /carts, should return only DRAFT status carts")
 	@Test
 	public void GET_carts_default_param_OK() throws Exception {
 		mvc.perform(get("/carts"))
 				.andExpect(status().isOk())
-				.andExpect(content().string(matchesJsonSchemaInClasspath(CART_ARRAY)));
+				.andExpect(content().string(matchesJsonSchemaInClasspath(CART_ARRAY_SCHEMA)));
 	}
 
 	@DisplayName("given a status params, when GET /carts, returns results filtered by status")
@@ -69,7 +62,7 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 
 		MvcResult res = mvc.perform(get("/carts?status=" + status))
 				.andExpect(status().isOk())
-				.andExpect(content().string(matchesJsonSchemaInClasspath(CART_ARRAY)))
+				.andExpect(content().string(matchesJsonSchemaInClasspath(CART_ARRAY_SCHEMA)))
 				.andReturn();
 		Cart carts[] = mapper.readValue(res.getResponse().getContentAsString(), Cart[].class);
 		for (Cart c : carts) {
@@ -82,7 +75,7 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 	public void GET_carts_BAD_REQUEST_PATH_VARIABLE() throws Exception {
 		mvc.perform(get("/carts?status=BADPARAM"))
 				.andExpect(status().isBadRequest())
-				.andExpect(content().string(matchesJsonSchemaInClasspath(BASE_ERROR)));
+				.andExpect(content().string(matchesJsonSchemaInClasspath(BASE_ERROR_SCHEMA)));
 	}
 
 	@DisplayName("given valid User JSON, when POST request, should return 201 Cart JSON")
@@ -93,7 +86,7 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 
 		mvc.perform(post("/carts").contentType(MediaType.APPLICATION_JSON).content(json))
 				.andExpect(status().isCreated())
-				.andExpect(content().string(matchesJsonSchemaInClasspath(CART)));
+				.andExpect(content().string(matchesJsonSchemaInClasspath(CART_SCHEMA)));
 	}
 
 	@DisplayName("given User JSON missing properties, when POST, should return 400 Validation Error JSON")
@@ -102,7 +95,7 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 		String json = mapper.writeValueAsString(new User());
 		mvc.perform(post("/carts").contentType(MediaType.APPLICATION_JSON).content(json))
 				.andExpect(status().isBadRequest())
-				.andExpect(content().string(matchesJsonSchemaInClasspath(VALIDATION_ERROR)));
+				.andExpect(content().string(matchesJsonSchemaInClasspath(VALIDATION_ERROR_SCHEMA)));
 	}
 
 	@DisplayName("given valid Product JSON, when PATCH, should return 200 Cart JSON")
@@ -113,10 +106,7 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 
 		mvc.perform(patch("/carts/" + CARTa_ID).contentType(MediaType.APPLICATION_JSON).content(json))
 				.andExpect(status().isOk())
-				.andExpect(content().string(matchesJsonSchemaInClasspath(CART)));
-		// CartEntity modifiedCart = cartRepository.findById(CARTa_ID).get();
-		// assertEquals(product.getId(),
-		// modifiedCart.getProducts().get(3).getCatalogId());
+				.andExpect(content().string(matchesJsonSchemaInClasspath(CART_SCHEMA)));
 	}
 
 	@DisplayName("given wrong path variable, when PATCH, should return 400 Error JSON")
@@ -127,7 +117,7 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 
 		mvc.perform(patch("/carts/CRASHANDBURN").contentType(MediaType.APPLICATION_JSON).content(json))
 				.andExpect(status().isBadRequest())
-				.andExpect(content().string(matchesJsonSchemaInClasspath(BASE_ERROR)));
+				.andExpect(content().string(matchesJsonSchemaInClasspath(BASE_ERROR_SCHEMA)));
 	}
 
 	@DisplayName("given wrong JSON, when PATCH, shoudl return 400 Validation Error JSON")
@@ -136,7 +126,7 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 		String json = mapper.writeValueAsString(new User());
 		mvc.perform(patch("/carts/" + CARTa_ID).contentType(MediaType.APPLICATION_JSON).content(json))
 				.andExpect(status().isBadRequest())
-				.andExpect(content().string(matchesJsonSchemaInClasspath(VALIDATION_ERROR)));
+				.andExpect(content().string(matchesJsonSchemaInClasspath(VALIDATION_ERROR_SCHEMA)));
 
 	}
 
@@ -148,7 +138,8 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 		String json = mapper.writeValueAsString(product);
 		mvc.perform(patch("/carts/" + notFoundId).contentType(MediaType.APPLICATION_JSON).content(json))
 				.andExpect(status().isNotFound())
-				.andExpect(content().string(matchesJsonSchemaInClasspath(BASE_ERROR)));
+				.andExpect(content().string(matchesJsonSchemaInClasspath(BASE_ERROR_SCHEMA)))
+				.andExpect(content().string(containsString(notFoundId.toString())));
 	}
 
 	@DisplayName("given existing cartId, when DELETE, should return 200")
@@ -156,7 +147,6 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 	public void DELETE_carts_OK() throws Exception {
 		mvc.perform(delete("/carts/" + CARTb_ID))
 				.andExpect(status().isOk());
-		// TODO repo call
 	}
 
 	@DisplayName("given non existing cartid, when DELETE, should return 404 Error Json")
@@ -164,8 +154,8 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 	public void DELETE_cart_NOT_FOUND() throws Exception {
 		UUID notFoundId = UUID.randomUUID();
 		mvc.perform(delete("/carts/" + notFoundId))
-				.andExpect(status().isNotFound());
-		// TODO repo call
+				.andExpect(status().isNotFound())
+				.andExpect(content().string(containsString(notFoundId.toString())));
 	}
 
 	static Stream<Arguments> provideStatusArguments() {
