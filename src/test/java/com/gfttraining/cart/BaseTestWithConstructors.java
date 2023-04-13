@@ -68,6 +68,10 @@ public class BaseTestWithConstructors {
 		return Arrays.asList(dtos);
 	}
 
+	protected List<ProductFromCatalog> toList(ProductFromCatalog... dtos) {
+		return Arrays.asList(dtos);
+	}
+
 	protected User userDTO(int id) {
 		User user = new User();
 		user.setId(id);
@@ -92,6 +96,14 @@ public class BaseTestWithConstructors {
 		product.setName(name);
 		product.setPrice(new BigDecimal(price).stripTrailingZeros());
 		product.setDescription(description == null ? "" : description);
+		return product;
+	}
+
+	protected ProductFromCatalog productFromCatalog(int id, double price, int stock) {
+		ProductFromCatalog product = new ProductFromCatalog();
+		product.setId(id);
+		product.setPrice(new BigDecimal(price).stripTrailingZeros());
+		product.setStock(stock);
 		return product;
 	}
 }

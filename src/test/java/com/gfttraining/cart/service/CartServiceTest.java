@@ -3,6 +3,8 @@ package com.gfttraining.cart.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -37,6 +39,8 @@ public class CartServiceTest extends BaseTestWithConstructors {
 
 	@Mock
 	CartRepository cartRepository;
+	@Mock
+	RestService restService;
 	Mapper mapper;
 	CartService cartService;
 
@@ -156,12 +160,34 @@ public class CartServiceTest extends BaseTestWithConstructors {
 		assertThrows(EntityNotFoundException.class, () -> cartService.deleteById(id));
 	}
 
+	@Test
+	public void validateCart() {
+		UUID id = UUID.randomUUID();
+		List<ProductEntity> products = toList(
+				productEntity(1, 2, null, null, id, 10, 2),
+				productEntity(2, 3, null, null, id, 5, 2),
+				productEntity(3, 4, null, null, id, 20, 2));
+		List<ProductFromCatalog> productsFromCatalog = toList(
+			productFromCatalog(2, 10, 10),
+			productFromCatalog(3, 10, 10),
+			productFromCatalog(4, 10, 10)
+		);	
+		CartEntity entity = cartEntity(id, 7, null, null, null, products);
+		when(cartRepository.findById(id)).thenReturn(Optional.of(entity));
+		when(restService.fetchProductFromCatalog(anyInt())).thenReturn(productsFromCatalog.get(0));
+		when(restService.fetchUserInfo(entity.getUserId())).thenReturn(userDTO(7));
+
+		cartService.validateCart(id);
+		verify(restService).fetchUserInfo(entity.getUserId());
+		verify(restService, times(entity.getProducts().size())).fetchProductFromCatalog(anyInt());
+	}
+
 	static Stream<Arguments> statusArguments() {
 		return Stream.of(
 				Arguments.of("DRAFT"),
 				Arguments.of("SUBMITTED"));
 	}
-	
+
 	@Test
 	public void get_Carts_By_UserId_OK() {
 		List<CartEntity> entities = Collections.emptyList();

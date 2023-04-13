@@ -104,4 +104,13 @@ public class CartService {
 		List<CartEntity> cartEntities = cartRepository.findByUserId(userId);
 		return cartEntities.stream().map((e) -> mapper.toCartDTO(e)).collect(Collectors.toList());
 	}
+
+	public Cart validateCart(UUID id) {
+		throw new UnsupportedOperationException();
+		// TODO fetch from User
+		// TODO fetch from Catalog
+		// Calculate Price
+		// Save To Repot
+		// Call Catalog with Stock Change
+	}
 }

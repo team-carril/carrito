@@ -89,4 +89,9 @@ public class CartController {
 	public List<Cart> getAllCartEntitiesByUserIdFilteredByStatus(@PathVariable Integer userId) {
 		return cartService.getAllCartEntitiesByUserIdFilteredByStatus(userId);
 	}
+
+	@PostMapping("/carts/submit/{id}")
+	public Cart validateCart(@PathVariable UUID userId) {
+		return cartService.validateCart(userId);
+	}
 }
