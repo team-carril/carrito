@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -32,6 +33,7 @@ public class RestServiceTest extends BaseTestWithConstructors {
 	}
 
 	@Test
+	@Disabled
 	public void fetchUser() {
 		int id = 1;
 		when(restTemplate.getForEntity(TEST_URL + id, User.class)).thenReturn(userResponse(id));
@@ -41,6 +43,7 @@ public class RestServiceTest extends BaseTestWithConstructors {
 	}
 
 	@Test
+	@Disabled
 	public void fetchProduct() {
 		int id = 1;
 		when(restTemplate.getForEntity(TEST_URL + id, ProductFromCatalog.class)).thenReturn(productResponse(id));

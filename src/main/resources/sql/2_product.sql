@@ -27,7 +27,7 @@ insert into PRODUCT (catalog_id , to_cart, name, description, price, quantity) v
 insert into PRODUCT (catalog_id , to_cart, name, description, price, quantity) values (62, '0f6f7a4f-1097-4624-8973-ae6966728647', 'Kiwi', 'Sports', 33, 9);
 
 insert into PRODUCT (catalog_id , to_cart, name, description, price, quantity) values (9, '3a9018dc-1506-439a-b0d4-1451fd5d8dae', 'Flower - Leather Leaf Fern', 'Grocery', 41, 5);
-insert into PRODUCT (catalog_id , to_cart, name, description, price, quantity) values (7,'3a9018dc-1506-439a-b0d4-1451fd5d8dae', 'Wine - Chenin Blanc K.w.v.', 'Games', 89, 11);
+insert into PRODUCT (catalog_id , to_cart, name, description, price, quantity) values (7,'3a9018dc-1506-439a-b0d4-1451fd5d8dae', 'Wine - Chenin Blanc K.w.v.', 'Games', 9, 11);
 insert into PRODUCT (catalog_id , to_cart, name, description, price, quantity) values (2, '3a9018dc-1506-439a-b0d4-1451fd5d8dae', 'Beef - Ground Medium', 'Kids', 16, 20);
 
 insert into PRODUCT (catalog_id , to_cart, name, description, price, quantity) values (10, '18df6192-4b31-4951-9756-4a277acba7ae', 'Glaze - Clear', 'Movies', 97, 4);

@@ -107,6 +107,7 @@ public class CartService {
 
 	public Cart validateCart(UUID id) {
 		throw new UnsupportedOperationException();
+		// Check if Cart exists & has status == "DRAFT"
 		// TODO fetch from User
 		// TODO fetch from Catalog
 		// Calculate Price

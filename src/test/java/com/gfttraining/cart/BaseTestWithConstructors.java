@@ -19,9 +19,13 @@ public class BaseTestWithConstructors {
 	protected CartEntity cartEntity(UUID id, int userId, LocalDateTime createdAt, LocalDateTime updatedAt,
 			String status,
 			List<ProductEntity> products) {
-		return CartEntity.builder().id(id).userId(userId).createdAt(createdAt).updatedAt(updatedAt).status(status)
-				.products(products).build();
+		CartEntity entity = CartEntity.builder().id(id).userId(userId).createdAt(createdAt).updatedAt(updatedAt)
+				.status(status == null ? "DRAFT" : status)
+				.products(products == null ? Collections.emptyList() : products).build();
 
+		if (entity.getStatus().equals("SUBMITTED"))
+			entity.setTotalPrice(entity.calculatePrice());
+		return entity;
 	}
 
 	protected Cart cartDto(UUID id, int userId, LocalDateTime createdAt, LocalDateTime updatedAt, String status,

@@ -3,6 +3,7 @@ CREATE TABLE CART (
 	to_user INT,
 	created_at DATETIME,
 	updated_at DATETIME,
+	total_price DECIMAL(10, 2),
 	status VARCHAR(20)
 );
 
