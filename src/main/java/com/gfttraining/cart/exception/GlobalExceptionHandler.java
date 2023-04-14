@@ -63,10 +63,11 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<ErrorResponse>(res, HttpStatus.BAD_REQUEST);
 	}
 
-	@ExceptionHandler(NegativeQuantityException.class)
-	public ResponseEntity<ErrorResponse> handleNegativeQuantityException(NegativeQuantityException ex, WebRequest req) {
+	@ExceptionHandler(ImpossibleQuantityException.class)
+	public ResponseEntity<ErrorResponse> handleNegativeQuantityException(ImpossibleQuantityException ex,
+			WebRequest req) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
-		return new ResponseEntity<ErrorResponse>(res, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<ErrorResponse>(res, HttpStatus.CONFLICT);
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)

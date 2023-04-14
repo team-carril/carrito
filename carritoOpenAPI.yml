@@ -1,10 +1,15 @@
 openapi: "3.0.2"
 info:
-  title: Cart
+  title: Cart Microservice API
   version: "1.0"
+tags:
+  - name: Carts
+  - name: Products
 paths:
   /carts:
     get:
+      tags:
+        - Carts
       parameters:
         - name: status
           in: query
@@ -21,12 +26,10 @@ paths:
           content:
             application/json:
               schema:
-                properties:
-                  items:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/Cart"
+                $ref: "src/main/resources/schema/carts_array.json"
     post:
+      tags:
+        - Carts
       requestBody:
         description: User JSON
         required: true
@@ -40,13 +43,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Cart"
+                $ref: "src/main/resources/schema/cart.json"
         "400":
           description: Wrong request body, must be User
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BadRequestBodyResponse"
+                $ref: "src/main/resources/schema/validation_error.json"
 
   /carts/{id}:
     parameters:
@@ -56,34 +59,38 @@ paths:
         schema:
           type: string
     patch:
+      tags:
+        - Carts
       requestBody:
-        description: ProductFromCatalog JSON
+        description: ProductToAdd JSON
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ProductFromCatalog"
+              $ref: "#/components/schemas/ProductToAdd"
       responses:
         "200":
           description: Cart updated
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Cart"
+                $ref: "src/main/resources/schema/cart.json"
 
         "400":
-          description: Wrong ProductFromCatalog JSON
+          description: Wrong ProductToAdd JSON
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BadRequestBodyResponse"
+                $ref: "src/main/resources/schema/validation_error.json"
         "404":
           description: Cart not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
+                $ref: "src/main/resources/schema/base_error.json"
     delete:
+      tags:
+        - Carts
       responses:
         "200":
           description: Cart deleted.
@@ -92,44 +99,77 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
-  /products/{id}:
+                $ref: "src/main/resources/schema/base_error.json"
+  /carts/users/{userId}: 
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+         type: integer
+    get:
+      tags:
+        - Carts
+      responses:
+        '200':
+          description: Returns a list of Carts with SUBMITTED status for the given User
+          content:
+            application/json:
+              schema:
+                $ref: "src/main/resources/schema/carts_array.json"
+  /products:
+    get:
+      tags:
+        - Products
+      responses:
+        '200':
+          description: Returns a list of products sorted by price.
+          content:
+            application/json:
+              schema:
+                $ref: "src/main/resources/schema/products_array.json"
+
+  /products/{catalogId}:
     summary: Controls the state of products in every cart with a DRAFT status.
     parameters:
-      - name: id
+      - name: catalogId
         in: path
         required: true
         schema:
           type: integer
     patch:
+      tags:
+        - Products
       description: Updates every product with matching id with the given requestBody
       requestBody:
-        description: ProductFromCatalog JSON
+        description: ProductToAdd JSON
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ProductFromCatalog"
+              $ref: "#/components/schemas/ProductToEdit"
       responses:
         "200":
           description: Products updated correctly.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CartCountResponse"
+                $ref: "src/main/resources/schema/cart_count.json"
         "400":
           description: Wrong ProducJSON
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BadRequestBodyResponse"
+                $ref: "src/main/resources/schema/validation_error.json"
         "404":
           description: No product with the given id found.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BadRequestBodyResponse"
+                $ref: "src/main/resources/schema/base_error.json"
     delete:
+      tags:
+        - Products
       description: Deletes product with matching id with the given requestBody
       responses:
         "200":
@@ -137,13 +177,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CartCountResponse"
+                $ref: "src/main/resources/schema/cart_count.json"
         "404":
           description: No product with the given id found.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BadRequestBodyResponse"
+                $ref: "src/main/resources/schema/validation_error.json"
 
   /carts/submit/{id}:
     parameters:
@@ -153,6 +193,8 @@ paths:
         schema:
           type: string
     patch:
+      tags:
+        - Products
       responses:
         "200":
           description: Cart submitted.
@@ -161,13 +203,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
+                $ref: "src/main/resources/schema/base_error.json"
         "404":
           description: Cart not found.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
+                $ref: "src/main/resources/schema/base_error.json"
 components:
   schemas:
     User:
@@ -187,11 +229,12 @@ components:
             - VISA
             - PAYPAL
             - TRANSFER
-    ProductFromCatalog:
+    ProductToAdd:
       type: object
       required:
         - id
         - price
+        - quantity
       properties:
         id:
           type: integer
@@ -207,15 +250,11 @@ components:
           type: number
           format: double
           example: 19.99
-        stock:
-          type: integer
-          format: int64
-          example: 48
         quantity:
           type: integer
           format: int64
           example: 42
-    Product:
+    ProductToEdit:
       type: object
       properties:
         id:
@@ -232,69 +271,3 @@ components:
           type: number
           format: double
           example: 19.99
-        quantity:
-          type: integer
-          format: int64
-          example: 48
-    Cart:
-      type: object
-      properties:
-        id:
-          type: string
-          description: "UUID string"
-          example: "123e4567-e89b-12d3-a456-426655440000"
-        userId:
-          type: integer
-          format: int
-          description: "id of the User, from /users endpoint"
-          example:
-        createdAt:
-          type: string
-          description: "Date of creation"
-          example: "yyyy-MM-dd HH:mm:s"
-        updatedAt:
-          type: string
-          description: "Date of creation"
-          example: "yyyy-MM-dd HH:mm:s"
-        status:
-          type: string
-          enum:
-            - DRAFT
-            - SUBMITTED
-          example: "DRAFT"
-        totalPrice:
-          type: number
-          format: double
-        products:
-          items:
-            type: array
-            items:
-              $ref: "#/components/schemas/Product"
-    CartCountResponse:
-      description: For the /products/ routes, holds the number of carts affected.
-      type: object
-      properties:
-        cartsChanged:
-          type: integer
-    ErrorResponse:
-      type: object
-      properties:
-        timestamp:
-          type: string
-          example: "yyyy-MM-dd HH:mm:ss"
-        msg:
-          type: string
-          example: "Missing User id"
-    BadRequestBodyResponse:
-      type: object
-      properties:
-        timestamp:
-          type: string
-          example: "yyyy-MM-dd HH:mm:ss"
-        errorCount:
-          type: integer
-        errors:
-          type: object
-          properties:
-            nameOfField:
-              type: string

@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "Cart",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "userId": {
+      "type": "integer"
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "updatedAt": {
+      "type": "string"
+    },
+    "totalPrice": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["SUBMITTED", "DRAFT"]
+    },
+    "products": {
+      "type": "array",
+      "items": {
+        "$ref": "product.json"
+      }
+    }
+  },
+  "required": ["id", "userId", "createdAt", "updatedAt", "status", "products"]
+}

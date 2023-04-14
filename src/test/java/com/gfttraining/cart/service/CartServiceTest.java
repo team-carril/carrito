@@ -21,13 +21,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.gfttraining.cart.BaseTestWithConstructors;
 import com.gfttraining.cart.api.dto.Cart;
 import com.gfttraining.cart.api.dto.Product;
+import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
 import com.gfttraining.cart.jpa.CartRepository;
 import com.gfttraining.cart.jpa.model.CartEntity;
@@ -37,13 +37,14 @@ public class CartServiceTest extends BaseTestWithConstructors {
 
 	@Mock
 	CartRepository cartRepository;
-
-	@InjectMocks
+	Mapper mapper;
 	CartService cartService;
 
 	@BeforeEach
 	public void init() {
 		MockitoAnnotations.openMocks(this);
+		mapper = new Mapper();
+		cartService = new CartService(cartRepository, mapper);
 	}
 
 	@Test
@@ -66,12 +67,12 @@ public class CartServiceTest extends BaseTestWithConstructors {
 		UUID uuidB = UUID.randomUUID();
 		UUID uuidC = UUID.randomUUID();
 
-		List<ProductEntity> p1 = toList(productEntity(1, 1, "test_item", "asdf", uuidA, 5.0, 1),
-				productEntity(2, 2, "test_item", "asdf", uuidA, 5.0, 1),
-				productEntity(3, 3, "test_item", "asdf", uuidA, 5.0, 1));
-		List<Product> p2 = toList(productDto(1, 1, "test_item", "asdf", uuidA, 5.0, 1),
-				productDto(2, 2, "test_item", "asdf", uuidA, 5.0, 1),
-				productDto(3, 3, "test_item", "asdf", uuidA, 5.0, 1));
+		List<ProductEntity> p1 = toList(productEntity(1, 1, "test_item", "asdf", uuidA, 5, 1),
+				productEntity(2, 2, "test_item", "asdf", uuidA, 5, 1),
+				productEntity(3, 3, "test_item", "asdf", uuidA, 5, 1));
+		List<Product> p2 = toList(productDto(1, 1, "test_item", "asdf", uuidA, 5, 1),
+				productDto(2, 2, "test_item", "asdf", uuidA, 5, 1),
+				productDto(3, 3, "test_item", "asdf", uuidA, 5, 1));
 
 		List<CartEntity> listInput = toList(
 				cartEntity(uuidA, 1, testDate, testDate, "DRAFT", p1),
@@ -108,7 +109,7 @@ public class CartServiceTest extends BaseTestWithConstructors {
 
 	@Test
 	public void create_calls_repository() {
-		User user = userDTO(0);
+		User user = userDTO(1);
 		when(cartRepository.save(any(CartEntity.class)))
 				.thenReturn(cartEntity(null, 0, null, null, null, Collections.emptyList()));
 		cartService.postNewCart(user);
@@ -118,7 +119,7 @@ public class CartServiceTest extends BaseTestWithConstructors {
 	@Test
 	public void add_product_existing_product() {
 		UUID uuid = UUID.randomUUID();
-		Product product = productDto(1, 1, null, null, uuid, 0, 1);
+		ProductFromCatalog product = productFromCatalog(1, null, null, 0);
 		CartEntity entity = cartEntity(uuid, 0, null, null, null, toList(productEntity(1, 1, null, null, uuid, 0, 1)));
 
 		when(cartRepository.findById(uuid)).thenReturn(Optional.of(entity));
@@ -137,7 +138,7 @@ public class CartServiceTest extends BaseTestWithConstructors {
 	public void add_product_throws_cart_not_found() {
 		UUID uuid = UUID.randomUUID();
 		when(cartRepository.findById(uuid)).thenReturn(Optional.ofNullable(null));
-		assertThrows(EntityNotFoundException.class, () -> cartService.addProductToCart(new Product(), uuid));
+		assertThrows(EntityNotFoundException.class, () -> cartService.addProductToCart(new ProductFromCatalog(), uuid));
 	}
 
 	@Test
@@ -159,5 +160,13 @@ public class CartServiceTest extends BaseTestWithConstructors {
 		return Stream.of(
 				Arguments.of("DRAFT"),
 				Arguments.of("SUBMITTED"));
+	}
+	
+	@Test
+	public void get_Carts_By_UserId_OK() {
+		List<CartEntity> entities = Collections.emptyList();
+		when(cartRepository.findByUserId(1)).thenReturn(entities);
+		cartService.getAllCartEntitiesByUserIdFilteredByStatus(1);
+		verify(cartRepository).findByUserId(1);
 	}
 }

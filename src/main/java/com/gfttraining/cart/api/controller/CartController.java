@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gfttraining.cart.api.dto.Cart;
-import com.gfttraining.cart.api.dto.Product;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
 import com.gfttraining.cart.exception.BadRequestBodyException;
@@ -38,14 +37,10 @@ public class CartController {
 		this.cartService = cartService;
 	}
 
-	public List<Cart> findAllCarts() {
-		return cartService.findAll();
-	}
-
 	@GetMapping("/carts")
 	public List<Cart> findByStatus(@RequestParam(required = false) String status) throws BadRequestParamException {
 		if (status == null)
-			status = "DRAFT";
+			return cartService.findByStatus("DRAFT");
 		if (status.equals("DRAFT") || status.equals("SUBMITTED"))
 			return cartService.findByStatus(status);
 		if (status.equals("ALL"))
@@ -68,8 +63,8 @@ public class CartController {
 	@PatchMapping("/carts/{id}")
 	public Cart addProductToCart(@Valid @RequestBody ProductFromCatalog productFromCatalog, @PathVariable UUID id)
 			throws BadRequestBodyException {
-		Product product = Product.fromCatalog(productFromCatalog);
-		Cart addProductToCartLog = cartService.addProductToCart(product, id);
+
+		Cart addProductToCartLog = cartService.addProductToCart(productFromCatalog, id);
 
 		log.info("Product " + addProductToCartLog.getProducts() + " added");
 
@@ -90,4 +85,8 @@ public class CartController {
 		return false;
 	}
 
+	@GetMapping("/carts/users/{userId}")
+	public List<Cart> getAllCartEntitiesByUserIdFilteredByStatus(@PathVariable Integer userId) {
+		return cartService.getAllCartEntitiesByUserIdFilteredByStatus(userId);
+	}
 }

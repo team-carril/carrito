@@ -14,7 +14,6 @@ import org.mockito.MockitoAnnotations;
 
 import com.gfttraining.cart.BaseTestWithConstructors;
 import com.gfttraining.cart.api.controller.ProductController;
-import com.gfttraining.cart.api.dto.Product;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.exception.BadRequestBodyException;
 import com.gfttraining.cart.service.ProductService;
@@ -37,13 +36,19 @@ public class ProductControllerTest extends BaseTestWithConstructors {
 		ProductFromCatalog productFromCatalog = new ProductFromCatalog();
 		productFromCatalog.setPrice(new BigDecimal(7));
 		productController.updateAllById(productFromCatalog, 1);
-		verify(productService).updateAllById(any(Product.class), anyInt());
+		verify(productService).updateAllById(any(ProductFromCatalog.class), anyInt());
 	}
 
 	@Test
 	public void deleteAll_calls_service() {
 		productController.deleteAllById(1);
 		verify(productService).deleteAllById(1);
+	}
+
+	@Test
+	public void findAllProductsSortedByPrice(){
+		productController.findAllProductsSortedByPrice();
+		verify(productService).findAllProductsSortedByPrice();
 	}
 
 }
