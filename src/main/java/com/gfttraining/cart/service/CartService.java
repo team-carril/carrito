@@ -17,6 +17,7 @@ import com.gfttraining.cart.api.dto.Product;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
 import com.gfttraining.cart.exception.ImpossibleQuantityException;
+import com.gfttraining.cart.exception.RemoteServiceException;
 import com.gfttraining.cart.jpa.CartRepository;
 import com.gfttraining.cart.jpa.model.CartEntity;
 import com.gfttraining.cart.jpa.model.ProductEntity;
@@ -29,10 +30,12 @@ public class CartService {
 
 	private CartRepository cartRepository;
 	private Mapper mapper;
+	private RestService restService;
 
-	public CartService(CartRepository cartRepository, Mapper mapper) {
+	public CartService(CartRepository cartRepository, Mapper mapper, RestService restService) {
 		this.cartRepository = cartRepository;
 		this.mapper = mapper;
+		this.restService = restService;
 	}
 
 	public List<Cart> findAll() {
@@ -105,8 +108,11 @@ public class CartService {
 		return cartEntities.stream().map((e) -> mapper.toCartDTO(e)).collect(Collectors.toList());
 	}
 
-	public Cart validateCart(UUID id) {
-		throw new UnsupportedOperationException();
+	public Cart validateCart(UUID id) throws RemoteServiceException {
+		// throw new UnsupportedOperationException();
+
+		User u = restService.fetchUserInfo(1);
+		return new Cart();
 		// Check if Cart exists & has status == "DRAFT"
 		// TODO fetch from User
 		// TODO fetch from Catalog

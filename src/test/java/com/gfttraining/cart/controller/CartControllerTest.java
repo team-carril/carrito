@@ -27,6 +27,7 @@ import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
 import com.gfttraining.cart.exception.BadRequestBodyException;
 import com.gfttraining.cart.exception.BadRequestParamException;
+import com.gfttraining.cart.exception.RemoteServiceException;
 import com.gfttraining.cart.service.CartService;
 
 class CartControllerTest extends BaseTestWithConstructors {
@@ -101,7 +102,7 @@ class CartControllerTest extends BaseTestWithConstructors {
 	}
 
 	@Test
-	public void validateCart() { // TODO
+	public void validateCart() throws RemoteServiceException { // TODO
 		UUID id = UUID.randomUUID();
 		cartController.validateCart(id);
 		verify(cartService).validateCart(id);

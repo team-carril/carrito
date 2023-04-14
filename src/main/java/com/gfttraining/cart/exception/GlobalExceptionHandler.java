@@ -94,4 +94,12 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(fieldErrors, HttpStatus.BAD_REQUEST);
 	}
 
+	@ExceptionHandler(RemoteServiceException.class)
+	public ResponseEntity<ErrorResponse> handleRemoteServiceException(RemoteServiceException ex, WebRequest req) {
+		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now())
+				.msg(ex.getMessage() + " " + (ex.getStatus() == null ? "" : ex.getStatus()))
+				.build();
+		return new ResponseEntity<>(res, HttpStatus.SERVICE_UNAVAILABLE);
+	}
+
 }

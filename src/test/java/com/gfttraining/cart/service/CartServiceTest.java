@@ -31,6 +31,7 @@ import com.gfttraining.cart.api.dto.Cart;
 import com.gfttraining.cart.api.dto.Product;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
+import com.gfttraining.cart.exception.RemoteServiceException;
 import com.gfttraining.cart.jpa.CartRepository;
 import com.gfttraining.cart.jpa.model.CartEntity;
 import com.gfttraining.cart.jpa.model.ProductEntity;
@@ -48,7 +49,7 @@ public class CartServiceTest extends BaseTestWithConstructors {
 	public void init() {
 		MockitoAnnotations.openMocks(this);
 		mapper = new Mapper();
-		cartService = new CartService(cartRepository, mapper);
+		cartService = new CartService(cartRepository, mapper, restService);
 	}
 
 	@Test
@@ -162,8 +163,7 @@ public class CartServiceTest extends BaseTestWithConstructors {
 	}
 
 	@Test
-	@Disabled
-	public void validateCart() {
+	public void validateCart() throws RemoteServiceException {
 		UUID id = UUID.randomUUID();
 		List<ProductEntity> products = toList(
 				productEntity(1, 2, null, null, id, 10, 2),
