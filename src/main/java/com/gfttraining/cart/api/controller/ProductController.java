@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gfttraining.cart.api.dto.CartCountDTO;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
+import com.gfttraining.cart.config.FeatureConfiguration;
+import com.gfttraining.cart.exception.BadMethodRequestException;
 import com.gfttraining.cart.exception.BadRequestBodyException;
 import com.gfttraining.cart.service.ProductService;
 import com.gfttraining.cart.api.dto.Product;
@@ -20,15 +22,22 @@ import com.gfttraining.cart.api.dto.Product;
 public class ProductController {
 
 	ProductService productService;
+	FeatureConfiguration featureConfiguration;
 
-	public ProductController(ProductService productService) {
+	public ProductController(ProductService productService, FeatureConfiguration featureConfiguration) {
 		this.productService = productService;
+		this.featureConfiguration = featureConfiguration;
 	}
 
 	@PatchMapping(value = "/products/{catalogId}")
 	public CartCountDTO updateAllById(@Valid @RequestBody ProductFromCatalog productFromCatalog,
 			@PathVariable int catalogId)
-			throws BadRequestBodyException {
+			throws BadRequestBodyException, BadMethodRequestException {
+		
+		if(!featureConfiguration.getUpdateAllByIdEnabled()) {
+			throw new BadMethodRequestException("Feature Flag is Disable");
+		}
+
 		return productService.updateAllById(productFromCatalog, catalogId);
 	}
 
