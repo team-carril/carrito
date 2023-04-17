@@ -45,7 +45,7 @@ public class CartEntity {
 	@Builder
 	static public CartEntity create(UUID id, int userId, LocalDateTime createdAt, LocalDateTime updatedAt,
 			String status,
-			List<ProductEntity> products) {
+			List<ProductEntity> products, BigDecimal totalPrice) {
 		CartEntity entity = new CartEntity();
 		entity.setId(id);
 		entity.setUserId(userId);
@@ -53,6 +53,7 @@ public class CartEntity {
 		entity.setUpdatedAt(updatedAt);
 		entity.setStatus(status);
 		entity.setProducts(products);
+		entity.setTotalPrice(totalPrice);
 		return entity;
 	}
 

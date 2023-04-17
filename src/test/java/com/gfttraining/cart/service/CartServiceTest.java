@@ -19,6 +19,7 @@ import javax.persistence.EntityNotFoundException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -31,6 +32,8 @@ import com.gfttraining.cart.api.dto.Cart;
 import com.gfttraining.cart.api.dto.Product;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
+import com.gfttraining.cart.config.RatesConfiguration;
+import com.gfttraining.cart.exception.OutOfStockException;
 import com.gfttraining.cart.exception.RemoteServiceException;
 import com.gfttraining.cart.jpa.CartRepository;
 import com.gfttraining.cart.jpa.model.CartEntity;
@@ -43,13 +46,15 @@ public class CartServiceTest extends BaseTestWithConstructors {
 	@Mock
 	RestService restService;
 	Mapper mapper;
+	RatesConfiguration ratesConfig;
 	CartService cartService;
 
 	@BeforeEach
 	public void init() {
 		MockitoAnnotations.openMocks(this);
 		mapper = new Mapper();
-		cartService = new CartService(cartRepository, mapper, restService);
+		ratesConfig = initTestRatesConfig();
+		cartService = new CartService(cartRepository, mapper, restService, ratesConfig);
 	}
 
 	@Test
@@ -162,24 +167,39 @@ public class CartServiceTest extends BaseTestWithConstructors {
 		assertThrows(EntityNotFoundException.class, () -> cartService.deleteById(id));
 	}
 
+	@DisplayName("GIVEN a CartEntity in DB and valid info in microservices WHEN service is called SHOULD Transform Properly")
 	@Test
-	public void validateCart() throws RemoteServiceException {
+	public void validateCart() throws RemoteServiceException, OutOfStockException {
+		// GIVEN this CartEntity in DB
 		UUID id = UUID.randomUUID();
-		List<ProductEntity> products = toList(
-				productEntity(1, 2, null, null, id, 10, 2),
-				productEntity(2, 3, null, null, id, 5, 2),
-				productEntity(3, 4, null, null, id, 20, 2));
+		List<ProductEntity> productsInDB = toList(
+				productEntity(2, null, null, id, 10, 2),
+				productEntity(3, null, null, id, 5, 2),
+				productEntity(4, null, null, id, 20, 2));
+		CartEntity entity = cartEntity(id, 7, null, null, "DRAFT", productsInDB);
+		when(cartRepository.findById(id)).thenReturn(Optional.of(entity));
+		// GIVEN this new information from Catalog microservice
 		List<ProductFromCatalog> productsFromCatalog = toList(
 				productFromCatalog(2, 10, 10),
 				productFromCatalog(3, 10, 10),
 				productFromCatalog(4, 10, 10));
-		CartEntity entity = cartEntity(id, 7, null, null, null, products);
-		when(cartRepository.findById(id)).thenReturn(Optional.of(entity));
-		when(restService.fetchProductFromCatalog(anyInt())).thenReturn(productsFromCatalog.get(0));
-		when(restService.fetchUserInfo(entity.getUserId())).thenReturn(userDTO(7));
+		when(restService.fetchProductFromCatalog(anyInt())).thenReturn(productsFromCatalog.get(0))
+				.thenReturn(productsFromCatalog.get(1))
+				.thenReturn(productsFromCatalog.get(2));
+		// GIVEN this information from User microservice
+		when(restService.fetchUserInfo(entity.getUserId())).thenReturn(userDTO(7, "VISA", "SPAIN"));
+		// SHOULD transform to
+		List<ProductEntity> expectedProducts = toList(
+				productEntity(2, null, null, id, 10, 2),
+				productEntity(3, null, null, id, 10, 2),
+				productEntity(4, null, null, id, 10, 2));
+		CartEntity expectedEntity = cartEntity(id, 7, null, null, "SUBMITTED", expectedProducts, 72.6);
+		when(cartRepository.saveAndFlush(any(CartEntity.class))).thenReturn(expectedEntity);
 
+		// WHEN service is called
 		cartService.validateCart(id);
-		verify(restService).fetchUserInfo(entity.getUserId());
+
+		verify(cartRepository).saveAndFlush(expectedEntity); // SHOULD transform entity to the proper values
 		verify(restService, times(entity.getProducts().size())).fetchProductFromCatalog(anyInt());
 	}
 

@@ -21,6 +21,7 @@ import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
 import com.gfttraining.cart.exception.BadRequestBodyException;
 import com.gfttraining.cart.exception.BadRequestParamException;
+import com.gfttraining.cart.exception.OutOfStockException;
 import com.gfttraining.cart.exception.RemoteServiceException;
 import com.gfttraining.cart.service.CartService;
 
@@ -91,8 +92,8 @@ public class CartController {
 		return cartService.getAllCartEntitiesByUserIdFilteredByStatus(userId);
 	}
 
-	@PostMapping("/carts/submit/{userId}")
-	public Cart validateCart(@PathVariable UUID userId) throws RemoteServiceException {
-		return cartService.validateCart(userId);
+	@PostMapping("/carts/submit/{id}")
+	public Cart validateCart(@PathVariable UUID id) throws RemoteServiceException, OutOfStockException {
+		return cartService.validateCart(id);
 	}
 }
