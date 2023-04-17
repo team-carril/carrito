@@ -6,6 +6,8 @@ import static org.springframework.http.HttpStatus.Series.SERVER_ERROR;
 import java.io.IOException;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
@@ -28,7 +30,7 @@ public class RestService {
 	public RestService() {
 		RestTemplateBuilder builder = new RestTemplateBuilder();
 		this.restTemplate = builder.errorHandler(new RestTemplateResponseErrorHandler()).build();
-		CATALOG_URL = "http://localhost:8081/products/id";
+		CATALOG_URL = "http://localhost:8081/products/";
 		USER_URL = "http://localhost:8082/users/bInfo/";
 	}
 
@@ -40,10 +42,10 @@ public class RestService {
 
 	public User fetchUserInfo(int userId) throws RemoteServiceException {
 		try {
-			ResponseEntity<User> res = restTemplate.getForEntity(CATALOG_URL + 1, User.class);
+			ResponseEntity<User> res = restTemplate.getForEntity(CATALOG_URL + "id/" + 1, User.class);
 			return res.getBody();
 		} catch (RestClientException ex) {
-			throw new RemoteServiceException("Connection to " + CATALOG_URL + "refused");
+			throw new RemoteServiceException("Connection to " + CATALOG_URL + "id/ refused");
 		}
 	}
 
@@ -52,8 +54,18 @@ public class RestService {
 			ResponseEntity<ProductFromCatalog> res = restTemplate.getForEntity(USER_URL + 1, ProductFromCatalog.class);
 			return res.getBody();
 		} catch (RestClientException ex) {
-			throw new RemoteServiceException("Connection to " + USER_URL + "refused");
+			throw new RemoteServiceException("Connection to " + USER_URL + " refused");
 		}
+	}
+
+	public void postStockChange(int id, int quantity) throws RemoteServiceException {
+		try {
+			HttpEntity<String> body = new HttpEntity<String>(Integer.toString(quantity));
+			restTemplate.exchange(CATALOG_URL + "updateStock/" + id, HttpMethod.POST, body, Void.class);
+		} catch (RestClientException ex) {
+			throw new RemoteServiceException("Connection to " + CATALOG_URL + "updateStock/ refused");
+		}
+
 	}
 
 }

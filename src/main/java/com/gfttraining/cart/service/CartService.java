@@ -141,7 +141,7 @@ public class CartService {
 		entity.setStatus("SUBMITTED");
 		entity = cartRepository.saveAndFlush(entity);
 
-		// Call Catalog with Stock Change
+		// Call Catalog with Stock Change LOOP for p in products w quantity
 		return mapper.toCartDTO(entity);
 	}
 
