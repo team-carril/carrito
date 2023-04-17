@@ -102,4 +102,11 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(res, HttpStatus.SERVICE_UNAVAILABLE);
 	}
 
+	@ExceptionHandler(OutOfStockException.class)
+	public ResponseEntity<ErrorResponse> handleOutOfstockException(OutOfStockException ex, WebRequest req) {
+		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now())
+				.msg(ex.getMessage())
+				.build();
+		return new ResponseEntity<>(res, HttpStatus.CONFLICT);
+	}
 }

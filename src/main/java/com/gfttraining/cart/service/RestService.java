@@ -28,8 +28,8 @@ public class RestService {
 	public RestService() {
 		RestTemplateBuilder builder = new RestTemplateBuilder();
 		this.restTemplate = builder.errorHandler(new RestTemplateResponseErrorHandler()).build();
-		CATALOG_URL = "http://localhost:8081/products/";
-		USER_URL = "http://localhost:8082/users/";
+		CATALOG_URL = "http://localhost:8081/products/id";
+		USER_URL = "http://localhost:8082/users/bInfo/";
 	}
 
 	public RestService(RestTemplate restTemplate, String testURL) {
