@@ -42,3 +42,6 @@ rates:
     ITALY: 22
     PORTUGAL: 20
     GREECE: 23
+    
+featureflag:
+  updateAllByIdEnabled: true
