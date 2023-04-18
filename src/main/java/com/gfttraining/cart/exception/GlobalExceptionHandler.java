@@ -117,5 +117,14 @@ public class GlobalExceptionHandler {
 				.build();
 		return new ResponseEntity<>(res, HttpStatus.CONFLICT);
 	}
-
+	
+	@ExceptionHandler(BadMethodRequestException.class)
+	public ResponseEntity<ErrorResponse> handlerInvalidMethod(BadMethodRequestException ex,
+			WebRequest req){
+		
+		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
+	
+		return new ResponseEntity<ErrorResponse>(res, HttpStatus.METHOD_NOT_ALLOWED);
+	}
+	
 }
