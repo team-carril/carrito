@@ -109,4 +109,13 @@ public class GlobalExceptionHandler {
 				.build();
 		return new ResponseEntity<>(res, HttpStatus.CONFLICT);
 	}
+
+	@ExceptionHandler(InvalidUserDataException.class)
+	public ResponseEntity<ErrorResponse> handleInvalidUserDataExecption(InvalidUserDataException ex, WebRequest req) {
+		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now())
+				.msg(ex.getMessage())
+				.build();
+		return new ResponseEntity<>(res, HttpStatus.CONFLICT);
+	}
+
 }

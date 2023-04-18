@@ -33,6 +33,7 @@ import com.gfttraining.cart.api.dto.Product;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
 import com.gfttraining.cart.config.RatesConfiguration;
+import com.gfttraining.cart.exception.InvalidUserDataException;
 import com.gfttraining.cart.exception.OutOfStockException;
 import com.gfttraining.cart.exception.RemoteServiceException;
 import com.gfttraining.cart.jpa.CartRepository;
@@ -169,7 +170,7 @@ public class CartServiceTest extends BaseTestWithConstructors {
 
 	@DisplayName("GIVEN a CartEntity in DB and valid info in microservices WHEN service is called SHOULD Transform Properly")
 	@Test
-	public void validateCart() throws RemoteServiceException, OutOfStockException {
+	public void validateCart() throws RemoteServiceException, OutOfStockException, InvalidUserDataException {
 		// GIVEN this CartEntity in DB
 		UUID id = UUID.randomUUID();
 		List<ProductEntity> productsInDB = toList(
@@ -201,6 +202,7 @@ public class CartServiceTest extends BaseTestWithConstructors {
 
 		verify(cartRepository).saveAndFlush(expectedEntity); // SHOULD transform entity to the proper values
 		verify(restService, times(entity.getProducts().size())).fetchProductFromCatalog(anyInt());
+		verify(restService, times(entity.getProducts().size())).postStockChange(anyInt(), anyInt());
 	}
 
 	static Stream<Arguments> statusArguments() {

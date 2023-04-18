@@ -20,6 +20,7 @@ import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
 import com.gfttraining.cart.config.RatesConfiguration;
 import com.gfttraining.cart.exception.ImpossibleQuantityException;
+import com.gfttraining.cart.exception.InvalidUserDataException;
 import com.gfttraining.cart.exception.OutOfStockException;
 import com.gfttraining.cart.exception.RemoteServiceException;
 import com.gfttraining.cart.jpa.CartRepository;
@@ -115,7 +116,7 @@ public class CartService {
 		return cartEntities.stream().map((e) -> mapper.toCartDTO(e)).collect(Collectors.toList());
 	}
 
-	public Cart validateCart(UUID cartId) throws RemoteServiceException, OutOfStockException {
+	public Cart validateCart(UUID cartId) throws RemoteServiceException, OutOfStockException, InvalidUserDataException {
 
 		CartEntity entity = findById(cartId);
 		if (entity.getStatus().equals("SUBMITTED"))
@@ -131,17 +132,28 @@ public class CartService {
 				p.setPrice(productFromCatalog.getPrice());
 		}
 
-		// TODO HANDLE MISSING KEYS
+		if (!ratesConfig.getPaymentMethod().containsKey(user.getPaymentMethod()))
+			throw new InvalidUserDataException("Unrecognized payment method: {}" + user.getPaymentMethod());
+
+		if (!ratesConfig.getCountry().containsKey(user.getCountry()))
+			throw new InvalidUserDataException("Unrecognized : " + user.getCountry());
+
 		BigDecimal priceAfterRates = calculatePriceAfterRates(
 				entity.calculatePrice(),
 				ratesConfig.getPaymentMethod().get(user.getPaymentMethod()),
 				ratesConfig.getCountry().get(user.getCountry()));
-
 		entity.setTotalPrice(priceAfterRates);
+
+		// DAILY: If Only One Fails, All The Ones Before It Would've Been Updated in
+		// Catalog
+		// Would be better as a Map <id, change>
+		for (ProductEntity p : entity.getProducts()) {
+			restService.postStockChange(p.getCatalogId(), p.getQuantity());
+		}
+
 		entity.setStatus("SUBMITTED");
 		entity = cartRepository.saveAndFlush(entity);
 
-		// Call Catalog with Stock Change LOOP for p in products w quantity
 		return mapper.toCartDTO(entity);
 	}
 
