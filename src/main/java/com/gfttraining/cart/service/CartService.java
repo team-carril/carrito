@@ -1,5 +1,7 @@
 package com.gfttraining.cart.service;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Comparator;
@@ -16,7 +18,11 @@ import com.gfttraining.cart.api.dto.Cart;
 import com.gfttraining.cart.api.dto.Product;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
+import com.gfttraining.cart.config.RatesConfiguration;
 import com.gfttraining.cart.exception.ImpossibleQuantityException;
+import com.gfttraining.cart.exception.InvalidUserDataException;
+import com.gfttraining.cart.exception.OutOfStockException;
+import com.gfttraining.cart.exception.RemoteServiceException;
 import com.gfttraining.cart.jpa.CartRepository;
 import com.gfttraining.cart.jpa.model.CartEntity;
 import com.gfttraining.cart.jpa.model.ProductEntity;
@@ -29,10 +35,15 @@ public class CartService {
 
 	private CartRepository cartRepository;
 	private Mapper mapper;
+	private RestService restService;
+	private RatesConfiguration ratesConfig;
 
-	public CartService(CartRepository cartRepository, Mapper mapper) {
+	public CartService(CartRepository cartRepository, Mapper mapper, RestService restService,
+			RatesConfiguration ratesConfig) {
 		this.cartRepository = cartRepository;
 		this.mapper = mapper;
+		this.restService = restService;
+		this.ratesConfig = ratesConfig;
 	}
 
 	public List<Cart> findAll() {
@@ -103,5 +114,66 @@ public class CartService {
 	public List<Cart> getAllCartEntitiesByUserIdFilteredByStatus(Integer userId) {
 		List<CartEntity> cartEntities = cartRepository.findByUserId(userId);
 		return cartEntities.stream().map((e) -> mapper.toCartDTO(e)).collect(Collectors.toList());
+	}
+
+	public Cart validateCart(UUID cartId) throws RemoteServiceException, OutOfStockException, InvalidUserDataException {
+
+		CartEntity entity = findById(cartId);
+		if (entity.getStatus().equals("SUBMITTED"))
+			throw new EntityNotFoundException("Cart " + cartId + "is already submitted.");
+
+		User user = restService.fetchUserInfo(entity.getUserId());
+		for (ProductEntity p : entity.getProducts()) {
+			ProductFromCatalog productFromCatalog = restService.fetchProductFromCatalog(p.getCatalogId());
+			if (productFromCatalog.getStock() < p.getQuantity())
+				throw new OutOfStockException(
+						"Product with catalogId" + p.getCatalogId() + "out of stock. Cart not submitted.");
+			if (productFromCatalog.getPrice() != p.getPrice())
+				p.setPrice(productFromCatalog.getPrice());
+		}
+
+		if (!ratesConfig.getPaymentMethod().containsKey(user.getPaymentMethod()))
+			throw new InvalidUserDataException("Unrecognized payment method: {}" + user.getPaymentMethod());
+
+		if (!ratesConfig.getCountry().containsKey(user.getCountry()))
+			throw new InvalidUserDataException("Unrecognized : " + user.getCountry());
+
+		BigDecimal priceAfterRates = calculatePriceAfterRates(
+				entity.calculatePrice(),
+				ratesConfig.getPaymentMethod().get(user.getPaymentMethod()),
+				ratesConfig.getCountry().get(user.getCountry()));
+		entity.setTotalPrice(priceAfterRates);
+
+		// DAILY: If Only One Fails, All The Ones Before It Would've Been Updated in
+		// Catalog
+		// Would be better as a Map <id, change>
+		for (ProductEntity p : entity.getProducts()) {
+			restService.postStockChange(p.getCatalogId(), p.getQuantity());
+		}
+
+		entity.setStatus("SUBMITTED");
+		entity = cartRepository.saveAndFlush(entity);
+
+		return mapper.toCartDTO(entity);
+	}
+
+	private BigDecimal calculatePriceAfterRates(BigDecimal cartPrice, int paymentMethodRate, int countryRate) {
+		cartPrice = applyRate(cartPrice, paymentMethodRate);
+		cartPrice = applyRate(cartPrice, countryRate);
+		cartPrice = cartPrice.round(new MathContext(4));
+		return cartPrice;
+	}
+
+	private BigDecimal applyRate(BigDecimal p, int configRate) {
+		BigDecimal rate = new BigDecimal(configRate).divide(new BigDecimal(100));
+		p = p.add(rate.multiply(p));
+		return p.stripTrailingZeros();
+	}
+
+	private CartEntity findById(UUID cartId) {
+		Optional<CartEntity> entityOptional = cartRepository.findById(cartId);
+		if (entityOptional.isEmpty())
+			throw new EntityNotFoundException("Cart " + cartId + " not found.");
+		return entityOptional.get();
 	}
 }

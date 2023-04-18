@@ -1,5 +1,6 @@
 package com.gfttraining.cart.jpa.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -38,10 +39,13 @@ public class CartEntity {
 	@JoinColumn(name = "to_cart", referencedColumnName = "id")
 	private List<ProductEntity> products;
 
+	@JoinColumn(name = "total_price")
+	private BigDecimal totalPrice;
+
 	@Builder
 	static public CartEntity create(UUID id, int userId, LocalDateTime createdAt, LocalDateTime updatedAt,
 			String status,
-			List<ProductEntity> products) {
+			List<ProductEntity> products, BigDecimal totalPrice) {
 		CartEntity entity = new CartEntity();
 		entity.setId(id);
 		entity.setUserId(userId);
@@ -49,6 +53,15 @@ public class CartEntity {
 		entity.setUpdatedAt(updatedAt);
 		entity.setStatus(status);
 		entity.setProducts(products);
+		entity.setTotalPrice(totalPrice);
 		return entity;
+	}
+
+	public BigDecimal calculatePrice() {
+		BigDecimal totalPrice = products.stream().reduce(BigDecimal.valueOf(0.0),
+				(x, p) -> x.add(p.getTotalPrize()), BigDecimal::add);
+		totalPrice = totalPrice.stripTrailingZeros();
+		return totalPrice;
+
 	}
 }

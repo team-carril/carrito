@@ -4,10 +4,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
+import com.gfttraining.cart.config.ExternalServicesConfiguration;
 import com.gfttraining.cart.config.RatesConfiguration;
 
 @SpringBootApplication
-@EnableConfigurationProperties(RatesConfiguration.class)
+@EnableConfigurationProperties({ RatesConfiguration.class, ExternalServicesConfiguration.class })
 public class CartApplication {
 
 	public static void main(String[] args) {
