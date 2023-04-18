@@ -42,3 +42,6 @@ rates:
     ITALY: 22
     PORTUGAL: 20
     GREECE: 23
+external-services:
+  catalogUrl: "http://localhost:8081/products/"
+  usersUrl: "http://localhost:8080/users/bInfo/"
