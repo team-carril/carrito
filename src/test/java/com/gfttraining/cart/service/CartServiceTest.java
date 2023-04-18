@@ -200,7 +200,7 @@ public class CartServiceTest extends BaseTestWithConstructors {
 		// WHEN service is called
 		cartService.validateCart(id);
 
-		verify(cartRepository).saveAndFlush(expectedEntity); // SHOULD transform entity to the proper values
+		verify(cartRepository).saveAndFlush(expectedEntity);
 		verify(restService, times(entity.getProducts().size())).fetchProductFromCatalog(anyInt());
 		verify(restService, times(entity.getProducts().size())).postStockChange(anyInt(), anyInt());
 	}

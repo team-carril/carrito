@@ -11,8 +11,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
@@ -40,7 +42,7 @@ public class RestServiceTest extends BaseTestWithConstructors {
 	@Test
 	public void fetchUser() throws RemoteServiceException {
 		int id = 1;
-		when(restTemplate.getForEntity(TEST_URL + "id/" + id, User.class)).thenReturn(userResponse(id));
+		when(restTemplate.getForEntity(TEST_URL + id, User.class)).thenReturn(userResponse(id));
 
 		User actual = service.fetchUserInfo(id);
 		assertEquals(id, actual.getId());
@@ -49,7 +51,7 @@ public class RestServiceTest extends BaseTestWithConstructors {
 	@Test
 	public void fetch_user_fails_server_down() {
 		int id = 1;
-		when(restTemplate.getForEntity(TEST_URL + "id/" + id, User.class))
+		when(restTemplate.getForEntity(TEST_URL + id, User.class))
 				.thenThrow(new ResourceAccessException("asdf"));
 		assertThrows(RemoteServiceException.class, () -> service.fetchUserInfo(id));
 	}
@@ -57,7 +59,7 @@ public class RestServiceTest extends BaseTestWithConstructors {
 	@Test
 	public void fetch_user_fails_user_not_found() {
 		int id = 1;
-		when(restTemplate.getForEntity(TEST_URL + "id/" + id, User.class))
+		when(restTemplate.getForEntity(TEST_URL + id, User.class))
 				.thenThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND));
 		assertThrows(RemoteServiceException.class, () -> service.fetchUserInfo(id));
 	}
@@ -65,24 +67,25 @@ public class RestServiceTest extends BaseTestWithConstructors {
 	@Test
 	public void fetchProduct() throws RemoteServiceException {
 		int id = 1;
-		when(restTemplate.getForEntity(TEST_URL + id, ProductFromCatalog.class)).thenReturn(productResponse(id));
+		when(restTemplate.getForEntity(TEST_URL + "id/" + id, ProductFromCatalog.class))
+				.thenReturn(productResponse(id));
 		ProductFromCatalog actual = service.fetchProductFromCatalog(id);
 		assertEquals(id, actual.getId());
-		verify(restTemplate).getForEntity(TEST_URL + id, ProductFromCatalog.class);
+		verify(restTemplate).getForEntity(TEST_URL + "id/" + id, ProductFromCatalog.class);
 	}
 
 	@Test
 	public void fetch_product_fails_server_down() {
 		int id = 1;
-		when(restTemplate.getForEntity(TEST_URL + id, ProductFromCatalog.class))
+		when(restTemplate.getForEntity(TEST_URL + "id/" + id, ProductFromCatalog.class))
 				.thenThrow(new ResourceAccessException("asdf"));
 		assertThrows(RemoteServiceException.class, () -> service.fetchProductFromCatalog(id));
 	}
 
 	@Test
-	public void fetch_user_fails_product_not_found() {
+	public void fetch_product_fails_product_not_found() {
 		int id = 1;
-		when(restTemplate.getForEntity(TEST_URL + id, ProductFromCatalog.class))
+		when(restTemplate.getForEntity(TEST_URL + "id/" + id, ProductFromCatalog.class))
 				.thenThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND));
 		assertThrows(RemoteServiceException.class, () -> service.fetchProductFromCatalog(id));
 	}
@@ -90,8 +93,10 @@ public class RestServiceTest extends BaseTestWithConstructors {
 	@Test
 	public void post_stock_fails_server_down() {
 		int id = 1;
-		HttpEntity<String> body = new HttpEntity<>("5");
-		when(restTemplate.exchange(TEST_URL + "updateStock/" + id, HttpMethod.POST, body, Void.class))
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<String> body = new HttpEntity<>("5", headers);
+		when(restTemplate.exchange(TEST_URL + "updateStock/" + id, HttpMethod.PUT, body, Void.class))
 				.thenThrow(new ResourceAccessException("asd"));
 
 		assertThrows(RemoteServiceException.class, () -> service.postStockChange(id, 5));
@@ -100,8 +105,10 @@ public class RestServiceTest extends BaseTestWithConstructors {
 	@Test
 	public void post_stock_fails_not_found() {
 		int id = 1;
-		HttpEntity<String> body = new HttpEntity<>("5");
-		when(restTemplate.exchange(TEST_URL + "updateStock/" + id, HttpMethod.POST, body, Void.class))
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<String> body = new HttpEntity<>("5", headers);
+		when(restTemplate.exchange(TEST_URL + "updateStock/" + id, HttpMethod.PUT, body, Void.class))
 				.thenThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND));
 
 		assertThrows(RemoteServiceException.class, () -> service.postStockChange(id, 5));

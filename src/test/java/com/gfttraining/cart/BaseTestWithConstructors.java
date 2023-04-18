@@ -48,10 +48,6 @@ public class BaseTestWithConstructors {
 			double totalPrice) {
 		if (id == null)
 			id = UUID.randomUUID();
-		// if (createdAt == null)
-		// createdAt = LocalDateTime.now();
-		// if (updatedAt == null)
-		// updatedAt = LocalDateTime.now();
 		if (products == null)
 			products = Collections.emptyList();
 

@@ -7,8 +7,10 @@ import java.io.IOException;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Service;
@@ -42,28 +44,31 @@ public class RestService {
 
 	public User fetchUserInfo(int userId) throws RemoteServiceException {
 		try {
-			ResponseEntity<User> res = restTemplate.getForEntity(CATALOG_URL + "id/" + 1, User.class);
+			ResponseEntity<User> res = restTemplate.getForEntity(USER_URL + userId, User.class);
+			return res.getBody();
+		} catch (RestClientException ex) {
+			throw new RemoteServiceException("Connection to " + USER_URL + "refused");
+		}
+	}
+
+	public ProductFromCatalog fetchProductFromCatalog(int catalogId) throws RemoteServiceException {
+		try {
+			ResponseEntity<ProductFromCatalog> res = restTemplate.getForEntity(CATALOG_URL + "id/" + catalogId,
+					ProductFromCatalog.class);
 			return res.getBody();
 		} catch (RestClientException ex) {
 			throw new RemoteServiceException("Connection to " + CATALOG_URL + "id/ refused");
 		}
 	}
 
-	public ProductFromCatalog fetchProductFromCatalog(int catalogId) throws RemoteServiceException {
-		try {
-			ResponseEntity<ProductFromCatalog> res = restTemplate.getForEntity(USER_URL + 1, ProductFromCatalog.class);
-			return res.getBody();
-		} catch (RestClientException ex) {
-			throw new RemoteServiceException("Connection to " + USER_URL + " refused");
-		}
-	}
-
 	public void postStockChange(int id, int quantity) throws RemoteServiceException {
 		try {
-			HttpEntity<String> body = new HttpEntity<String>(Integer.toString(quantity));
-			restTemplate.exchange(CATALOG_URL + "updateStock/" + id, HttpMethod.POST, body, Void.class);
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			HttpEntity<String> body = new HttpEntity<String>(Integer.toString(quantity), headers);
+			restTemplate.exchange(CATALOG_URL + "updateStock/" + id, HttpMethod.PUT, body, Void.class);
 		} catch (RestClientException ex) {
-			throw new RemoteServiceException("Connection to " + CATALOG_URL + "updateStock/ refused");
+			throw new RemoteServiceException("Connection to " + CATALOG_URL + "updateStock/" + id + " refused");
 		}
 
 	}
