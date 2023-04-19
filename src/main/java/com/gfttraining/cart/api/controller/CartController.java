@@ -23,7 +23,7 @@ import com.gfttraining.cart.exception.BadRequestBodyException;
 import com.gfttraining.cart.exception.BadRequestParamException;
 import com.gfttraining.cart.exception.InvalidUserDataException;
 import com.gfttraining.cart.exception.OutOfStockException;
-import com.gfttraining.cart.exception.RemoteServiceException;
+import com.gfttraining.cart.exception.RemoteServiceInternalException;
 import com.gfttraining.cart.service.CartService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -95,7 +95,7 @@ public class CartController {
 
 	@PostMapping("/carts/submit/{id}")
 	public Cart validateCart(@PathVariable UUID id)
-			throws RemoteServiceException, OutOfStockException, InvalidUserDataException {
+			throws RemoteServiceInternalException, OutOfStockException, InvalidUserDataException {
 		return cartService.validateCart(id);
 	}
 }
