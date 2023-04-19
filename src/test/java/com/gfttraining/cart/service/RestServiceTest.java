@@ -23,7 +23,7 @@ import org.springframework.web.client.RestTemplate;
 import com.gfttraining.cart.BaseTestWithConstructors;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
-import com.gfttraining.cart.exception.RemoteServiceException;
+import com.gfttraining.cart.exception.RemoteServiceInternalException;
 
 @ExtendWith(MockitoExtension.class)
 public class RestServiceTest extends BaseTestWithConstructors {
@@ -40,7 +40,7 @@ public class RestServiceTest extends BaseTestWithConstructors {
 	}
 
 	@Test
-	public void fetchUser() throws RemoteServiceException {
+	public void fetchUser() throws RemoteServiceInternalException {
 		int id = 1;
 		when(restTemplate.getForEntity(TEST_URL + id, User.class)).thenReturn(userResponse(id));
 
@@ -53,7 +53,7 @@ public class RestServiceTest extends BaseTestWithConstructors {
 		int id = 1;
 		when(restTemplate.getForEntity(TEST_URL + id, User.class))
 				.thenThrow(new ResourceAccessException("asdf"));
-		assertThrows(RemoteServiceException.class, () -> service.fetchUserInfo(id));
+		assertThrows(RemoteServiceInternalException.class, () -> service.fetchUserInfo(id));
 	}
 
 	@Test
@@ -61,11 +61,11 @@ public class RestServiceTest extends BaseTestWithConstructors {
 		int id = 1;
 		when(restTemplate.getForEntity(TEST_URL + id, User.class))
 				.thenThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND));
-		assertThrows(RemoteServiceException.class, () -> service.fetchUserInfo(id));
+		assertThrows(RemoteServiceInternalException.class, () -> service.fetchUserInfo(id));
 	}
 
 	@Test
-	public void fetchProduct() throws RemoteServiceException {
+	public void fetchProduct() throws RemoteServiceInternalException {
 		int id = 1;
 		when(restTemplate.getForEntity(TEST_URL + "id/" + id, ProductFromCatalog.class))
 				.thenReturn(productResponse(id));
@@ -79,7 +79,7 @@ public class RestServiceTest extends BaseTestWithConstructors {
 		int id = 1;
 		when(restTemplate.getForEntity(TEST_URL + "id/" + id, ProductFromCatalog.class))
 				.thenThrow(new ResourceAccessException("asdf"));
-		assertThrows(RemoteServiceException.class, () -> service.fetchProductFromCatalog(id));
+		assertThrows(RemoteServiceInternalException.class, () -> service.fetchProductFromCatalog(id));
 	}
 
 	@Test
@@ -87,7 +87,7 @@ public class RestServiceTest extends BaseTestWithConstructors {
 		int id = 1;
 		when(restTemplate.getForEntity(TEST_URL + "id/" + id, ProductFromCatalog.class))
 				.thenThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND));
-		assertThrows(RemoteServiceException.class, () -> service.fetchProductFromCatalog(id));
+		assertThrows(RemoteServiceInternalException.class, () -> service.fetchProductFromCatalog(id));
 	}
 
 	@Test
@@ -99,7 +99,7 @@ public class RestServiceTest extends BaseTestWithConstructors {
 		when(restTemplate.exchange(TEST_URL + "updateStock/" + id, HttpMethod.PUT, body, Void.class))
 				.thenThrow(new ResourceAccessException("asd"));
 
-		assertThrows(RemoteServiceException.class, () -> service.postStockChange(id, 5));
+		assertThrows(RemoteServiceInternalException.class, () -> service.postStockChange(id, 5));
 	}
 
 	@Test
@@ -111,7 +111,7 @@ public class RestServiceTest extends BaseTestWithConstructors {
 		when(restTemplate.exchange(TEST_URL + "updateStock/" + id, HttpMethod.PUT, body, Void.class))
 				.thenThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND));
 
-		assertThrows(RemoteServiceException.class, () -> service.postStockChange(id, 5));
+		assertThrows(RemoteServiceInternalException.class, () -> service.postStockChange(id, 5));
 	}
 
 	private ResponseEntity<User> userResponse(int userId) {
