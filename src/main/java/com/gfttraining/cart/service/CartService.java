@@ -75,10 +75,7 @@ public class CartService {
 
 		Product product = mapper.toProductDTO(productFromCatalog);
 
-		Optional<CartEntity> entityOptional = cartRepository.findById(cartId);
-		if (entityOptional.isEmpty())
-			throw new EntityNotFoundException("Cart " + cartId + " not found.");
-		CartEntity entity = entityOptional.get();
+		CartEntity entity = findById(cartId);
 
 		Optional<ProductEntity> sameProduct = entity.getProducts().stream()
 				.filter(p -> (p.getCatalogId() == product.getCatalogId() && p.getCartId().equals(cartId)))
@@ -106,10 +103,9 @@ public class CartService {
 	}
 
 	public Cart deleteById(UUID cartId) {
-		Optional<CartEntity> entityOptional = cartRepository.findById(cartId);
-		if (entityOptional.isEmpty())
-			throw new EntityNotFoundException("Cart " + cartId + " not found.");
-		cartRepository.delete(entityOptional.get());
+
+		CartEntity entity = findById(cartId);
+		cartRepository.delete(entity);
 
 		log.debug(cartId + "deleted");
 
@@ -129,6 +125,7 @@ public class CartService {
 			throw new EntityNotFoundException("Cart " + cartId + "is already submitted.");
 
 		User user = restService.fetchUserInfo(entity.getUserId());
+		validateUserInformation(user);
 		for (ProductEntity p : entity.getProducts()) {
 			ProductFromCatalog productFromCatalog = restService.fetchProductFromCatalog(p.getCatalogId());
 			if (productFromCatalog.getStock() < p.getQuantity())
@@ -138,24 +135,14 @@ public class CartService {
 				p.setPrice(productFromCatalog.getPrice());
 		}
 
-		if (!ratesConfig.getPaymentMethod().containsKey(user.getPaymentMethod()))
-			throw new InvalidUserDataException("Unrecognized payment method: " + user.getPaymentMethod());
-
-		if (!ratesConfig.getCountry().containsKey(user.getCountry()))
-			throw new InvalidUserDataException("Unrecognized country: " + user.getCountry());
-
 		BigDecimal priceAfterRates = calculatePriceAfterRates(
 				entity.calculatePrice(),
 				ratesConfig.getPaymentMethod().get(user.getPaymentMethod()),
 				ratesConfig.getCountry().get(user.getCountry()));
 		entity.setTotalPrice(priceAfterRates);
 
-		// DAILY: If Only One Fails, All The Ones Before It Would've Been Updated in
-		// Catalog
-		// Would be better as a Map <id, change>
-		for (ProductEntity p : entity.getProducts()) {
+		for (ProductEntity p : entity.getProducts())
 			restService.postStockChange(p.getCatalogId(), p.getQuantity());
-		}
 
 		entity.setStatus("SUBMITTED");
 		entity.setUpdatedAt(LocalDateTime.now());
@@ -182,5 +169,14 @@ public class CartService {
 		if (entityOptional.isEmpty())
 			throw new EntityNotFoundException("Cart " + cartId + " not found.");
 		return entityOptional.get();
+	}
+
+	private void validateUserInformation(User user) throws InvalidUserDataException {
+		if (!ratesConfig.getPaymentMethod().containsKey(user.getPaymentMethod()))
+			throw new InvalidUserDataException("Unrecognized payment method: " + user.getPaymentMethod());
+
+		if (!ratesConfig.getCountry().containsKey(user.getCountry()))
+			throw new InvalidUserDataException("Unrecognized country: " + user.getCountry());
+
 	}
 }
