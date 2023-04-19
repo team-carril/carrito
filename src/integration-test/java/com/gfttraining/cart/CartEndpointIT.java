@@ -2,10 +2,10 @@ package com.gfttraining.cart;
 
 import static com.gfttraining.cart.ITConfig.BASE_ERROR_SCHEMA;
 import static com.gfttraining.cart.ITConfig.CART_ARRAY_SCHEMA;
+import static com.gfttraining.cart.ITConfig.CART_DELETE_ID;
 import static com.gfttraining.cart.ITConfig.CART_NOTFOUND_ID;
 import static com.gfttraining.cart.ITConfig.CART_SCHEMA;
 import static com.gfttraining.cart.ITConfig.CARTa_ID;
-import static com.gfttraining.cart.ITConfig.CARTb_ID;
 import static com.gfttraining.cart.ITConfig.VALIDATION_ERROR_SCHEMA;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.containsString;
@@ -147,7 +147,7 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 	@DisplayName("given existing cartId, when DELETE, should return 200")
 	@Test
 	public void DELETE_carts_OK() throws Exception {
-		mvc.perform(delete("/carts/" + CARTb_ID))
+		mvc.perform(delete("/carts/" + CART_DELETE_ID))
 				.andExpect(status().isOk());
 	}
 

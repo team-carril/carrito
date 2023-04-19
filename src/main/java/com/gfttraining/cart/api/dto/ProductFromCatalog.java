@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
-// TODO look for finalPrice
 @Data
 public class ProductFromCatalog {
 	@Min(value = 1, message = "Id is required and positive.")

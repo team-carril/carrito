@@ -45,7 +45,7 @@ rates:
 
 external-services:
   catalogUrl: "http://localhost:8081/products/"
-  usersUrl: "http://localhost:8080/users/bInfo/"
-    
+  usersUrl: "http://localhost:8082/users/bInfo/"
+
 featureflag:
   updateAllByIdEnabled: true
