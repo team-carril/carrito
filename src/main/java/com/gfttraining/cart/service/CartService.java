@@ -88,10 +88,15 @@ public class CartService {
 				throw new ImpossibleQuantityException(
 						"Quantity must restult in an integer bigger than 0.");
 			entity.getProducts().add(mapper.toProductEntity(product));
+			entity.setUpdatedAt(LocalDateTime.now());
 			entity = cartRepository.saveAndFlush(entity);
+
+			log.debug("Id: " + entity.getId() + " User Id: " + entity.getUserId() + " Products: " + entity.getProducts()
+					+ " Status: " + entity.getStatus());
 			return mapper.toCartDTO(entity);
 		}
 		sameProduct.get().addToQuantity(product.getQuantity());
+		entity.setUpdatedAt(LocalDateTime.now());
 		entity = cartRepository.saveAndFlush(entity);
 
 		log.debug("Id: " + entity.getId() + " User Id: " + entity.getUserId() + " Products: " + entity.getProducts()
@@ -153,6 +158,7 @@ public class CartService {
 		}
 
 		entity.setStatus("SUBMITTED");
+		entity.setUpdatedAt(LocalDateTime.now());
 		entity = cartRepository.saveAndFlush(entity);
 
 		return mapper.toCartDTO(entity);
