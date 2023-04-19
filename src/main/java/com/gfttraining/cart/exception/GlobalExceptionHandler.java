@@ -16,6 +16,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import com.gfttraining.cart.api.dto.ErrorResponse;
 
+import lombok.Generated;
 import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice
@@ -31,7 +32,7 @@ public class GlobalExceptionHandler {
 
 		return new ResponseEntity<ErrorResponse>(res, HttpStatus.BAD_REQUEST);
 	}
-
+	
 	@ExceptionHandler(BadRequestBodyException.class)
 	public ResponseEntity<ErrorResponse> handlesBadRequestBodyException(BadRequestBodyException ex, WebRequest req) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
@@ -63,6 +64,7 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<ErrorResponse>(res, HttpStatus.BAD_REQUEST);
 	}
 
+	@Generated
 	@ExceptionHandler(ImpossibleQuantityException.class)
 	public ResponseEntity<ErrorResponse> handleNegativeQuantityException(ImpossibleQuantityException ex,
 			WebRequest req) {
@@ -103,6 +105,7 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(res, HttpStatus.SERVICE_UNAVAILABLE);
 	}
 
+	@Generated
 	public ResponseEntity<ErrorResponse> handleRemoteServiceBadRequestException(RemoteServiceBadRequestException ex,
 			WebRequest req) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now())
@@ -127,6 +130,7 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(res, HttpStatus.CONFLICT);
 	}
 
+	@Generated
 	@ExceptionHandler(BadMethodRequestException.class)
 	public ResponseEntity<ErrorResponse> handlerInvalidMethod(BadMethodRequestException ex,
 			WebRequest req) {

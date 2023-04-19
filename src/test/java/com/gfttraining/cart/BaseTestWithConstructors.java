@@ -17,6 +17,8 @@ import com.gfttraining.cart.config.RatesConfiguration;
 import com.gfttraining.cart.jpa.model.CartEntity;
 import com.gfttraining.cart.jpa.model.ProductEntity;
 
+import lombok.Generated;
+
 public class BaseTestWithConstructors {
 
 	protected CartEntity cartEntity(UUID id, int userId, LocalDateTime createdAt, LocalDateTime updatedAt,
@@ -81,6 +83,7 @@ public class BaseTestWithConstructors {
 				.price(new BigDecimal(price).stripTrailingZeros()).quantity(quantity).build();
 	}
 
+	@Generated
 	protected Product productDto(int catalogId, String name, String description, UUID cartId, double price,
 			int quantity) {
 		return Product.builder().catalogId(catalogId).name(name).description(description)

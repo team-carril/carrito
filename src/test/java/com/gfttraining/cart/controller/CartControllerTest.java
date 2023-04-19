@@ -32,6 +32,8 @@ import com.gfttraining.cart.exception.OutOfStockException;
 import com.gfttraining.cart.exception.RemoteServiceInternalException;
 import com.gfttraining.cart.service.CartService;
 
+import lombok.Generated;
+
 class CartControllerTest extends BaseTestWithConstructors {
 
 	@Mock
