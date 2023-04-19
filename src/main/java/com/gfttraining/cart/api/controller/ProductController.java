@@ -14,7 +14,6 @@ import com.gfttraining.cart.api.dto.CartCountDTO;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.config.FeatureConfiguration;
 import com.gfttraining.cart.exception.BadMethodRequestException;
-import com.gfttraining.cart.exception.BadRequestBodyException;
 import com.gfttraining.cart.service.ProductService;
 import com.gfttraining.cart.api.dto.Product;
 
@@ -32,9 +31,9 @@ public class ProductController {
 	@PatchMapping(value = "/products/{catalogId}")
 	public CartCountDTO updateAllById(@Valid @RequestBody ProductFromCatalog productFromCatalog,
 			@PathVariable int catalogId)
-			throws BadRequestBodyException, BadMethodRequestException {
-		
-		if(!featureConfiguration.getUpdateAllByIdEnabled()) {
+			throws BadMethodRequestException {
+
+		if (!featureConfiguration.getUpdateAllByIdEnabled()) {
 			throw new BadMethodRequestException("Feature Flag is Disable");
 		}
 

@@ -25,14 +25,11 @@ import com.gfttraining.cart.api.controller.CartController;
 import com.gfttraining.cart.api.dto.Cart;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
-import com.gfttraining.cart.exception.BadRequestBodyException;
 import com.gfttraining.cart.exception.BadRequestParamException;
 import com.gfttraining.cart.exception.InvalidUserDataException;
 import com.gfttraining.cart.exception.OutOfStockException;
 import com.gfttraining.cart.exception.RemoteServiceInternalException;
 import com.gfttraining.cart.service.CartService;
-
-import lombok.Generated;
 
 class CartControllerTest extends BaseTestWithConstructors {
 
@@ -65,7 +62,7 @@ class CartControllerTest extends BaseTestWithConstructors {
 	}
 
 	@Test
-	public void createCart() throws BadRequestBodyException {
+	public void createCart() {
 		User user = new User();
 		Cart cart = cartDto(UUID.randomUUID(), 1, null, null, null, null, 0);
 		when(cartService.postNewCart(user)).thenReturn(cart);
@@ -74,7 +71,7 @@ class CartControllerTest extends BaseTestWithConstructors {
 	}
 
 	@Test
-	public void addProductToCart() throws BadRequestBodyException {
+	public void addProductToCart() {
 		ProductFromCatalog product = productFromCatalog(1, "test", null, 15);
 
 		Cart cart = cartDto(null, 1, null, null, null, Collections.emptyList(), 0);
