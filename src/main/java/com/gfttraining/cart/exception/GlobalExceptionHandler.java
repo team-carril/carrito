@@ -94,4 +94,46 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(fieldErrors, HttpStatus.BAD_REQUEST);
 	}
 
+	@ExceptionHandler(RemoteServiceInternalException.class)
+	public ResponseEntity<ErrorResponse> handleRemoteServiceInternalException(RemoteServiceInternalException ex,
+			WebRequest req) {
+		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now())
+				.msg(ex.getMessage() + " " + (ex.getStatus() == null ? "" : ex.getStatus()))
+				.build();
+		return new ResponseEntity<>(res, HttpStatus.SERVICE_UNAVAILABLE);
+	}
+
+	public ResponseEntity<ErrorResponse> handleRemoteServiceBadRequestException(RemoteServiceBadRequestException ex,
+			WebRequest req) {
+		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now())
+				.msg(ex.getMessage())
+				.build();
+		return new ResponseEntity<>(res, HttpStatus.CONFLICT);
+	}
+
+	@ExceptionHandler(OutOfStockException.class)
+	public ResponseEntity<ErrorResponse> handleOutOfstockException(OutOfStockException ex, WebRequest req) {
+		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now())
+				.msg(ex.getMessage())
+				.build();
+		return new ResponseEntity<>(res, HttpStatus.CONFLICT);
+	}
+
+	@ExceptionHandler(InvalidUserDataException.class)
+	public ResponseEntity<ErrorResponse> handleInvalidUserDataExecption(InvalidUserDataException ex, WebRequest req) {
+		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now())
+				.msg(ex.getMessage())
+				.build();
+		return new ResponseEntity<>(res, HttpStatus.CONFLICT);
+	}
+
+	@ExceptionHandler(BadMethodRequestException.class)
+	public ResponseEntity<ErrorResponse> handlerInvalidMethod(BadMethodRequestException ex,
+			WebRequest req) {
+
+		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
+
+		return new ResponseEntity<ErrorResponse>(res, HttpStatus.METHOD_NOT_ALLOWED);
+	}
+
 }

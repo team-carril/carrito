@@ -21,6 +21,9 @@ import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
 import com.gfttraining.cart.exception.BadRequestBodyException;
 import com.gfttraining.cart.exception.BadRequestParamException;
+import com.gfttraining.cart.exception.InvalidUserDataException;
+import com.gfttraining.cart.exception.OutOfStockException;
+import com.gfttraining.cart.exception.RemoteServiceInternalException;
 import com.gfttraining.cart.service.CartService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -88,5 +91,11 @@ public class CartController {
 	@GetMapping("/carts/users/{userId}")
 	public List<Cart> getAllCartEntitiesByUserIdFilteredByStatus(@PathVariable Integer userId) {
 		return cartService.getAllCartEntitiesByUserIdFilteredByStatus(userId);
+	}
+
+	@PostMapping("/carts/submit/{id}")
+	public Cart validateCart(@PathVariable UUID id)
+			throws RemoteServiceInternalException, OutOfStockException, InvalidUserDataException {
+		return cartService.validateCart(id);
 	}
 }
