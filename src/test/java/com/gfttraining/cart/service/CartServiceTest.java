@@ -18,7 +18,6 @@ import java.util.stream.Stream;
 import javax.persistence.EntityNotFoundException;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -35,7 +34,7 @@ import com.gfttraining.cart.api.dto.User;
 import com.gfttraining.cart.config.RatesConfiguration;
 import com.gfttraining.cart.exception.InvalidUserDataException;
 import com.gfttraining.cart.exception.OutOfStockException;
-import com.gfttraining.cart.exception.RemoteServiceException;
+import com.gfttraining.cart.exception.RemoteServiceInternalException;
 import com.gfttraining.cart.jpa.CartRepository;
 import com.gfttraining.cart.jpa.model.CartEntity;
 import com.gfttraining.cart.jpa.model.ProductEntity;
@@ -142,11 +141,6 @@ public class CartServiceTest extends BaseTestWithConstructors {
 	}
 
 	@Test
-	@Disabled // TODO
-	public void add_product_new_product() {
-	}
-
-	@Test
 	public void add_product_throws_cart_not_found() {
 		UUID uuid = UUID.randomUUID();
 		when(cartRepository.findById(uuid)).thenReturn(Optional.ofNullable(null));
@@ -170,7 +164,7 @@ public class CartServiceTest extends BaseTestWithConstructors {
 
 	@DisplayName("GIVEN a CartEntity in DB and valid info in microservices WHEN service is called SHOULD Transform Properly")
 	@Test
-	public void validateCart() throws RemoteServiceException, OutOfStockException, InvalidUserDataException {
+	public void validateCart() throws RemoteServiceInternalException, OutOfStockException, InvalidUserDataException {
 		// GIVEN this CartEntity in DB
 		UUID id = UUID.randomUUID();
 		List<ProductEntity> productsInDB = toList(

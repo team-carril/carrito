@@ -22,7 +22,7 @@ import com.gfttraining.cart.config.RatesConfiguration;
 import com.gfttraining.cart.exception.ImpossibleQuantityException;
 import com.gfttraining.cart.exception.InvalidUserDataException;
 import com.gfttraining.cart.exception.OutOfStockException;
-import com.gfttraining.cart.exception.RemoteServiceException;
+import com.gfttraining.cart.exception.RemoteServiceInternalException;
 import com.gfttraining.cart.jpa.CartRepository;
 import com.gfttraining.cart.jpa.model.CartEntity;
 import com.gfttraining.cart.jpa.model.ProductEntity;
@@ -116,7 +116,8 @@ public class CartService {
 		return cartEntities.stream().map((e) -> mapper.toCartDTO(e)).collect(Collectors.toList());
 	}
 
-	public Cart validateCart(UUID cartId) throws RemoteServiceException, OutOfStockException, InvalidUserDataException {
+	public Cart validateCart(UUID cartId)
+			throws RemoteServiceInternalException, OutOfStockException, InvalidUserDataException {
 
 		CartEntity entity = findById(cartId);
 		if (entity.getStatus().equals("SUBMITTED"))
@@ -127,16 +128,16 @@ public class CartService {
 			ProductFromCatalog productFromCatalog = restService.fetchProductFromCatalog(p.getCatalogId());
 			if (productFromCatalog.getStock() < p.getQuantity())
 				throw new OutOfStockException(
-						"Product with catalogId" + p.getCatalogId() + "out of stock. Cart not submitted.");
+						"Product with catalogId: " + p.getCatalogId() + "out of stock. Cart not submitted.");
 			if (productFromCatalog.getPrice() != p.getPrice())
 				p.setPrice(productFromCatalog.getPrice());
 		}
 
 		if (!ratesConfig.getPaymentMethod().containsKey(user.getPaymentMethod()))
-			throw new InvalidUserDataException("Unrecognized payment method: {}" + user.getPaymentMethod());
+			throw new InvalidUserDataException("Unrecognized payment method: " + user.getPaymentMethod());
 
 		if (!ratesConfig.getCountry().containsKey(user.getCountry()))
-			throw new InvalidUserDataException("Unrecognized : " + user.getCountry());
+			throw new InvalidUserDataException("Unrecognized country: " + user.getCountry());
 
 		BigDecimal priceAfterRates = calculatePriceAfterRates(
 				entity.calculatePrice(),

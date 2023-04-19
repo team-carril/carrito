@@ -4,14 +4,17 @@ import java.io.IOException;
 
 import org.springframework.http.HttpStatus;
 
-public class RemoteServiceException extends IOException {
+import lombok.Generated;
+
+public class RemoteServiceInternalException extends IOException {
 	HttpStatus status;
 
-	public RemoteServiceException(String msg) {
+	public RemoteServiceInternalException(String msg) {
 		super(msg);
 	}
 
-	public RemoteServiceException(String msg, HttpStatus status) {
+	@Generated
+	public RemoteServiceInternalException(String msg, HttpStatus status) {
 		super(msg);
 		this.status = status;
 	}

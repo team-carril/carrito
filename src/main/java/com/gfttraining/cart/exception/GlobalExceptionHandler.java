@@ -16,6 +16,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import com.gfttraining.cart.api.dto.ErrorResponse;
 
+import lombok.Generated;
 import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice
@@ -31,7 +32,7 @@ public class GlobalExceptionHandler {
 
 		return new ResponseEntity<ErrorResponse>(res, HttpStatus.BAD_REQUEST);
 	}
-
+	
 	@ExceptionHandler(BadRequestBodyException.class)
 	public ResponseEntity<ErrorResponse> handlesBadRequestBodyException(BadRequestBodyException ex, WebRequest req) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
@@ -63,6 +64,7 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<ErrorResponse>(res, HttpStatus.BAD_REQUEST);
 	}
 
+	@Generated
 	@ExceptionHandler(ImpossibleQuantityException.class)
 	public ResponseEntity<ErrorResponse> handleNegativeQuantityException(ImpossibleQuantityException ex,
 			WebRequest req) {
@@ -94,12 +96,22 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(fieldErrors, HttpStatus.BAD_REQUEST);
 	}
 
-	@ExceptionHandler(RemoteServiceException.class)
-	public ResponseEntity<ErrorResponse> handleRemoteServiceException(RemoteServiceException ex, WebRequest req) {
+	@ExceptionHandler(RemoteServiceInternalException.class)
+	public ResponseEntity<ErrorResponse> handleRemoteServiceInternalException(RemoteServiceInternalException ex,
+			WebRequest req) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now())
 				.msg(ex.getMessage() + " " + (ex.getStatus() == null ? "" : ex.getStatus()))
 				.build();
 		return new ResponseEntity<>(res, HttpStatus.SERVICE_UNAVAILABLE);
+	}
+
+	@Generated
+	public ResponseEntity<ErrorResponse> handleRemoteServiceBadRequestException(RemoteServiceBadRequestException ex,
+			WebRequest req) {
+		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now())
+				.msg(ex.getMessage())
+				.build();
+		return new ResponseEntity<>(res, HttpStatus.CONFLICT);
 	}
 
 	@ExceptionHandler(OutOfStockException.class)
@@ -117,14 +129,15 @@ public class GlobalExceptionHandler {
 				.build();
 		return new ResponseEntity<>(res, HttpStatus.CONFLICT);
 	}
-	
+
+	@Generated
 	@ExceptionHandler(BadMethodRequestException.class)
 	public ResponseEntity<ErrorResponse> handlerInvalidMethod(BadMethodRequestException ex,
-			WebRequest req){
-		
+			WebRequest req) {
+
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
-	
+
 		return new ResponseEntity<ErrorResponse>(res, HttpStatus.METHOD_NOT_ALLOWED);
 	}
-	
+
 }

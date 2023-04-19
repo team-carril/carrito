@@ -29,8 +29,10 @@ import com.gfttraining.cart.exception.BadRequestBodyException;
 import com.gfttraining.cart.exception.BadRequestParamException;
 import com.gfttraining.cart.exception.InvalidUserDataException;
 import com.gfttraining.cart.exception.OutOfStockException;
-import com.gfttraining.cart.exception.RemoteServiceException;
+import com.gfttraining.cart.exception.RemoteServiceInternalException;
 import com.gfttraining.cart.service.CartService;
+
+import lombok.Generated;
 
 class CartControllerTest extends BaseTestWithConstructors {
 
@@ -104,7 +106,7 @@ class CartControllerTest extends BaseTestWithConstructors {
 	}
 
 	@Test
-	public void validateCart() throws RemoteServiceException, OutOfStockException, InvalidUserDataException { // TODO
+	public void validateCart() throws RemoteServiceInternalException, OutOfStockException, InvalidUserDataException {
 		UUID id = UUID.randomUUID();
 		cartController.validateCart(id);
 		verify(cartService).validateCart(id);

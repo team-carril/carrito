@@ -29,7 +29,7 @@ class ProductControllerTest extends BaseTestWithConstructors {
 
 	@Mock
 	ProductService productService;
-	
+
 	@Mock
 	FeatureConfiguration featureConfiguration;
 
@@ -81,9 +81,9 @@ class ProductControllerTest extends BaseTestWithConstructors {
 		verify(productService).findAllProductsSortedByPrice();
 		assertEquals(expectedProducts,actualProducts);
 	}
-	
+
 	@Test
-	void updateAll_calls_service_false() throws BadRequestBodyException, BadMethodRequestException{
+	void updateAll_calls_service_false() throws BadRequestBodyException, BadMethodRequestException {
 		ProductFromCatalog productFromCatalog = new ProductFromCatalog();
 		productFromCatalog.setPrice(new BigDecimal(7));
 
