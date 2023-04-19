@@ -43,7 +43,7 @@ public class CartEntity {
 	private BigDecimal totalPrice;
 
 	@Builder
-	static public CartEntity create(UUID id, int userId, LocalDateTime createdAt, LocalDateTime updatedAt,
+	public static CartEntity create(UUID id, int userId, LocalDateTime createdAt, LocalDateTime updatedAt,
 			String status,
 			List<ProductEntity> products, BigDecimal totalPrice) {
 		CartEntity entity = new CartEntity();
@@ -58,10 +58,10 @@ public class CartEntity {
 	}
 
 	public BigDecimal calculatePrice() {
-		BigDecimal totalPrice = products.stream().reduce(BigDecimal.valueOf(0.0),
+		BigDecimal priceOfCart = products.stream().reduce(BigDecimal.valueOf(0.0),
 				(x, p) -> x.add(p.getTotalPrize()), BigDecimal::add);
-		totalPrice = totalPrice.stripTrailingZeros();
-		return totalPrice;
+		priceOfCart = priceOfCart.stripTrailingZeros();
+		return priceOfCart;
 
 	}
 }

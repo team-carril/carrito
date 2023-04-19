@@ -1,5 +1,7 @@
 package com.gfttraining.cart.jpa;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
@@ -38,7 +40,8 @@ public class CartRepositoryIT extends BaseTestWithConstructors {
 		List<CartEntity> actualList = cartRepository.findByStatus(status);
 
 		for (CartEntity e : actualList)
-			assertTrue(e.getStatus() == status);
+			//assertTrue(e.getStatus() == status);
+			assertSame(status, e.getStatus());
 	}
 
 	@BeforeEach
@@ -70,7 +73,8 @@ public class CartRepositoryIT extends BaseTestWithConstructors {
 		List<CartEntity> actualList = cartRepository.findByUserId(userId);
 
 		for (CartEntity e : actualList)
-			assertTrue(e.getUserId() == userId);
+			//assertTrue(e.getUserId() == userId);
+			assertEquals(userId.intValue(), e.getUserId());
 	}
 
 	

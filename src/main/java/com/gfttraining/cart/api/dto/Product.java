@@ -25,7 +25,7 @@ public class Product {
 	private Integer quantity;
 
 	@Builder
-	static public Product create(int id, int catalogId, String name, String description, BigDecimal price,
+	public static Product create(int id, int catalogId, String name, String description, BigDecimal price,
 			int quantity) {
 		Product product = new Product();
 		product.setId(id);

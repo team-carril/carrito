@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
 		log.error("Message: " + ex.getMessage() + " Cause: " + ex.getCause() + " Stack Trace: " + ex.getStackTrace()
 				+ " Localized Message: " + ex.getLocalizedMessage());
 
-		return new ResponseEntity<ErrorResponse>(res, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(BadRequestBodyException.class)
@@ -103,8 +103,7 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(res, HttpStatus.SERVICE_UNAVAILABLE);
 	}
 
-	public ResponseEntity<ErrorResponse> handleRemoteServiceBadRequestException(RemoteServiceBadRequestException ex,
-			WebRequest req) {
+	public ResponseEntity<ErrorResponse> handleRemoteServiceBadRequestException(RemoteServiceBadRequestException ex) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now())
 				.msg(ex.getMessage())
 				.build();

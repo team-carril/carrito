@@ -14,14 +14,14 @@ import com.gfttraining.cart.jpa.model.ProductEntity;
 @Component
 public class Mapper {
 
-	private ModelMapper mapper;
+	private ModelMapper mapperModel;
 
 	public Mapper() {
-		this.mapper = new ModelMapper();
+		this.mapperModel = new ModelMapper();
 	}
 
 	public Product toProductDTO(ProductEntity entity) {
-		return mapper.map(entity, Product.class);
+		return mapperModel.map(entity, Product.class);
 	}
 
 	public Product toProductDTO(ProductFromCatalog productFromCatalog) {
@@ -34,12 +34,12 @@ public class Mapper {
 	}
 
 	public ProductEntity toProductEntity(Product product) {
-		return mapper.map(product, ProductEntity.class);
+		return mapperModel.map(product, ProductEntity.class);
 	}
 
 	public Cart toCartDTO(CartEntity entity) {
-		Cart dto = mapper.map(entity, Cart.class);
-		dto.setProducts(entity.getProducts().stream().map((e) -> toProductDTO(e)).collect(Collectors.toList()));
+		Cart dto = mapperModel.map(entity, Cart.class);
+		dto.setProducts(entity.getProducts().stream().map(this::toProductDTO).collect(Collectors.toList()));
 		if (entity.getStatus().equals("DRAFT"))
 			dto.setTotalPrice(entity.calculatePrice());
 		return dto;

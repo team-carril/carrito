@@ -32,7 +32,7 @@ public class ProductController {
 	@PatchMapping(value = "/products/{catalogId}")
 	public CartCountDTO updateAllById(@Valid @RequestBody ProductFromCatalog productFromCatalog,
 			@PathVariable int catalogId)
-			throws BadRequestBodyException, BadMethodRequestException {
+			throws BadMethodRequestException {
 		
 		if(!featureConfiguration.getUpdateAllByIdEnabled()) {
 			throw new BadMethodRequestException("Feature Flag is Disable");
