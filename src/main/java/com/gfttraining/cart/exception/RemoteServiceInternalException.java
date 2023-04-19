@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import org.springframework.http.HttpStatus;
 
+import lombok.Generated;
+
 public class RemoteServiceInternalException extends IOException {
 	HttpStatus status;
 
@@ -11,6 +13,7 @@ public class RemoteServiceInternalException extends IOException {
 		super(msg);
 	}
 
+	@Generated
 	public RemoteServiceInternalException(String msg, HttpStatus status) {
 		super(msg);
 		this.status = status;
