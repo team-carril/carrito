@@ -32,16 +32,6 @@ public class GlobalExceptionHandler {
 
 		return new ResponseEntity<ErrorResponse>(res, HttpStatus.BAD_REQUEST);
 	}
-	
-	@ExceptionHandler(BadRequestBodyException.class)
-	public ResponseEntity<ErrorResponse> handlesBadRequestBodyException(BadRequestBodyException ex, WebRequest req) {
-		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
-
-		log.error("Message: " + ex.getMessage() + " Cause: " + ex.getCause() + " Stack Trace: " + ex.getStackTrace()
-				+ " Localized Message: " + ex.getLocalizedMessage());
-
-		return new ResponseEntity<ErrorResponse>(res, HttpStatus.BAD_REQUEST);
-	}
 
 	@ExceptionHandler(EntityNotFoundException.class)
 	public ResponseEntity<ErrorResponse> handlesBadRequestBodyException(EntityNotFoundException ex, WebRequest req) {

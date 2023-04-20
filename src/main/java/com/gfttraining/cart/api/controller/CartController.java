@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gfttraining.cart.api.dto.Cart;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
-import com.gfttraining.cart.exception.BadRequestBodyException;
 import com.gfttraining.cart.exception.BadRequestParamException;
 import com.gfttraining.cart.exception.InvalidUserDataException;
 import com.gfttraining.cart.exception.OutOfStockException;
@@ -52,7 +51,7 @@ public class CartController {
 	}
 
 	@PostMapping("/carts")
-	public ResponseEntity<Cart> createCart(@Valid @RequestBody User user) throws BadRequestBodyException {
+	public ResponseEntity<Cart> createCart(@Valid @RequestBody User user) {
 		Cart cart = cartService.postNewCart(user);
 
 		log.info("Creating cart with id: " + cart.getId() + " and user id: "
@@ -64,8 +63,7 @@ public class CartController {
 	}
 
 	@PatchMapping("/carts/{id}")
-	public Cart addProductToCart(@Valid @RequestBody ProductFromCatalog productFromCatalog, @PathVariable UUID id)
-			throws BadRequestBodyException {
+	public Cart addProductToCart(@Valid @RequestBody ProductFromCatalog productFromCatalog, @PathVariable UUID id) {
 
 		Cart addProductToCartLog = cartService.addProductToCart(productFromCatalog, id);
 

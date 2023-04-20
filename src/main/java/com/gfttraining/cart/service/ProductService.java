@@ -17,8 +17,6 @@ import com.gfttraining.cart.jpa.ProductRepository;
 import com.gfttraining.cart.jpa.model.CartEntity;
 import com.gfttraining.cart.jpa.model.ProductEntity;
 
-import lombok.Generated;
-
 @Service
 public class ProductService {
 
@@ -32,7 +30,6 @@ public class ProductService {
 		this.mapper = mapper;
 	}
 
-	@Generated
 	public List<ProductEntity> findByCatalogId(int catalogId) {
 		List<ProductEntity> entities = productRepository.findByCatalogId(catalogId);
 		if (entities.isEmpty())
@@ -45,11 +42,10 @@ public class ProductService {
 		return entities;
 	}
 
-	public List<Product> findAllProductsSortedByPrice(){
+	public List<Product> findAllProductsSortedByPrice() {
 		List<ProductEntity> entities = productRepository.findAllAndSortByPrice();
-		return entities.stream().map((s)-> mapper.toProductDTO(s)).collect(Collectors.toList());
+		return entities.stream().map((s) -> mapper.toProductDTO(s)).collect(Collectors.toList());
 	}
-
 
 	public CartCountDTO updateAllById(ProductFromCatalog productFromCatalog, int catalogId) {
 		Product product = mapper.toProductDTO(productFromCatalog);
@@ -76,7 +72,6 @@ public class ProductService {
 		entity.setPrice(product.getPrice());
 	}
 
-	@Generated
 	private String checkCartStatus(UUID cartId) {
 		Optional<CartEntity> entity = cartRepository.findById(cartId);
 		if (entity.isEmpty())

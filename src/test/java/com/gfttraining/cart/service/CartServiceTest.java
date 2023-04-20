@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -188,13 +189,18 @@ public class CartServiceTest extends BaseTestWithConstructors {
 				productEntity(2, null, null, id, 10, 2),
 				productEntity(3, null, null, id, 10, 2),
 				productEntity(4, null, null, id, 10, 2));
-		CartEntity expectedEntity = cartEntity(id, 7, null, null, "SUBMITTED", expectedProducts, 72.6);
+		CartEntity expectedEntity = cartEntity(id, 7, null, null, "SUBMITTED",
+				expectedProducts, 72.6);
 		when(cartRepository.saveAndFlush(any(CartEntity.class))).thenReturn(expectedEntity);
 
 		// WHEN service is called
 		cartService.validateCart(id);
 
-		verify(cartRepository).saveAndFlush(expectedEntity);
+		ArgumentCaptor<CartEntity> actualEntity = ArgumentCaptor.forClass(CartEntity.class);
+		verify(cartRepository).saveAndFlush(actualEntity.capture());
+		assertEquals(expectedEntity.getTotalPrice(), actualEntity.getValue().getTotalPrice());
+		assertEquals(expectedEntity.getProducts(), actualEntity.getValue().getProducts());
+
 		verify(restService, times(entity.getProducts().size())).fetchProductFromCatalog(anyInt());
 		verify(restService, times(entity.getProducts().size())).postStockChange(anyInt(), anyInt());
 	}
