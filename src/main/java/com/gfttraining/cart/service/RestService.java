@@ -27,8 +27,6 @@ import com.gfttraining.cart.config.ExternalServicesConfiguration;
 import com.gfttraining.cart.exception.RemoteServiceBadRequestException;
 import com.gfttraining.cart.exception.RemoteServiceInternalException;
 
-import lombok.Generated;
-
 @Service
 public class RestService {
 
@@ -91,7 +89,6 @@ class RestTemplateResponseErrorHandler implements ResponseErrorHandler {
 				|| res.getStatusCode().series() == CLIENT_ERROR;
 	}
 
-	@Generated
 	@Override
 	public void handleError(ClientHttpResponse res) throws IOException {
 		if (res.getStatusCode().series() == SERVER_ERROR) {
