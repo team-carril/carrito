@@ -14,6 +14,7 @@ import com.gfttraining.cart.exception.ImpossibleQuantityException;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Generated;
 
 @Entity
 @Data
@@ -39,6 +40,7 @@ public class ProductEntity {
 		return this.getPrice().multiply(BigDecimal.valueOf(this.getQuantity()));
 	}
 
+	@Generated
 	public void addToQuantity(int x) throws ImpossibleQuantityException {
 		if ((this.quantity + x) < 1)
 			throw new ImpossibleQuantityException(
@@ -47,7 +49,7 @@ public class ProductEntity {
 	}
 
 	@Builder
-	static public ProductEntity create(int id, int catalogId, String name, String description, UUID cartId,
+	public static ProductEntity create(int id, int catalogId, String name, String description, UUID cartId,
 			BigDecimal price, int quantity) {
 		ProductEntity entity = new ProductEntity();
 		entity.setId(id);

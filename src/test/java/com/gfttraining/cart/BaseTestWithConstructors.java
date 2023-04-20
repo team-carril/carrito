@@ -1,9 +1,11 @@
 package com.gfttraining.cart;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,6 +13,7 @@ import com.gfttraining.cart.api.dto.Cart;
 import com.gfttraining.cart.api.dto.Product;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
+import com.gfttraining.cart.config.RatesConfiguration;
 import com.gfttraining.cart.jpa.model.CartEntity;
 import com.gfttraining.cart.jpa.model.ProductEntity;
 
@@ -19,9 +22,25 @@ public class BaseTestWithConstructors {
 	protected CartEntity cartEntity(UUID id, int userId, LocalDateTime createdAt, LocalDateTime updatedAt,
 			String status,
 			List<ProductEntity> products) {
-		return CartEntity.builder().id(id).userId(userId).createdAt(createdAt).updatedAt(updatedAt).status(status)
-				.products(products).build();
+		CartEntity entity = CartEntity.builder().id(id).userId(userId).createdAt(createdAt).updatedAt(updatedAt)
+				.status(status == null ? "DRAFT" : status)
+				.products(products == null ? Collections.emptyList() : products).build();
 
+		if (entity.getStatus().equals("SUBMITTED"))
+			entity.setTotalPrice(entity.calculatePrice());
+		return entity;
+	}
+
+	protected CartEntity cartEntity(UUID id, int userId, LocalDateTime createdAt, LocalDateTime updatedAt,
+			String status,
+			List<ProductEntity> products, double totalPrice) {
+		BigDecimal price = new BigDecimal(totalPrice).round(new MathContext(4)).stripTrailingZeros();
+		CartEntity entity = CartEntity.builder().id(id).userId(userId).createdAt(createdAt).updatedAt(updatedAt)
+				.status(status == null ? "DRAFT" : status)
+				.products(products == null ? Collections.emptyList() : products)
+				.totalPrice(price)
+				.build();
+		return entity;
 	}
 
 	protected Cart cartDto(UUID id, int userId, LocalDateTime createdAt, LocalDateTime updatedAt, String status,
@@ -29,10 +48,6 @@ public class BaseTestWithConstructors {
 			double totalPrice) {
 		if (id == null)
 			id = UUID.randomUUID();
-		if (createdAt == null)
-			createdAt = LocalDateTime.now();
-		if (updatedAt == null)
-			updatedAt = LocalDateTime.now();
 		if (products == null)
 			products = Collections.emptyList();
 
@@ -54,9 +69,21 @@ public class BaseTestWithConstructors {
 				.price(new BigDecimal(price).stripTrailingZeros()).quantity(quantity).build();
 	}
 
+	protected ProductEntity productEntity(int catalogId, String name, String description, UUID cartId,
+			double price, int quantity) {
+		return ProductEntity.builder().catalogId(catalogId).name(name).cartId(cartId).description(description)
+				.price(new BigDecimal(price).stripTrailingZeros()).quantity(quantity).build();
+	}
+
 	protected Product productDto(int id, int catalogId, String name, String description, UUID cartId, double price,
 			int quantity) {
 		return Product.builder().id(id).catalogId(catalogId).name(name).description(description)
+				.price(new BigDecimal(price).stripTrailingZeros()).quantity(quantity).build();
+	}
+
+	protected Product productDto(int catalogId, String name, String description, UUID cartId, double price,
+			int quantity) {
+		return Product.builder().catalogId(catalogId).name(name).description(description)
 				.price(new BigDecimal(price).stripTrailingZeros()).quantity(quantity).build();
 	}
 
@@ -68,10 +95,22 @@ public class BaseTestWithConstructors {
 		return Arrays.asList(dtos);
 	}
 
+	protected List<ProductFromCatalog> toList(ProductFromCatalog... dtos) {
+		return Arrays.asList(dtos);
+	}
+
 	protected User userDTO(int id) {
 		User user = new User();
 		user.setId(id);
 
+		return user;
+	}
+
+	protected User userDTO(int id, String paymentMethod, String country) {
+		User user = new User();
+		user.setId(id);
+		user.setPaymentMethod(paymentMethod);
+		user.setCountry(country);
 		return user;
 	}
 
@@ -93,5 +132,27 @@ public class BaseTestWithConstructors {
 		product.setPrice(new BigDecimal(price).stripTrailingZeros());
 		product.setDescription(description == null ? "" : description);
 		return product;
+	}
+
+	protected ProductFromCatalog productFromCatalog(int id, double price, int stock) {
+		ProductFromCatalog product = new ProductFromCatalog();
+		product.setId(id);
+		product.setPrice(new BigDecimal(price).stripTrailingZeros());
+		product.setStock(stock);
+		return product;
+	}
+
+	protected RatesConfiguration initTestRatesConfig() {
+		RatesConfiguration config = new RatesConfiguration();
+		HashMap<String, Integer> country = new HashMap<>();
+		HashMap<String, Integer> paymentInfo = new HashMap<>();
+
+		country.put("SPAIN", 21);
+		paymentInfo.put("VISA", 0);
+
+		config.setCountry(country);
+		config.setPaymentMethod(paymentInfo);
+
+		return config;
 	}
 }

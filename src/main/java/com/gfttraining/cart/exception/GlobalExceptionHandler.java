@@ -16,6 +16,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import com.gfttraining.cart.api.dto.ErrorResponse;
 
+import lombok.Generated;
 import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice
@@ -24,16 +25,6 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(BadRequestParamException.class)
 	public ResponseEntity<ErrorResponse> handlesBadRequestParamException(BadRequestParamException ex, WebRequest req) {
-		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
-
-		log.error("Message: " + ex.getMessage() + " Cause: " + ex.getCause() + " Stack Trace: " + ex.getStackTrace()
-				+ " Localized Message: " + ex.getLocalizedMessage());
-
-		return new ResponseEntity<ErrorResponse>(res, HttpStatus.BAD_REQUEST);
-	}
-
-	@ExceptionHandler(BadRequestBodyException.class)
-	public ResponseEntity<ErrorResponse> handlesBadRequestBodyException(BadRequestBodyException ex, WebRequest req) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
 
 		log.error("Message: " + ex.getMessage() + " Cause: " + ex.getCause() + " Stack Trace: " + ex.getStackTrace()
@@ -63,10 +54,12 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<ErrorResponse>(res, HttpStatus.BAD_REQUEST);
 	}
 
+	@Generated
 	@ExceptionHandler(ImpossibleQuantityException.class)
 	public ResponseEntity<ErrorResponse> handleNegativeQuantityException(ImpossibleQuantityException ex,
 			WebRequest req) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
+		log.error("Invalid quantity for a product. {} | {}", res.getMsg(), ex.getCause());
 		return new ResponseEntity<ErrorResponse>(res, HttpStatus.CONFLICT);
 	}
 
@@ -92,6 +85,57 @@ public class GlobalExceptionHandler {
 				+ " Localized Message: " + ex.getLocalizedMessage());
 
 		return new ResponseEntity<>(fieldErrors, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(RemoteServiceInternalException.class)
+	public ResponseEntity<ErrorResponse> handleRemoteServiceInternalException(RemoteServiceInternalException ex,
+			WebRequest req) {
+		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now())
+				.msg(ex.getMessage() + " " + (ex.getStatus() == null ? "" : ex.getStatus()))
+				.build();
+		log.error("Remote service internal error. {} | {}", res.getMsg(), ex.getCause());
+		return new ResponseEntity<>(res, HttpStatus.SERVICE_UNAVAILABLE);
+	}
+
+	@Generated
+	public ResponseEntity<ErrorResponse> handleRemoteServiceBadRequestException(RemoteServiceBadRequestException ex,
+			WebRequest req) {
+		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now())
+				.msg(ex.getMessage())
+				.build();
+
+		log.error("Remote service conflict. {} | {}", res.getMsg(), ex.getCause());
+		return new ResponseEntity<>(res, HttpStatus.CONFLICT);
+	}
+
+	@ExceptionHandler(OutOfStockException.class)
+	public ResponseEntity<ErrorResponse> handleOutOfstockException(OutOfStockException ex, WebRequest req) {
+		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now())
+				.msg(ex.getMessage())
+				.build();
+		log.error("Catalog external service out of stock. {} | {}", res.getMsg(), ex.getCause());
+		return new ResponseEntity<>(res, HttpStatus.CONFLICT);
+	}
+
+	@ExceptionHandler(InvalidUserDataException.class)
+	public ResponseEntity<ErrorResponse> handleInvalidUserDataExecption(InvalidUserDataException ex, WebRequest req) {
+		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now())
+				.msg(ex.getMessage())
+				.build();
+
+		log.error("Invalid user payment data. {} | {}", res.getMsg(), ex.getCause());
+		return new ResponseEntity<>(res, HttpStatus.CONFLICT);
+	}
+
+	@Generated
+	@ExceptionHandler(BadMethodRequestException.class)
+	public ResponseEntity<ErrorResponse> handlerInvalidMethod(BadMethodRequestException ex,
+			WebRequest req) {
+
+		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
+
+		log.error("Feature is disabled. {} | {}", res.getMsg(), ex.getCause());
+		return new ResponseEntity<ErrorResponse>(res, HttpStatus.METHOD_NOT_ALLOWED);
 	}
 
 }

@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gfttraining.cart.api.dto.Cart;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
-import com.gfttraining.cart.exception.BadRequestBodyException;
 import com.gfttraining.cart.exception.BadRequestParamException;
+import com.gfttraining.cart.exception.InvalidUserDataException;
+import com.gfttraining.cart.exception.OutOfStockException;
+import com.gfttraining.cart.exception.RemoteServiceInternalException;
 import com.gfttraining.cart.service.CartService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -49,7 +51,7 @@ public class CartController {
 	}
 
 	@PostMapping("/carts")
-	public ResponseEntity<Cart> createCart(@Valid @RequestBody User user) throws BadRequestBodyException {
+	public ResponseEntity<Cart> createCart(@Valid @RequestBody User user) {
 		Cart cart = cartService.postNewCart(user);
 
 		log.info("Creating cart with id: " + cart.getId() + " and user id: "
@@ -61,8 +63,7 @@ public class CartController {
 	}
 
 	@PatchMapping("/carts/{id}")
-	public Cart addProductToCart(@Valid @RequestBody ProductFromCatalog productFromCatalog, @PathVariable UUID id)
-			throws BadRequestBodyException {
+	public Cart addProductToCart(@Valid @RequestBody ProductFromCatalog productFromCatalog, @PathVariable UUID id) {
 
 		Cart addProductToCartLog = cartService.addProductToCart(productFromCatalog, id);
 
@@ -87,6 +88,17 @@ public class CartController {
 
 	@GetMapping("/carts/users/{userId}")
 	public List<Cart> getAllCartEntitiesByUserIdFilteredByStatus(@PathVariable Integer userId) {
-		return cartService.getAllCartEntitiesByUserIdFilteredByStatus(userId);
+		List<Cart> carts = cartService.getAllCartEntitiesByUserIdFilteredByStatus(userId);
+		log.info("Retrieving all SUBMITTED carts for user: {}", userId);
+		return carts;
+	}
+
+	@PostMapping("/carts/submit/{id}")
+	public Cart validateCart(@PathVariable UUID id)
+			throws RemoteServiceInternalException, OutOfStockException, InvalidUserDataException {
+		log.info("Attempting to validate and submit cart: {}", id);
+		Cart submittedCart = cartService.validateCart(id);
+		log.info("Cart: {} submitted.", id);
+		return submittedCart;
 	}
 }

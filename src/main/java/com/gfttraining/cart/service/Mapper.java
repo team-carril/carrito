@@ -1,6 +1,5 @@
 package com.gfttraining.cart.service;
 
-import java.math.BigDecimal;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -40,11 +39,9 @@ public class Mapper {
 
 	public Cart toCartDTO(CartEntity entity) {
 		Cart dto = mapper.map(entity, Cart.class);
-		BigDecimal totalPrice = entity.getProducts().stream().reduce(BigDecimal.valueOf(0.0),
-				(x, p) -> x.add(p.getTotalPrize()), BigDecimal::add);
-		totalPrice = totalPrice.stripTrailingZeros();
-		dto.setTotalPrice(totalPrice);
 		dto.setProducts(entity.getProducts().stream().map((e) -> toProductDTO(e)).collect(Collectors.toList()));
+		if (entity.getStatus().equals("DRAFT"))
+			dto.setTotalPrice(entity.calculatePrice());
 		return dto;
 	}
 
