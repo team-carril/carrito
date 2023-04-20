@@ -88,12 +88,17 @@ public class CartController {
 
 	@GetMapping("/carts/users/{userId}")
 	public List<Cart> getAllCartEntitiesByUserIdFilteredByStatus(@PathVariable Integer userId) {
-		return cartService.getAllCartEntitiesByUserIdFilteredByStatus(userId);
+		List<Cart> carts = cartService.getAllCartEntitiesByUserIdFilteredByStatus(userId);
+		log.info("Retrieving all SUBMITTED carts for user: {}", userId);
+		return carts;
 	}
 
 	@PostMapping("/carts/submit/{id}")
 	public Cart validateCart(@PathVariable UUID id)
 			throws RemoteServiceInternalException, OutOfStockException, InvalidUserDataException {
-		return cartService.validateCart(id);
+		log.info("Attempting to validate and submit cart: {}", id);
+		Cart submittedCart = cartService.validateCart(id);
+		log.info("Cart: {} submitted.", id);
+		return submittedCart;
 	}
 }

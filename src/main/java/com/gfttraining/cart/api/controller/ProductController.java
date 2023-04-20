@@ -15,9 +15,13 @@ import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.config.FeatureConfiguration;
 import com.gfttraining.cart.exception.BadMethodRequestException;
 import com.gfttraining.cart.service.ProductService;
+
+import lombok.extern.slf4j.Slf4j;
+
 import com.gfttraining.cart.api.dto.Product;
 
 @RestController
+@Slf4j
 public class ProductController {
 
 	ProductService productService;
@@ -37,12 +41,18 @@ public class ProductController {
 			throw new BadMethodRequestException("Feature Flag is Disable");
 		}
 
-		return productService.updateAllById(productFromCatalog, catalogId);
+		log.info("Updating every instance of product {}", catalogId);
+		CartCountDTO count = productService.updateAllById(productFromCatalog, catalogId);
+		log.info("Operation success. Carts affected: {}", count.getCartsChanged());
+		return count;
 	}
 
 	@DeleteMapping(value = "/products/{catalogId}")
 	public CartCountDTO deleteAllById(@PathVariable int catalogId) {
-		return productService.deleteAllById(catalogId);
+		log.info("Deleting every instance of product {}", catalogId);
+		CartCountDTO count = productService.deleteAllById(catalogId);
+		log.info("Operation success. Carts affected: {}", count.getCartsChanged());
+		return count;
 	}
 
 	@GetMapping(value = "/products")

@@ -59,6 +59,7 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ErrorResponse> handleNegativeQuantityException(ImpossibleQuantityException ex,
 			WebRequest req) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
+		log.error("Invalid quantity for a product. {} | {}", res.getMsg(), ex.getCause());
 		return new ResponseEntity<ErrorResponse>(res, HttpStatus.CONFLICT);
 	}
 
@@ -92,6 +93,7 @@ public class GlobalExceptionHandler {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now())
 				.msg(ex.getMessage() + " " + (ex.getStatus() == null ? "" : ex.getStatus()))
 				.build();
+		log.error("Remote service internal error. {} | {}", res.getMsg(), ex.getCause());
 		return new ResponseEntity<>(res, HttpStatus.SERVICE_UNAVAILABLE);
 	}
 
@@ -101,6 +103,8 @@ public class GlobalExceptionHandler {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now())
 				.msg(ex.getMessage())
 				.build();
+
+		log.error("Remote service conflict. {} | {}", res.getMsg(), ex.getCause());
 		return new ResponseEntity<>(res, HttpStatus.CONFLICT);
 	}
 
@@ -109,6 +113,7 @@ public class GlobalExceptionHandler {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now())
 				.msg(ex.getMessage())
 				.build();
+		log.error("Catalog external service out of stock. {} | {}", res.getMsg(), ex.getCause());
 		return new ResponseEntity<>(res, HttpStatus.CONFLICT);
 	}
 
@@ -117,6 +122,8 @@ public class GlobalExceptionHandler {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now())
 				.msg(ex.getMessage())
 				.build();
+
+		log.error("Invalid user payment data. {} | {}", res.getMsg(), ex.getCause());
 		return new ResponseEntity<>(res, HttpStatus.CONFLICT);
 	}
 
@@ -127,6 +134,7 @@ public class GlobalExceptionHandler {
 
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
 
+		log.error("Feature is disabled. {} | {}", res.getMsg(), ex.getCause());
 		return new ResponseEntity<ErrorResponse>(res, HttpStatus.METHOD_NOT_ALLOWED);
 	}
 

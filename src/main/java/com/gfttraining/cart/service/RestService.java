@@ -28,7 +28,10 @@ import com.gfttraining.cart.config.ExternalServicesConfiguration;
 import com.gfttraining.cart.exception.RemoteServiceBadRequestException;
 import com.gfttraining.cart.exception.RemoteServiceInternalException;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class RestService {
 
 	ExternalServicesConfiguration config;
@@ -53,6 +56,7 @@ public class RestService {
 	@Retryable
 	public User fetchUserInfo(int userId) throws RemoteServiceInternalException {
 		try {
+			log.info("Retrieving from user service, user id: {}", userId);
 			ResponseEntity<User> res = restTemplate.getForEntity(USER_URL + userId, User.class);
 			return res.getBody();
 		} catch (RestClientException ex) {
@@ -63,6 +67,7 @@ public class RestService {
 	@Retryable
 	public ProductFromCatalog fetchProductFromCatalog(int catalogId) throws RemoteServiceInternalException {
 		try {
+			log.info("Retrieving from catalog, product id: {}", catalogId);
 			ResponseEntity<ProductFromCatalog> res = restTemplate.getForEntity(CATALOG_URL + "id/" + catalogId,
 					ProductFromCatalog.class);
 			return res.getBody();
@@ -74,6 +79,7 @@ public class RestService {
 	@Retryable
 	public void postStockChange(int id, int quantity) throws RemoteServiceInternalException {
 		try {
+			log.info("Sending changes in stock ({} items) to catalog service. Product: {}", quantity, id);
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			HttpEntity<String> body = new HttpEntity<String>(Integer.toString(quantity), headers);

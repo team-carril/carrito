@@ -18,6 +18,7 @@ import org.mockito.MockitoAnnotations;
 
 import com.gfttraining.cart.BaseTestWithConstructors;
 import com.gfttraining.cart.api.controller.ProductController;
+import com.gfttraining.cart.api.dto.CartCountDTO;
 import com.gfttraining.cart.api.dto.Product;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.config.FeatureConfiguration;
@@ -47,6 +48,9 @@ class ProductControllerTest extends BaseTestWithConstructors {
 		ProductFromCatalog productFromCatalog = new ProductFromCatalog();
 		productFromCatalog.setPrice(new BigDecimal(7));
 		when(featureConfiguration.getUpdateAllByIdEnabled()).thenReturn(true);
+		CartCountDTO counter = new CartCountDTO();
+		counter.setCartsChanged(1);
+		when(productService.updateAllById(productFromCatalog, catalogId)).thenReturn(counter);
 
 		productController.updateAllById(productFromCatalog, catalogId);
 
@@ -61,6 +65,9 @@ class ProductControllerTest extends BaseTestWithConstructors {
 
 	@Test
 	void deleteAll_calls_service() throws BadMethodRequestException {
+		CartCountDTO counter = new CartCountDTO();
+		counter.setCartsChanged(1);
+		when(productService.deleteAllById(catalogId)).thenReturn(counter);
 		productController.deleteAllById(catalogId);
 
 		verify(productService).deleteAllById(1);
