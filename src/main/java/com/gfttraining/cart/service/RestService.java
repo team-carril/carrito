@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestClientException;
@@ -49,6 +50,7 @@ public class RestService {
 		USER_URL = testURL;
 	}
 
+	@Retryable
 	public User fetchUserInfo(int userId) throws RemoteServiceInternalException {
 		try {
 			ResponseEntity<User> res = restTemplate.getForEntity(USER_URL + userId, User.class);
@@ -58,6 +60,7 @@ public class RestService {
 		}
 	}
 
+	@Retryable
 	public ProductFromCatalog fetchProductFromCatalog(int catalogId) throws RemoteServiceInternalException {
 		try {
 			ResponseEntity<ProductFromCatalog> res = restTemplate.getForEntity(CATALOG_URL + "id/" + catalogId,
@@ -68,6 +71,7 @@ public class RestService {
 		}
 	}
 
+	@Retryable
 	public void postStockChange(int id, int quantity) throws RemoteServiceInternalException {
 		try {
 			HttpHeaders headers = new HttpHeaders();
