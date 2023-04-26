@@ -6,6 +6,7 @@ import static com.gfttraining.cart.ITConfig.CART_SUBMITTED_ID;
 import static com.gfttraining.cart.ITConfig.CARTa_ID;
 import static com.gfttraining.cart.ITConfig.CARTb_ID;
 import static com.gfttraining.cart.ITConfig.CARTc_ID;
+import static com.gfttraining.cart.ITConfig.CARTd_ID;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
@@ -18,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.io.IOException;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -129,6 +131,37 @@ public class ExternalMicroServicesIT extends BaseTestWithConstructors {
 				.andExpect(status().isConflict())
 				.andExpect(content().string(matchesJsonSchemaInClasspath(BASE_ERROR_SCHEMA)))
 				.andExpect(content().string(containsString("out of stock")));
+	}
+
+	@DisplayName("given services down for 2 tries, when POST carts/submit, should 200 Cart JSON")
+	@Test
+	public void retries_three_times() throws IOException, Exception {
+		User u15 = userDTO(15, "TRANSFER", "ESTONIA");
+		String json = mapper.writeValueAsString(u15);
+
+		usersMock.stubFor(WireMock.get(USERS_ROUTE +
+				u15.getId())
+				.willReturn(aResponse().withStatus(500))
+				.willReturn(aResponse().withStatus(500))
+				.willReturn(WireMock.aResponse()
+						.withHeader("Content-Type", "application/json")
+						.withBody(json).withStatus(200)));
+
+		catalogMock.stubFor(WireMock.get(INFO_CATALOG_ROUTE + 23).willReturn(WireMock.aResponse()
+				.withHeader("Content-Type", "application/json")
+				.withBody(mapper.writeValueAsString(productFromCatalog(23, 10, 100)))));
+		catalogMock.stubFor(WireMock.get(INFO_CATALOG_ROUTE + 61).willReturn(WireMock.aResponse()
+				.withHeader("Content-Type", "application/json")
+				.withBody(mapper.writeValueAsString(productFromCatalog(61, 10, 100)))));
+		catalogMock.stubFor(WireMock.put(UPDATE_CATALOG_ROUTE + 23).willReturn(WireMock.aResponse().withStatus(200)));
+		catalogMock.stubFor(WireMock.put(UPDATE_CATALOG_ROUTE + 61).willReturn(WireMock.aResponse().withStatus(200)));
+
+		mvc.perform(post("/carts/submit/" + CARTd_ID))
+				.andExpect(status().isOk())
+				.andExpect(content().string(matchesJsonSchemaInClasspath(CART_SCHEMA)))
+				.andExpect(jsonPath("@.id", is(CARTd_ID.toString())))
+				.andExpect(jsonPath("@.status", is("SUBMITTED")))
+				.andExpect(jsonPath("@.totalPrice", is(97.92)));
 	}
 
 	@DisplayName("given valid data in external services, when POST carts/submit, should 200 CART JSON")

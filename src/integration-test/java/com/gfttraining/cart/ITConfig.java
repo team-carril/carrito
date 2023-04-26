@@ -16,6 +16,7 @@ public class ITConfig {
 	public static final UUID CARTa_ID = UUID.fromString("6e7baf09-9877-4c26-a4fb-21e0e2572819");
 	public static final UUID CARTb_ID = UUID.fromString("0f6f7a4f-1097-4624-8973-ae6966728647");
 	public static final UUID CARTc_ID = UUID.fromString("f92f3177-78cd-4e5d-9324-1954cae5e016");
+	public static final UUID CARTd_ID = UUID.fromString("49ea83b7-ad55-449b-8d90-4c0a33a83a73");
 	public static final UUID CART_DELETE_ID = UUID.fromString("7e2bb8f9-6bbc-4bc4-915f-f72cb21b035f");
 	public static final UUID CART_NOTFOUND_ID = UUID.fromString("163f923b-c48e-44f7-8428-c488a9ef23e5");
 	public static final UUID CART_SUBMITTED_ID = UUID.fromString("0aa4e49a-dbba-4a9e-a162-c3a9dc350f7f");

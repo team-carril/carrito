@@ -36,3 +36,5 @@ insert into PRODUCT (catalog_id , to_cart, name, description, price, quantity) v
 insert into PRODUCT (catalog_id , to_cart, name, description, price, quantity) values (62, 'afa3350e-51da-468a-b288-1c41e317eb73', 'Kiwi', 'Sports', 35, 2);
 insert into PRODUCT (catalog_id , to_cart, name, description, price, quantity) values (1, 'afa3350e-51da-468a-b288-1c41e317eb73', 'Wine - Chablis 2003 Champs', 'Garden', 120, 5);
 
+insert into PRODUCT (catalog_id , to_cart, name, description, price, quantity) values (23, '49ea83b7-ad55-449b-8d90-4c0a33a83a73', 'Gekko gecko', 'duis bibendum felis sed interdum venenatis turpis enim blandit', 422.1, 3);
+insert into PRODUCT (catalog_id , to_cart, name, description, price, quantity) values (61, '49ea83b7-ad55-449b-8d90-4c0a33a83a73', 'Stenella coeruleoalba', 'duis bibendum felis sed interdum venenatis turpis enim blandit', 2111, 5);
