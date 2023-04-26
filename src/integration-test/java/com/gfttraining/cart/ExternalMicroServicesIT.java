@@ -12,6 +12,7 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMoc
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -19,7 +20,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.io.IOException;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -30,6 +30,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gfttraining.cart.api.dto.User;
+import com.gfttraining.cart.jpa.CartRepository;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.http.Fault;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
@@ -43,6 +44,9 @@ public class ExternalMicroServicesIT extends BaseTestWithConstructors {
 
 	@Autowired
 	ObjectMapper mapper;
+
+	@Autowired
+	CartRepository cartRepo;
 
 	static final String USERS_ROUTE = "/users/bInfo/";
 	static final String CATALOG_ROUTE = "/products/";
@@ -167,6 +171,7 @@ public class ExternalMicroServicesIT extends BaseTestWithConstructors {
 	@DisplayName("given valid data in external services, when POST carts/submit, should 200 CART JSON")
 	@Test
 	public void happy_path() throws Exception {
+		assertEquals(cartRepo.findById(CARTb_ID).get().getStatus(), "DRAFT");
 		User u6 = userDTO(6, "TRANSFER", "ESTONIA");
 		String json = mapper.writeValueAsString(u6);
 		usersMock.stubFor(WireMock.get(USERS_ROUTE +
@@ -193,6 +198,7 @@ public class ExternalMicroServicesIT extends BaseTestWithConstructors {
 				.andExpect(jsonPath("@.id", is(CARTb_ID.toString())))
 				.andExpect(jsonPath("@.status", is("SUBMITTED")))
 				.andExpect(jsonPath("@.totalPrice", is(1603)));
+		assertEquals(cartRepo.findById(CARTb_ID).get().getStatus(), "SUBMITTED");
 	}
 
 }

@@ -10,7 +10,9 @@ import static com.gfttraining.cart.ITConfig.VALIDATION_ERROR_SCHEMA;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -37,6 +39,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gfttraining.cart.api.dto.Cart;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
+import com.gfttraining.cart.jpa.CartRepository;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -47,6 +50,9 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 
 	@Autowired
 	ObjectMapper mapper;
+
+	@Autowired
+	CartRepository cartRepo;
 
 	@DisplayName("given no param, when GET /carts, should return only DRAFT status carts")
 	@Test
@@ -85,10 +91,13 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 		User user = userDTO(1);
 		String json = mapper.writeValueAsString(user);
 
-		mvc.perform(post("/carts").contentType(MediaType.APPLICATION_JSON).content(json))
+		MvcResult res = mvc.perform(post("/carts").contentType(MediaType.APPLICATION_JSON).content(json))
 				.andExpect(status().isCreated())
 				.andExpect(content().string(matchesJsonSchemaInClasspath(CART_SCHEMA)))
-				.andExpect(jsonPath("@.userId", is(1)));
+				.andExpect(jsonPath("@.userId", is(1)))
+				.andReturn();
+		Cart actualCart = mapper.readValue(res.getResponse().getContentAsString(), Cart.class);
+		assertNotNull(cartRepo.findById(actualCart.getId()));
 	}
 
 	@DisplayName("given User JSON missing properties, when POST, should return 400 Validation Error JSON")
@@ -147,8 +156,10 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 	@DisplayName("given existing cartId, when DELETE, should return 200")
 	@Test
 	public void DELETE_carts_OK() throws Exception {
+		assertNotNull(cartRepo.findById(CART_DELETE_ID).get());
 		mvc.perform(delete("/carts/" + CART_DELETE_ID))
 				.andExpect(status().isOk());
+		assertTrue(cartRepo.findById(CART_DELETE_ID).isEmpty());
 	}
 
 	@DisplayName("given non existing cartid, when DELETE, should return 404 Error Json")
