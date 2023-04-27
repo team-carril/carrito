@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import com.gfttraining.cart.api.dto.ErrorResponse;
@@ -24,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(BadRequestParamException.class)
-	public ResponseEntity<ErrorResponse> handlesBadRequestParamException(BadRequestParamException ex, WebRequest req) {
+	public ResponseEntity<ErrorResponse> handlesBadRequestParamException(BadRequestParamException ex) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
 
 		log.error("Message: " + ex.getMessage() + " Cause: " + ex.getCause() + " Stack Trace: " + ex.getStackTrace()
@@ -34,7 +33,7 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(EntityNotFoundException.class)
-	public ResponseEntity<ErrorResponse> handlesBadRequestBodyException(EntityNotFoundException ex, WebRequest req) {
+	public ResponseEntity<ErrorResponse> handlesBadRequestBodyException(EntityNotFoundException ex) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
 
 		log.error("Message: " + ex.getMessage() + " Cause: " + ex.getCause() + " Stack Trace: " + ex.getStackTrace()
@@ -44,8 +43,7 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
-	public ResponseEntity<ErrorResponse> handlesBadPathVariableException(MethodArgumentTypeMismatchException ex,
-			WebRequest req) {
+	public ResponseEntity<ErrorResponse> handlesBadPathVariableException(MethodArgumentTypeMismatchException ex) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
 
 		log.error("Message: " + ex.getMessage() + " Cause: " + ex.getCause() + " Stack Trace: " + ex.getStackTrace()
@@ -56,16 +54,14 @@ public class GlobalExceptionHandler {
 
 	@Generated
 	@ExceptionHandler(ImpossibleQuantityException.class)
-	public ResponseEntity<ErrorResponse> handleNegativeQuantityException(ImpossibleQuantityException ex,
-			WebRequest req) {
+	public ResponseEntity<ErrorResponse> handleNegativeQuantityException(ImpossibleQuantityException ex) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
 		log.error("Invalid quantity for a product. {} | {}", res.getMsg(), ex.getCause());
 		return new ResponseEntity<ErrorResponse>(res, HttpStatus.CONFLICT);
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<Object> handleValidationError(MethodArgumentNotValidException ex,
-			WebRequest req) {
+	public ResponseEntity<Object> handleValidationError(MethodArgumentNotValidException ex) {
 		Map<String, Object> fieldErrors = new HashMap<>();
 		fieldErrors.put("timestamp", LocalDateTime.now());
 
@@ -88,8 +84,7 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(RemoteServiceInternalException.class)
-	public ResponseEntity<ErrorResponse> handleRemoteServiceInternalException(RemoteServiceInternalException ex,
-			WebRequest req) {
+	public ResponseEntity<ErrorResponse> handleRemoteServiceInternalException(RemoteServiceInternalException ex) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now())
 				.msg(ex.getMessage())
 				.build();
@@ -98,8 +93,7 @@ public class GlobalExceptionHandler {
 	}
 
 	@Generated
-	public ResponseEntity<ErrorResponse> handleRemoteServiceBadRequestException(RemoteServiceBadRequestException ex,
-			WebRequest req) {
+	public ResponseEntity<ErrorResponse> handleRemoteServiceBadRequestException(RemoteServiceBadRequestException ex) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now())
 				.msg(ex.getMessage())
 				.build();
@@ -109,7 +103,7 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(OutOfStockException.class)
-	public ResponseEntity<ErrorResponse> handleOutOfstockException(OutOfStockException ex, WebRequest req) {
+	public ResponseEntity<ErrorResponse> handleOutOfstockException(OutOfStockException ex) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now())
 				.msg(ex.getMessage())
 				.build();
@@ -118,7 +112,7 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(InvalidUserDataException.class)
-	public ResponseEntity<ErrorResponse> handleInvalidUserDataExecption(InvalidUserDataException ex, WebRequest req) {
+	public ResponseEntity<ErrorResponse> handleInvalidUserDataExecption(InvalidUserDataException ex) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now())
 				.msg(ex.getMessage())
 				.build();
@@ -129,13 +123,20 @@ public class GlobalExceptionHandler {
 
 	@Generated
 	@ExceptionHandler(BadMethodRequestException.class)
-	public ResponseEntity<ErrorResponse> handlerInvalidMethod(BadMethodRequestException ex,
-			WebRequest req) {
+	public ResponseEntity<ErrorResponse> handlerInvalidMethod(BadMethodRequestException ex) {
 
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
 
 		log.error("Feature is disabled. {} | {}", res.getMsg(), ex.getCause());
 		return new ResponseEntity<ErrorResponse>(res, HttpStatus.METHOD_NOT_ALLOWED);
+	}
+
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<ErrorResponse> handlerUnknownException(Exception ex) {
+		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now()).msg(ex.getMessage()).build();
+
+		log.error("Feature is disabled. {} | {}", res.getMsg(), ex.getCause());
+		return new ResponseEntity<ErrorResponse>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 }

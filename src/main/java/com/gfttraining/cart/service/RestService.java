@@ -1,7 +1,6 @@
 package com.gfttraining.cart.service;
 
 import static org.springframework.http.HttpStatus.Series.CLIENT_ERROR;
-import static org.springframework.http.HttpStatus.Series.SERVER_ERROR;
 
 import java.io.IOException;
 
