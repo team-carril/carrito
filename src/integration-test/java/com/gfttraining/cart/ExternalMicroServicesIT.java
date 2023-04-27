@@ -6,11 +6,13 @@ import static com.gfttraining.cart.ITConfig.CART_SUBMITTED_ID;
 import static com.gfttraining.cart.ITConfig.CARTa_ID;
 import static com.gfttraining.cart.ITConfig.CARTb_ID;
 import static com.gfttraining.cart.ITConfig.CARTc_ID;
+import static com.gfttraining.cart.ITConfig.CARTd_ID;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -28,6 +30,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gfttraining.cart.api.dto.User;
+import com.gfttraining.cart.jpa.CartRepository;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.http.Fault;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
@@ -41,6 +44,9 @@ public class ExternalMicroServicesIT extends BaseTestWithConstructors {
 
 	@Autowired
 	ObjectMapper mapper;
+
+	@Autowired
+	CartRepository cartRepo;
 
 	static final String USERS_ROUTE = "/users/bInfo/";
 	static final String CATALOG_ROUTE = "/products/";
@@ -131,9 +137,41 @@ public class ExternalMicroServicesIT extends BaseTestWithConstructors {
 				.andExpect(content().string(containsString("out of stock")));
 	}
 
+	@DisplayName("given services down for 2 tries, when POST carts/submit, should 200 Cart JSON")
+	@Test
+	public void retries_three_times() throws IOException, Exception {
+		User u15 = userDTO(15, "TRANSFER", "ESTONIA");
+		String json = mapper.writeValueAsString(u15);
+
+		usersMock.stubFor(WireMock.get(USERS_ROUTE +
+				u15.getId())
+				.willReturn(aResponse().withStatus(500))
+				.willReturn(aResponse().withStatus(500))
+				.willReturn(WireMock.aResponse()
+						.withHeader("Content-Type", "application/json")
+						.withBody(json).withStatus(200)));
+
+		catalogMock.stubFor(WireMock.get(INFO_CATALOG_ROUTE + 23).willReturn(WireMock.aResponse()
+				.withHeader("Content-Type", "application/json")
+				.withBody(mapper.writeValueAsString(productFromCatalog(23, 10, 100)))));
+		catalogMock.stubFor(WireMock.get(INFO_CATALOG_ROUTE + 61).willReturn(WireMock.aResponse()
+				.withHeader("Content-Type", "application/json")
+				.withBody(mapper.writeValueAsString(productFromCatalog(61, 10, 100)))));
+		catalogMock.stubFor(WireMock.put(UPDATE_CATALOG_ROUTE + 23).willReturn(WireMock.aResponse().withStatus(200)));
+		catalogMock.stubFor(WireMock.put(UPDATE_CATALOG_ROUTE + 61).willReturn(WireMock.aResponse().withStatus(200)));
+
+		mvc.perform(post("/carts/submit/" + CARTd_ID))
+				.andExpect(status().isOk())
+				.andExpect(content().string(matchesJsonSchemaInClasspath(CART_SCHEMA)))
+				.andExpect(jsonPath("@.id", is(CARTd_ID.toString())))
+				.andExpect(jsonPath("@.status", is("SUBMITTED")))
+				.andExpect(jsonPath("@.totalPrice", is(97.92)));
+	}
+
 	@DisplayName("given valid data in external services, when POST carts/submit, should 200 CART JSON")
 	@Test
 	public void happy_path() throws Exception {
+		assertEquals(cartRepo.findById(CARTb_ID).get().getStatus(), "DRAFT");
 		User u6 = userDTO(6, "TRANSFER", "ESTONIA");
 		String json = mapper.writeValueAsString(u6);
 		usersMock.stubFor(WireMock.get(USERS_ROUTE +
@@ -160,6 +198,7 @@ public class ExternalMicroServicesIT extends BaseTestWithConstructors {
 				.andExpect(jsonPath("@.id", is(CARTb_ID.toString())))
 				.andExpect(jsonPath("@.status", is("SUBMITTED")))
 				.andExpect(jsonPath("@.totalPrice", is(1603)));
+		assertEquals(cartRepo.findById(CARTb_ID).get().getStatus(), "SUBMITTED");
 	}
 
 }
