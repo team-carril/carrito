@@ -121,6 +121,17 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 				.andExpect(jsonPath("@.products[3].catalogId", is(1024)));
 	}
 
+	@DisplayName("given invalid Product JSON with impossible quantity, when PATCH, should return 200 Cart JSON")
+	@Test
+	public void PATCH_carts_impossible_quantity() throws Exception {
+		ProductFromCatalog product = productFromCatalog(1024, "test", null, 17, 0);
+		String json = mapper.writeValueAsString(product);
+
+		mvc.perform(patch("/carts/" + CARTa_ID).contentType(MediaType.APPLICATION_JSON).content(json))
+				.andExpect(status().isConflict())
+				.andExpect(content().string(matchesJsonSchemaInClasspath(BASE_ERROR_SCHEMA)));
+	}
+
 	@DisplayName("given wrong path variable, when PATCH, should return 400 Error JSON")
 	@Test
 	public void PATCH_carts_BAD_REQUEST_PATH_VARIABLE() throws Exception {
@@ -132,7 +143,7 @@ public class CartEndpointIT extends BaseTestWithConstructors {
 				.andExpect(content().string(matchesJsonSchemaInClasspath(BASE_ERROR_SCHEMA)));
 	}
 
-	@DisplayName("given wrong JSON, when PATCH, shoudl return 400 Validation Error JSON")
+	@DisplayName("given wrong JSON, when PATCH, should return 400 Validation Error JSON")
 	@Test
 	public void PATCH_carts_BAD_REQUEST_BODY() throws Exception {
 		String json = mapper.writeValueAsString(new User());

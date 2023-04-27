@@ -91,7 +91,7 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ErrorResponse> handleRemoteServiceInternalException(RemoteServiceInternalException ex,
 			WebRequest req) {
 		ErrorResponse res = ErrorResponse.builder().timestamp(LocalDateTime.now())
-				.msg(ex.getMessage() + " " + (ex.getStatus() == null ? "" : ex.getStatus()))
+				.msg(ex.getMessage())
 				.build();
 		log.error("Remote service internal error. {} | {}", res.getMsg(), ex.getCause());
 		return new ResponseEntity<>(res, HttpStatus.SERVICE_UNAVAILABLE);

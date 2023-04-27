@@ -33,6 +33,7 @@ import com.gfttraining.cart.api.dto.Product;
 import com.gfttraining.cart.api.dto.ProductFromCatalog;
 import com.gfttraining.cart.api.dto.User;
 import com.gfttraining.cart.config.RatesConfiguration;
+import com.gfttraining.cart.exception.ImpossibleQuantityException;
 import com.gfttraining.cart.exception.InvalidUserDataException;
 import com.gfttraining.cart.exception.OutOfStockException;
 import com.gfttraining.cart.exception.RemoteServiceInternalException;
@@ -127,18 +128,40 @@ public class CartServiceTest extends BaseTestWithConstructors {
 		verify(cartRepository).save(any(CartEntity.class));
 	}
 
-	@Test
-	public void add_product_existing_product() {
+	@ParameterizedTest
+	@MethodSource("productsToAdd")
+	public void add_product_existing_product(int quantityInDb, int quantityInJSON) {
 		UUID uuid = UUID.randomUUID();
-		ProductFromCatalog product = productFromCatalog(1, null, null, 0);
-		CartEntity entity = cartEntity(uuid, 0, null, null, null,
-				toList(productEntity(1, 1, null, null, uuid, 0, 1)));
+		ProductFromCatalog product = productFromCatalog(1, null, null, 10, quantityInJSON);
+		CartEntity entityInDB = cartEntity(uuid, 0, null, null, "DRAFT",
+				toList(productEntity(1, 1, null, null, uuid, 10, quantityInDb)));
 
-		when(cartRepository.findById(uuid)).thenReturn(Optional.of(entity));
-		when(cartRepository.saveAndFlush(entity)).thenReturn(entity);
+		if (quantityInDb == 0)
+			when(cartRepository.findById(uuid)).thenReturn(Optional.of(null));
+		else
+			when(cartRepository.findById(uuid)).thenReturn(Optional.of(entityInDB));
+
+		CartEntity expectedEntity = cartEntity(uuid, 0, null, null, "DRAFT",
+				toList(productEntity(1, 1, null, null, uuid, 10, quantityInDb + quantityInJSON)));
+		when(cartRepository.saveAndFlush(any(CartEntity.class))).thenReturn(expectedEntity);
+
 		cartService.addProductToCart(product, uuid);
-		verify(cartRepository).findById(uuid);
-		verify(cartRepository).saveAndFlush(entity);
+
+		ArgumentCaptor<CartEntity> actualEntity = ArgumentCaptor.forClass(CartEntity.class);
+		verify(cartRepository).saveAndFlush(actualEntity.capture());
+		assertEquals(expectedEntity.getProducts(), actualEntity.getValue().getProducts());
+	}
+
+	@ParameterizedTest
+	@MethodSource("impossibleQuantityProducts")
+	public void add_products_impossible_quantity(int quantityInDb, int quantityInJSON) {
+		UUID uuid = UUID.randomUUID();
+		ProductFromCatalog product = productFromCatalog(1, null, null, 10, quantityInJSON);
+		CartEntity entityInDB = cartEntity(uuid, 0, null, null, "DRAFT",
+				toList(productEntity(1, 1, null, null, uuid, 10, quantityInDb)));
+		when(cartRepository.findById(uuid)).thenReturn(Optional.of(entityInDB));
+
+		assertThrows(ImpossibleQuantityException.class, () -> cartService.addProductToCart(product, uuid));
 	}
 
 	@Test
@@ -209,6 +232,19 @@ public class CartServiceTest extends BaseTestWithConstructors {
 		return Stream.of(
 				Arguments.of("DRAFT"),
 				Arguments.of("SUBMITTED"));
+	}
+
+	static Stream<Arguments> productsToAdd() {
+		return Stream.of(
+				Arguments.of(5, 5),
+				Arguments.of(10, -5));
+	}
+
+	static Stream<Arguments> impossibleQuantityProducts() {
+		return Stream.of(
+				Arguments.of(0, -5),
+				Arguments.of(5, -5),
+				Arguments.of(5, -6));
 	}
 
 	@Test

@@ -47,8 +47,26 @@ public class ProductServiceTest extends BaseTestWithConstructors {
 	}
 
 	@Test
-	public void throws_when_empty() {
+	public void throws_when_products_empty() {
 		when(productRepository.findByCatalogId(1)).thenReturn(Collections.emptyList());
+		assertThrows(EntityNotFoundException.class, () -> service.findByCatalogId(1));
+	}
+
+	@Test
+	public void throws_when_cart_not_found() {
+		UUID id = UUID.randomUUID();
+		when(productRepository.findByCatalogId(1)).thenReturn(Collections.singletonList(
+				productEntity(1, null, null, id, 0, 0)));
+		when(cartRepository.findById(id)).thenReturn(Optional.empty());
+		assertThrows(EntityNotFoundException.class, () -> service.findByCatalogId(1));
+	}
+
+	@Test
+	public void throws_when_cart_found_is_submitted() {
+		UUID id = UUID.randomUUID();
+		when(productRepository.findByCatalogId(1)).thenReturn(Collections.singletonList(
+				productEntity(1, null, null, id, 0, 0)));
+		when(cartRepository.findById(id)).thenReturn(Optional.of(cartEntity(id, 0, null, null, "SUBMITTED", null, 0)));
 		assertThrows(EntityNotFoundException.class, () -> service.findByCatalogId(1));
 	}
 
@@ -91,8 +109,8 @@ public class ProductServiceTest extends BaseTestWithConstructors {
 	}
 
 	@Test
-	public void findAllProducts(){
-		
+	public void findAllProducts() {
+
 		UUID cartId = UUID.randomUUID();
 		List<Product> entities = toList(
 				productDto(1, 1, "A", null, cartId, 5, 1),
@@ -100,13 +118,13 @@ public class ProductServiceTest extends BaseTestWithConstructors {
 				productDto(3, 1, "B", null, cartId, 15, 9));
 
 		when(service.findAllProductsSortedByPrice()).thenReturn(entities);
-		
-		Assertions.assertThat(entities)
-				  .extracting(Product::getPrice)
-				  .contains(BigDecimal.valueOf(15),
-				  			BigDecimal.valueOf(8),
-							BigDecimal.valueOf(5)).isSorted();
 
+		Assertions.assertThat(entities)
+				.extracting(Product::getPrice)
+				.contains(BigDecimal.valueOf(15),
+						BigDecimal.valueOf(8),
+						BigDecimal.valueOf(5))
+				.isSorted();
 
 	}
 

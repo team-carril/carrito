@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
@@ -52,7 +53,7 @@ public class RestServiceTest extends BaseTestWithConstructors {
 	public void fetch_user_fails_server_down() {
 		int id = 1;
 		when(restTemplate.getForEntity(TEST_URL + id, User.class))
-				.thenThrow(new ResourceAccessException("asdf"));
+				.thenThrow(new HttpServerErrorException(HttpStatus.SERVICE_UNAVAILABLE));
 		assertThrows(RemoteServiceInternalException.class, () -> service.fetchUserInfo(id));
 	}
 
@@ -61,6 +62,14 @@ public class RestServiceTest extends BaseTestWithConstructors {
 		int id = 1;
 		when(restTemplate.getForEntity(TEST_URL + id, User.class))
 				.thenThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND));
+		assertThrows(RemoteServiceInternalException.class, () -> service.fetchUserInfo(id));
+	}
+
+	@Test
+	public void fetch_user_fails_user_bad_request() {
+		int id = 1;
+		when(restTemplate.getForEntity(TEST_URL + id, User.class))
+				.thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST));
 		assertThrows(RemoteServiceInternalException.class, () -> service.fetchUserInfo(id));
 	}
 
@@ -78,7 +87,15 @@ public class RestServiceTest extends BaseTestWithConstructors {
 	public void fetch_product_fails_server_down() {
 		int id = 1;
 		when(restTemplate.getForEntity(TEST_URL + "id/" + id, ProductFromCatalog.class))
-				.thenThrow(new ResourceAccessException("asdf"));
+				.thenThrow(new HttpServerErrorException(HttpStatus.SERVICE_UNAVAILABLE));
+		assertThrows(RemoteServiceInternalException.class, () -> service.fetchProductFromCatalog(id));
+	}
+
+	@Test
+	public void fetch_product_fails_bad_request() {
+		int id = 1;
+		when(restTemplate.getForEntity(TEST_URL + "id/" + id, ProductFromCatalog.class))
+				.thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST));
 		assertThrows(RemoteServiceInternalException.class, () -> service.fetchProductFromCatalog(id));
 	}
 

@@ -95,15 +95,12 @@ public class RestService {
 class RestTemplateResponseErrorHandler implements ResponseErrorHandler {
 	@Override
 	public boolean hasError(ClientHttpResponse res) throws IOException {
-		return res.getStatusCode().series() == SERVER_ERROR
-				|| res.getStatusCode().series() == CLIENT_ERROR;
+		return res.getStatusCode().series() == CLIENT_ERROR;
 	}
 
 	@Override
 	public void handleError(ClientHttpResponse res) throws IOException {
-		if (res.getStatusCode().series() == SERVER_ERROR) {
-			throw new RemoteServiceInternalException("Remote service internal error.", res.getStatusCode());
-		} else if (res.getStatusCode().series() == CLIENT_ERROR) {
+		if (res.getStatusCode().series() == CLIENT_ERROR) {
 			if (res.getStatusCode() == HttpStatus.NOT_FOUND)
 				throw new EntityNotFoundException("Remote service could not find resource.");
 			if (res.getStatusCode() == HttpStatus.BAD_REQUEST)

@@ -19,10 +19,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.IOException;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -96,10 +100,23 @@ public class ExternalMicroServicesIT extends BaseTestWithConstructors {
 				.andExpect(content().string(matchesJsonSchemaInClasspath(BASE_ERROR_SCHEMA)));
 	}
 
-	@DisplayName("given unrecognized user information, when POST carts/submit, should 409 Error JSON")
+	@DisplayName("given any service 400s, when POST carts/submit, should 503 Error JSON")
 	@Test
-	public void invalid_user_info() throws Exception {
-		User u1 = userDTO(4, "RUBICARD", "NARNIA");
+	public void service_400() throws Exception {
+		User u1 = userDTO(1, null, null);
+		usersMock.stubFor(WireMock.get(USERS_ROUTE +
+				u1.getId()).willReturn(WireMock.aResponse().withStatus(400)));
+
+		mvc.perform(post("/carts/submit/" + CARTa_ID))
+				.andExpect(status().isServiceUnavailable())
+				.andExpect(content().string(matchesJsonSchemaInClasspath(BASE_ERROR_SCHEMA)));
+	}
+
+	@DisplayName("given unrecognized user information, when POST carts/submit, should 409 Error JSON")
+	@ParameterizedTest
+	@MethodSource("invalidUserArguments")
+	public void invalid_user_info(String paymentMethod, String country) throws Exception {
+		User u1 = userDTO(4, paymentMethod, country);
 		String json = mapper.writeValueAsString(u1);
 		usersMock.stubFor(WireMock.get(USERS_ROUTE +
 				u1.getId()).willReturn(WireMock.aResponse()
@@ -110,6 +127,13 @@ public class ExternalMicroServicesIT extends BaseTestWithConstructors {
 				.andExpect(status().isConflict())
 				.andExpect(content().string(matchesJsonSchemaInClasspath(BASE_ERROR_SCHEMA)))
 				.andExpect(content().string(containsString("Unrecognized")));
+	}
+
+	static Stream<Arguments> invalidUserArguments() {
+		return Stream.of(
+				Arguments.of("INVALIDPAYMENT", "SPAIN"),
+				Arguments.of("PAYPAL", "INVALIDCOUNTRY"),
+				Arguments.of("INVALIDPAYMENT", "INVALIDCOUNTRY"));
 	}
 
 	@DisplayName("given insufficient stock, when POST carts/submit, should 409 Error JSON")
